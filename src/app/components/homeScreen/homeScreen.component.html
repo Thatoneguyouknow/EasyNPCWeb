@@ -1,2 +1,28 @@
-<h1>{{title}}</h1>
-<div class="homeScreen"></div>
+<h1>{{ title }}</h1>
+<div class="homeScreen">
+  <ly-card [ngClass]="classes.card">
+    <ly-card-content>
+      <h2 lyTyp="headline">Characters</h2>
+      <p lyTyp="body1">Various attributes</p>
+    </ly-card-content>
+  </ly-card>
+  <ly-card [ngClass]="classes.card">
+    <ly-card-content>
+      <h2 lyTyp="headline">Races</h2>
+      <ly-grid container [spacing]="16"> 
+        <ly-grid item [col]="6">
+            <div>test</div>
+        </ly-grid>
+        <ly-grid item [col]="6">
+            <div>test</div>
+        </ly-grid>
+      </ly-grid>
+    </ly-card-content>
+  </ly-card>
+  <ly-card [ngClass]="classes.card">
+    <ly-card-content>
+      <h2 lyTyp="headline">Classes</h2>
+      <p lyTyp="body1">Various attributes</p>
+    </ly-card-content>
+  </ly-card>
+</div>

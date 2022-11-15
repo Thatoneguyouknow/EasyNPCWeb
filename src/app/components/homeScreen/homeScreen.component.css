@@ -1,0 +1,7 @@
+.homeScreen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 80px 100px;
+
+}
