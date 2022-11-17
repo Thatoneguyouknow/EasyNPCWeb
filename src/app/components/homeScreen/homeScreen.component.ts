@@ -1,40 +1,59 @@
-import { Component } from '@angular/core';
-import { npcClass } from 'src/app/models';
-import { ThemeVariables, ThemeRef, lyl, StyleRenderer } from '@alyle/ui';
+import { AfterViewInit, Component, ViewEncapsulation } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table/table-data-source';
+import { npcClass, npcRace, npc } from 'src/app/models';
 
-const STYLES = (theme: ThemeVariables, ref: ThemeRef) => {
-  const __ = ref.selectorsOf(STYLES);
-  return {
-    $global: lyl`{
-      body {
-        background-color: ${theme.background.default}
-        color: ${theme.text.primary}
-        font-family: ${theme.typography.fontFamily}
-        margin: 20
-        direction: ${theme.direction}
-      }
-    }`,
-    root: lyl`{
-      display: block
-    }`,
-    card: lyl `{
-        min-width: 320px
-        max-width: 320px
-        min-height: 500px
-    }`
-  };
-};
+const CLASS_MOC_DATA: npcClass[] = [
+  {
+    classId: 1,
+    className: 'Jeff',
+    userCreated: false,
+    hitDie: 4,
+    statPriority: new Map(),
+  },
+];
+
+const RACE_MOC_DATA: npcRace[] = [
+  {
+    raceId: 1,
+    raceName: 'Jeff',
+    asiPrimary: [1, 1],
+    asiSecondary: [2, 2],
+    ageRange: [10, 100],
+    nameType: 10,
+  },
+];
+
+const CHAR_MOC_DATA: npc[] = [
+  {
+    charId: 1,
+    charName: 'Jeffery',
+    charRace: RACE_MOC_DATA[0],
+    charClass: CLASS_MOC_DATA[0],
+  },
+];
 
 @Component({
   selector: 'app-root',
   templateUrl: './homeScreen.component.html',
   styleUrls: ['./homeScreen.component.css'],
-  providers: [StyleRenderer],
+  encapsulation: ViewEncapsulation.None,
 })
-export class homeScreenComponent {
-  readonly classes = this.sRenderer.renderSheet(STYLES, true);
-
+export class homeScreenComponent implements AfterViewInit {
   title = 'EasyNPCHome';
+  characterTableColumns: string[] = ['name', 'race', 'class'];
+  classTableColumns: string[] = ['name', 'hitDie', 'userCreated'];
+  raceTableColumns: string[] = [
+    'name',
+    'asiPrimary',
+    'asiSecondary',
+    'ageRange',
+  ];
 
-  constructor(readonly sRenderer: StyleRenderer) {}
+  characterDataSource = new MatTableDataSource<npc>(CHAR_MOC_DATA);
+  classDataSource = new MatTableDataSource<npcClass>(CLASS_MOC_DATA);
+  raceDataSource = new MatTableDataSource<npcRace>(RACE_MOC_DATA);
+
+  constructor() {}
+
+  ngAfterViewInit(): void {}
 }

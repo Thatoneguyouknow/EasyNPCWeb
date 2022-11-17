@@ -1,33 +1,17 @@
 // Angular imports
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  BrowserModule,
-  HAMMER_GESTURE_CONFIG,
-  HammerModule,
-} from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-// Alyle imports
-import {
-  LyHammerGestureConfig,
-  LY_THEME,
-  LY_THEME_NAME,
-  StyleRenderer,
-  LyTheme2,
-} from '@alyle/ui';
-import {
-  MinimaLight,
-  MinimaDeepDark,
-  MinimaDark,
-} from '@alyle/ui/themes/minima';
-import { LyCommonModule } from '@alyle/ui';
-import { LyCardModule } from '@alyle/ui/card';
-import { LyTypographyModule } from '@alyle/ui/typography';
-import { LyButtonModule } from '@alyle/ui/button';
-import { LyIconModule } from '@alyle/ui/icon';
-import { LyGridModule } from '@alyle/ui/grid';
-import { LyListModule } from '@alyle/ui/list';
+// Angular Material imports
+import { MatCardModule } from '@angular/material/card';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 // App imports
 import { AppRoutingModule } from './app-routing.module';
@@ -40,24 +24,16 @@ import { homeScreenComponent } from './components/homeScreen/homeScreen.componen
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    HammerModule,
-    LyCommonModule,
-    LyCardModule,
-    LyTypographyModule,
-    LyButtonModule,
-    LyIconModule,
-    LyListModule,
-    LyGridModule,
+    CommonModule,
+    MatCardModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTableModule,
+    MatPaginatorModule,
   ],
-  providers: [
-    { provide: HAMMER_GESTURE_CONFIG, useClass: LyHammerGestureConfig },
-    StyleRenderer,
-    LyTheme2,
-    { provide: LY_THEME_NAME, useValue: 'minima-light' },
-    { provide: LY_THEME, useClass: MinimaLight, multi: true },
-    { provide: LY_THEME, useClass: MinimaDeepDark, multi: true },
-    { provide: LY_THEME, useClass: MinimaDark, multi: true },
-  ],
+  providers: [],
   bootstrap: [homeScreenComponent],
 })
 export class AppModule {}
