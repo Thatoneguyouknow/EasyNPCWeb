@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ViewEncapsulation } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table/table-data-source';
+import { MatTableDataSource } from '@angular/material/table';
 import { npcClass, npcRace, npc } from 'src/app/models';
 
 const CLASS_MOC_DATA: npcClass[] = [
