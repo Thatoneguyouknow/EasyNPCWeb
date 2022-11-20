@@ -1,7 +1,29 @@
-.homeScreen {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 80px 100px;
+body {
+  background-color: rgb(230, 230, 184);
+}
 
+// .home-toolbar {
+//   margin-top: 10px;
+// }
+
+.display-cards {
+  justify-content: center;
+  align-content: center;
+  display: flex;
+  margin-top: 10px;
+}
+
+.card {
+  min-width: 320px;
+  min-height: 400px;
+  max-height: 400px;
+  margin: 10px;
+}
+
+.home-screen-container {
+  background-color: rgb(230, 230, 184);
+}
+
+table {
+    width: 100%;
 }

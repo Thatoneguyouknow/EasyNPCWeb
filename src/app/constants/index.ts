@@ -16,7 +16,7 @@ export const statNames: Map<number, string> = new Map([
     [Stats.CHARISMA, "Charisma"]
 ]);
 
-export const abbreviatedStatNames = new Map([
+export const abbreviatedStatNames: Map<number, string> = new Map([
     [Stats.STRENGTH, "Str"],
     [Stats.DEXTERITY, "Dex"],
     [Stats.CONSTITUTION, "Con"],
