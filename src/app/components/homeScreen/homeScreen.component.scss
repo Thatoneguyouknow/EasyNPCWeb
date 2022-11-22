@@ -2,10 +2,6 @@ body {
   background-color: rgb(230, 230, 184);
 }
 
-// .home-toolbar {
-//   margin-top: 10px;
-// }
-
 .display-cards {
   justify-content: center;
   align-content: center;
@@ -26,4 +22,28 @@ body {
 
 table {
     width: 100%;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  background-color: red;
+}
+
+.mat-mdc-row .mat-mdc-cell {
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  cursor: pointer;
+}
+
+.home-screen-sidebar {
+  min-width: 180px;
+  padding-top: 10px;
+  padding-left: 10px;
+  justify-content: center;
+  align-content: center;
+}
+
+.sidebar-content {
+  justify-content: center;
+  align-content: center;
+  margin-bottom: 10px;
 }
