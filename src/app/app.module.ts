@@ -17,6 +17,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { homeScreenComponent } from './components/homeScreen/homeScreen.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent, homeScreenComponent],
@@ -32,6 +33,7 @@ import { homeScreenComponent } from './components/homeScreen/homeScreen.componen
     MatIconModule,
     MatTableModule,
     MatPaginatorModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [homeScreenComponent],
