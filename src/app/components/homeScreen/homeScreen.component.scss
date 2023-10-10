@@ -11,9 +11,14 @@ body {
 
 .card {
   min-width: 320px;
-  min-height: 400px;
-  max-height: 400px;
+  min-height: 500px;
+  max-height: 500px;
   margin: 10px;
+  overflow-y: scroll;
+  .card-header{
+    position: -webkit-sticky;
+    position:sticky;
+  }
 }
 
 .home-screen-container {
@@ -22,28 +27,18 @@ body {
 
 table {
     width: 100%;
+    align-content: center;
 }
 
-.mat-mdc-row:hover .mat-mdc-cell {
-  background-color: red;
+.mat-column-name{
+  
 }
 
 .mat-mdc-row .mat-mdc-cell {
-  border-top: 1px solid;
-  border-bottom: 1px solid;
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
   cursor: pointer;
 }
-
-.home-screen-sidebar {
-  min-width: 180px;
-  padding-top: 10px;
-  padding-left: 10px;
-  justify-content: center;
-  align-content: center;
-}
-
-.sidebar-content {
-  justify-content: center;
-  align-content: center;
-  margin-bottom: 10px;
+.mat-mdc-row:hover .mat-mdc-cell {
+  border-color: black;
 }

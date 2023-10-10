@@ -18,6 +18,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { homeScreenComponent } from './components/homeScreen/homeScreen.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent, homeScreenComponent],
@@ -34,6 +35,7 @@ import { homeScreenComponent } from './components/homeScreen/homeScreen.componen
     MatTableModule,
     MatPaginatorModule,
     MatDialogModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [homeScreenComponent],

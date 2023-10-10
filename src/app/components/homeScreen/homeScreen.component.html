@@ -55,7 +55,7 @@
           <ng-component matColumnDef="class">
             <th mat-header-cell *matHeaderCellDef>Class</th>
             <td mat-cell *matCellDef="let character">
-              {{ character.charClass.className }}
+              {{ character.charClass.name }}
             </td>
           </ng-component>
 
@@ -65,10 +65,10 @@
       </mat-card-content>
     </mat-card>
     <mat-card [ngClass]="'classes-card, card'">
-      <mat-card-header>
+      <mat-card-header [ngClass]="'card-header'">
         <mat-card-title>Classes</mat-card-title>
         <mat-card-subtitle>Classes you've created</mat-card-subtitle>
-        <button mat-icon-button [color]="'primary'">
+        <button mat-icon-button [color]="'primary'" (click)="classButtonTest()">
           <mat-icon>add</mat-icon>
         </button>
       </mat-card-header>
@@ -80,7 +80,7 @@
         >
           <ng-component matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef>Name</th>
-            <td mat-cell *matCellDef="let class">{{ class.className }}</td>
+            <td mat-cell *matCellDef="let class">{{ class.name }}</td>
           </ng-component>
           <ng-component matColumnDef="hitDie">
             <th mat-header-cell *matHeaderCellDef>Hit Die</th>
@@ -92,7 +92,9 @@
           </ng-component>
 
           <tr mat-header-row *matHeaderRowDef="classTableColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: classTableColumns"></tr>
+          <tr mat-row 
+              (click)="viewClass(row.id)"
+          *matRowDef="let row; columns: classTableColumns"></tr>
         </table>
       </mat-card-content>
     </mat-card>

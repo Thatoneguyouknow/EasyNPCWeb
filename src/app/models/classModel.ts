@@ -1,7 +1,10 @@
+// These interfaces do not need to match the backend
+
 export interface npcClass {
-    classId: number;
-    className: string;
+    id: number;
+    userId: number;
+    name: string;
     userCreated: boolean;
     hitDie: number;
-    statPriority: Map<number, number>;
+    statPriority: number[];
 }

@@ -1,15 +1,17 @@
-import { AfterViewInit, Component, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ViewEncapsulation, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import * as Stat from 'src/app/constants';
 import { npcClass, npcRace, npc } from 'src/app/models';
+import { npcService } from 'src/app/api/npc.service';
 
 const CLASS_MOC_DATA: npcClass[] = [
   {
-    classId: 1,
-    className: 'Ligma',
+    id: 1,
+    userId: 100, 
+    name: 'Ligma',
     userCreated: false,
     hitDie: 4,
-    statPriority: new Map(),
+    statPriority: [1, 2, 3, 4, 5, 6],
   },
 ];
 
@@ -51,14 +53,33 @@ export class homeScreenComponent implements AfterViewInit {
   ];
 
   characterDataSource = new MatTableDataSource<npc>(CHAR_MOC_DATA);
-  classDataSource = new MatTableDataSource<npcClass>(CLASS_MOC_DATA);
+  classDataSource = new MatTableDataSource<npcClass>();
   raceDataSource = new MatTableDataSource<npcRace>(RACE_MOC_DATA);
 
-  constructor() {}
+  constructor(private api: npcService) {}
 
-  ngAfterViewInit(): void {}
+  ngAfterViewInit(): void {
+    this.api.getAllClasses().subscribe((response) => {
+      this.classDataSource.data = response;
+    });
+  }
 
   public convertToStatName(stat: number): string {
-    return Stat.abbreviatedStatNames.get(stat) || "None";
+    return Stat.abbreviatedStatNames.get(stat) || 'None';
+  }
+
+  public classButtonTest() {
+    this.api.getAllClasses().subscribe((response) => {
+      console.log(response);
+    });
+  }
+
+  public newClass() {
+
+  }
+  
+  public viewClass(classID: number) {
+    console.log(classID);
+    console.log(this.classDataSource.data.find(npcClass => npcClass.id === classID));
   }
 }
