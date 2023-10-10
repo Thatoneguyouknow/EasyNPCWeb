@@ -6,7 +6,24 @@
 </mat-toolbar>
 <mat-drawer-container [ngClass]="'home-screen-container'" autosize>
   <mat-drawer #drawer [ngClass]="'home-screen-sidebar'" mode="side">
-    <p>Stuff, testing all the stuff</p>
+    <div [ngClass]="'sidebar-content'">
+      <button mat-raised-button [color]="'accent'">Characters</button>
+    </div>
+    <div [ngClass]="'sidebar-content'">
+      <button mat-raised-button [color]="'accent'">Classes</button>
+    </div>
+    <div [ngClass]="'sidebar-content'">
+      <button mat-raised-button [color]="'accent'">Races</button>
+    </div>
+    <div [ngClass]="'sidebar-content'">
+      <button mat-raised-button [color]="'accent'">Home</button>
+    </div>
+    <div [ngClass]="'sidebar-content'">
+      <button mat-raised-button [color]="'accent'">Contact</button>
+    </div>
+    <div [ngClass]="'sidebar-content'">
+      <button mat-raised-button [color]="'accent'">Donate</button>
+    </div>
   </mat-drawer>
   <div [ngClass]="'display-cards'">
     <mat-card [ngClass]="'characters-card, card'">

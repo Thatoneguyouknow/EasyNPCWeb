@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatDialogModule } from '@angular/material/dialog';
 
 // App imports
 import { AppRoutingModule } from './app-routing.module';
@@ -33,6 +34,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatIconModule,
     MatTableModule,
     MatPaginatorModule,
+    MatDialogModule,
     HttpClientModule,
   ],
   providers: [],
