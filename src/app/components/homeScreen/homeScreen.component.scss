@@ -15,9 +15,14 @@ body {
 
 .card {
   min-width: 320px;
-  min-height: 400px;
-  max-height: 400px;
+  min-height: 500px;
+  max-height: 500px;
   margin: 10px;
+  overflow-y: scroll;
+  .card-header{
+    position: -webkit-sticky;
+    position:sticky;
+  }
 }
 
 .home-screen-container {
@@ -26,4 +31,18 @@ body {
 
 table {
     width: 100%;
+    align-content: center;
+}
+
+.mat-column-name{
+  
+}
+
+.mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
+}
+.mat-mdc-row:hover .mat-mdc-cell {
+  border-color: black;
 }

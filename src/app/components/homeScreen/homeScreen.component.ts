@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ViewEncapsulation, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import * as Stat from 'src/app/constants';
 import { npcClass, npcRace, npc } from 'src/app/models';
@@ -53,12 +53,16 @@ export class homeScreenComponent implements AfterViewInit {
   ];
 
   characterDataSource = new MatTableDataSource<npc>(CHAR_MOC_DATA);
-  classDataSource = new MatTableDataSource<npcClass>(CLASS_MOC_DATA);
+  classDataSource = new MatTableDataSource<npcClass>();
   raceDataSource = new MatTableDataSource<npcRace>(RACE_MOC_DATA);
 
   constructor(private api: npcService) {}
 
-  ngAfterViewInit(): void {}
+  ngAfterViewInit(): void {
+    this.api.getAllClasses().subscribe((response) => {
+      this.classDataSource.data = response;
+    });
+  }
 
   public convertToStatName(stat: number): string {
     return Stat.abbreviatedStatNames.get(stat) || 'None';
@@ -68,5 +72,14 @@ export class homeScreenComponent implements AfterViewInit {
     this.api.getAllClasses().subscribe((response) => {
       console.log(response);
     });
+  }
+
+  public newClass() {
+
+  }
+  
+  public viewClass(classID: number) {
+    console.log(classID);
+    console.log(this.classDataSource.data.find(npcClass => npcClass.id === classID));
   }
 }
