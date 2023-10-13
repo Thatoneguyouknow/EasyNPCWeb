@@ -1,0 +1,29 @@
+<div>
+  <h1 mat-dialog-title>View/Edit {{ data.name }}</h1>
+  <div mat-dialog-content>
+    <!-- <label for="name">Class Name: </label>
+    <input id="name" type="text" [formControl]="nameControl"> -->
+    <!-- <label for="hitDie">Hit Die: </label>
+    <input type="text" class="form-control" id="hitDie" [(ngModel)]="model.hitDie" name="hitDie" #hitDie="ngModel"> -->
+    <mat-form-field appearance="fill">
+      <label for="name">Class Name: </label>
+      <input matInput type="text" [(ngModel)]="model.name" name="name" #name="ngModel">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <label for="hitDie">Hit Die: </label>
+      <input matInput type="text" [(ngModel)]="model.hitDie" name="hitDie" #hitDie="ngModel">
+    </mat-form-field>
+      <!-- <mat-form-field appearance="outline">
+        <mat-label>Class Name</mat-label>
+        <input matInput [(ngModel)]="data.name" />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Class Name</mat-label>
+        <input matInput [(ngModel)]="data.hitDie" />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Class Name</mat-label>
+        <input matInput [(ngModel)]="data.statPriority" />
+      </mat-form-field> -->
+  </div>
+</div>

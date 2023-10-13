@@ -13,21 +13,27 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // App imports
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { homeScreenComponent } from './components/homeScreen/homeScreen.component';
 import { HttpClientModule } from '@angular/common/http';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { ClassEditDialogComponent } from './components/classEditDialog/classEditDialog.component';
+import { CharEditDialogComponent } from './components/charEditDialog/charEditDialog.component';
 
 @NgModule({
-  declarations: [AppComponent, homeScreenComponent],
+  declarations: [AppComponent, homeScreenComponent, ClassEditDialogComponent, CharEditDialogComponent],
   imports: [
+    BrowserAnimationsModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     CommonModule,
     MatCardModule,
+    MatFormFieldModule,
     MatToolbarModule,
     MatSidenavModule,
     MatButtonModule,
@@ -35,6 +41,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatTableModule,
     MatPaginatorModule,
     MatDialogModule,
+    FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
   ],
   providers: [],

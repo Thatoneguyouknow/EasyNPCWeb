@@ -60,7 +60,11 @@
           </ng-component>
 
           <tr mat-header-row *matHeaderRowDef="characterTableColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: characterTableColumns"></tr>
+          <tr
+            mat-row
+            (click)="viewCharacter(row.id)"
+            *matRowDef="let row; columns: characterTableColumns"
+          ></tr>
         </table>
       </mat-card-content>
     </mat-card>
@@ -92,9 +96,11 @@
           </ng-component>
 
           <tr mat-header-row *matHeaderRowDef="classTableColumns"></tr>
-          <tr mat-row 
-              (click)="viewClass(row.id)"
-          *matRowDef="let row; columns: classTableColumns"></tr>
+          <tr
+            mat-row
+            (click)="viewClass(row.id)"
+            *matRowDef="let row; columns: classTableColumns"
+          ></tr>
         </table>
       </mat-card-content>
     </mat-card>

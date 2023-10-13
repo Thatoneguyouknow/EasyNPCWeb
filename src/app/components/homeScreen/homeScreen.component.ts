@@ -3,6 +3,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import * as Stat from 'src/app/constants';
 import { npcClass, npcRace, npc } from 'src/app/models';
 import { npcService } from 'src/app/api/npc.service';
+import { CharEditDialogComponent } from '../charEditDialog/charEditDialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ClassEditDialogComponent } from '../classEditDialog/classEditDialog.component';
 
 const CLASS_MOC_DATA: npcClass[] = [
   {
@@ -56,7 +59,7 @@ export class homeScreenComponent implements AfterViewInit {
   classDataSource = new MatTableDataSource<npcClass>();
   raceDataSource = new MatTableDataSource<npcRace>(RACE_MOC_DATA);
 
-  constructor(private api: npcService) {}
+  constructor(private api: npcService, private dialog: MatDialog) {}
 
   ngAfterViewInit(): void {
     this.api.getAllClasses().subscribe((response) => {
@@ -79,7 +82,30 @@ export class homeScreenComponent implements AfterViewInit {
   }
   
   public viewClass(classID: number) {
-    console.log(classID);
-    console.log(this.classDataSource.data.find(npcClass => npcClass.id === classID));
+    let classData = this.classDataSource.data.find(npcClass => npcClass.id === classID);
+    let dialogRef = this.dialog.open(ClassEditDialogComponent, {
+      height: '400px',
+      width: '600px',
+      data: classData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog closed');
+      console.log(result);
+    });
+  }
+
+  public viewCharacter(charID: number) {
+    let charData = this.characterDataSource.data.find(npc => npc.charId === charID);
+    let dialogRef = this.dialog.open(CharEditDialogComponent, {
+      height: '400px',
+      width: '600px',
+      data: charData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog closed');
+      console.log(result);
+    })
   }
 }
