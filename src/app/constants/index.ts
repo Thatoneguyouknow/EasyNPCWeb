@@ -13,7 +13,7 @@ export interface StatTypes {
     abbreviated: string;
 }
 
-export const Abilities: StatTypes[] = [
+export const availableAbilities: StatTypes[] = [
     {value: Stats.STRENGTH, name: "Strength", abbreviated: "Str"},
     {value: Stats.DEXTERITY, name: "Dexterity", abbreviated: "Dex"},
     {value: Stats.CONSTITUTION, name: "Constitution", abbreviated: "Con"},

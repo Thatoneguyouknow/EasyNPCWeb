@@ -1,4 +1,9 @@
-import { AfterViewInit, Component, ViewEncapsulation, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ViewEncapsulation,
+  ViewChild,
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import * as Stat from 'src/app/constants';
 import { npcClass, npcRace, npc } from 'src/app/models';
@@ -8,15 +13,17 @@ import { MatDialog } from '@angular/material/dialog';
 import { ClassEditDialogComponent } from '../classEditDialog/classEditDialog.component';
 import { Observable, of, Subscription } from 'rxjs';
 import { UntypedFormBuilder } from '@angular/forms';
+import { NewClassDialogComponent } from '../newClassDialog/newClassDialog.component';
+import { findLargestNumber } from 'src/app/supporting methods/mathOperations';
 
 const CLASS_MOC_DATA: npcClass[] = [
   {
     id: 1,
-    userId: 100, 
+    userId: 100,
     name: 'Ligma',
     userCreated: false,
-    hitDie: Stat.availableHitDie.find((hitdie) => hitdie.value == 4),
-    statPriority: [1, 2, 3, 4, 5, 6],
+    hitDie: Stat.availableHitDie.filter((hitdie) => hitdie.value == 4)[0],
+    statPriority: Stat.availableAbilities,
   },
 ];
 
@@ -71,7 +78,7 @@ export class homeScreenComponent implements AfterViewInit {
     this.subscriptions = this.classData$.subscribe((npcClass) => {
       this.classDataSource.data = npcClass;
       this.classData = [...npcClass];
-    })
+    });
   }
 
   public convertToStatName(stat: number): string {
@@ -85,45 +92,79 @@ export class homeScreenComponent implements AfterViewInit {
   }
 
   public newClass() {
+    let next_ID: number = this.classData.map(npcClass => npcClass.id).reduce((a, b) => Math.max(a, b));
 
-  }
-  
-  public viewClass(classID: number) {
-    let viewClassData = this.classDataSource.data.find(npcClass => npcClass.id === classID);
-    let dialogRef = this.dialog.open(ClassEditDialogComponent, {
+    let dialogRef = this.dialog.open(NewClassDialogComponent, {
       height: '400px',
       width: '600px',
-      data: viewClassData
+      data: next_ID, 
     });
 
     dialogRef.afterClosed().subscribe((result: npcClass) => {
-      console.log('Dialog closed');
-      if(result != undefined) {
-        let index = this.classData.findIndex(npcClass => npcClass.id === result.id);
+      if (result != undefined) {
+        console.log(result);
+        // let index = this.classData.findIndex(
+        //   (npcClass) => npcClass.id === result.id
+        // );
+        // this.classData[index] = result;
+      }
+      // this.classData$ = of(this.classData);
+
+      // // TODO: Backend save call
+
+      // this.subscriptions.unsubscribe();
+
+      // this.subscriptions = this.classData$.subscribe((npcClass) => {
+      //   this.classDataSource.data = npcClass;
+      //   this.classData = [...npcClass];
+      // });
+    });
+  }
+
+  public viewClass(classID: number) {
+    let viewClassData = this.classDataSource.data.find(
+      (npcClass) => npcClass.id === classID
+    );
+    let dialogRef = this.dialog.open(ClassEditDialogComponent, {
+      height: '400px',
+      width: '600px',
+      data: viewClassData,
+    });
+
+    dialogRef.afterClosed().subscribe((result: npcClass) => {
+      if (result != undefined) {
+        console.log(result);
+        let index = this.classData.findIndex(
+          (npcClass) => npcClass.id === result.id
+        );
         this.classData[index] = result;
       }
       this.classData$ = of(this.classData);
 
+      // TODO: Backend save call
+
       this.subscriptions.unsubscribe();
-      
+
       this.subscriptions = this.classData$.subscribe((npcClass) => {
         this.classDataSource.data = npcClass;
         this.classData = [...npcClass];
-      })
+      });
     });
   }
 
   public viewCharacter(charID: number) {
-    let charData = this.characterDataSource.data.find(npc => npc.charId === charID);
+    let charData = this.characterDataSource.data.find(
+      (npc) => npc.charId === charID
+    );
     let dialogRef = this.dialog.open(CharEditDialogComponent, {
       height: '400px',
       width: '600px',
-      data: charData
+      data: charData,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       console.log('Dialog closed');
       console.log(result);
-    })
+    });
   }
 }

@@ -14,6 +14,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 // App imports
 import { AppRoutingModule } from './app-routing.module';
@@ -23,17 +26,23 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ClassEditDialogComponent } from './components/classEditDialog/classEditDialog.component';
 import { CharEditDialogComponent } from './components/charEditDialog/charEditDialog.component';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
+import { NewClassDialogComponent } from './components/newClassDialog/newClassDialog.component';
 
 @NgModule({
-  declarations: [AppComponent, homeScreenComponent, ClassEditDialogComponent, CharEditDialogComponent],
+  declarations: [
+    AppComponent,
+    homeScreenComponent,
+    ClassEditDialogComponent,
+    CharEditDialogComponent,
+    NewClassDialogComponent,
+  ],
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     CommonModule,
+    DragDropModule,
     MatCardModule,
     MatFormFieldModule,
     MatToolbarModule,

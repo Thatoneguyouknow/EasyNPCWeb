@@ -1,8 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormControl } from '@angular/forms';
 import { npcClass } from 'src/app/models';
 import { availableHitDie } from 'src/app/constants';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'class-edit-dialog',
@@ -10,14 +10,21 @@ import { availableHitDie } from 'src/app/constants';
   styleUrls: ['./classEditDialog.component.scss'],
 })
 export class ClassEditDialogComponent {
-  nameControl = new FormControl('');
   model = Object.assign({}, this.data);
   availableHitDie = availableHitDie;
 
   constructor(
     public dialogRef: MatDialogRef<ClassEditDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: npcClass,
+    @Inject(MAT_DIALOG_DATA) public data: npcClass
   ) {}
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(
+      this.model.statPriority,
+      event.previousIndex,
+      event.currentIndex
+    );
+  }
 
   closeDialog() {
     this.dialogRef.close();
