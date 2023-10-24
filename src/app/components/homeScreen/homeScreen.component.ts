@@ -6,6 +6,8 @@ import { npcService } from 'src/app/api/npc.service';
 import { CharEditDialogComponent } from '../charEditDialog/charEditDialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ClassEditDialogComponent } from '../classEditDialog/classEditDialog.component';
+import { Observable, of, Subscription } from 'rxjs';
+import { UntypedFormBuilder } from '@angular/forms';
 
 const CLASS_MOC_DATA: npcClass[] = [
   {
@@ -13,7 +15,7 @@ const CLASS_MOC_DATA: npcClass[] = [
     userId: 100, 
     name: 'Ligma',
     userCreated: false,
-    hitDie: 4,
+    hitDie: Stat.availableHitDie.find((hitdie) => hitdie.value == 4),
     statPriority: [1, 2, 3, 4, 5, 6],
   },
 ];
@@ -54,17 +56,22 @@ export class homeScreenComponent implements AfterViewInit {
     'asiSecondary',
     'ageRange',
   ];
-
   characterDataSource = new MatTableDataSource<npc>(CHAR_MOC_DATA);
   classDataSource = new MatTableDataSource<npcClass>();
+  classData$: Observable<npcClass[]>;
+  classData: npcClass[] = [];
+  subscriptions: Subscription = Subscription.EMPTY;
   raceDataSource = new MatTableDataSource<npcRace>(RACE_MOC_DATA);
 
-  constructor(private api: npcService, private dialog: MatDialog) {}
+  constructor(private api: npcService, private dialog: MatDialog) {
+    this.classData$ = this.api.getAllClasses();
+  }
 
   ngAfterViewInit(): void {
-    this.api.getAllClasses().subscribe((response) => {
-      this.classDataSource.data = response;
-    });
+    this.subscriptions = this.classData$.subscribe((npcClass) => {
+      this.classDataSource.data = npcClass;
+      this.classData = [...npcClass];
+    })
   }
 
   public convertToStatName(stat: number): string {
@@ -82,16 +89,27 @@ export class homeScreenComponent implements AfterViewInit {
   }
   
   public viewClass(classID: number) {
-    let classData = this.classDataSource.data.find(npcClass => npcClass.id === classID);
+    let viewClassData = this.classDataSource.data.find(npcClass => npcClass.id === classID);
     let dialogRef = this.dialog.open(ClassEditDialogComponent, {
       height: '400px',
       width: '600px',
-      data: classData
+      data: viewClassData
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: npcClass) => {
       console.log('Dialog closed');
-      console.log(result);
+      if(result != undefined) {
+        let index = this.classData.findIndex(npcClass => npcClass.id === result.id);
+        this.classData[index] = result;
+      }
+      this.classData$ = of(this.classData);
+
+      this.subscriptions.unsubscribe();
+      
+      this.subscriptions = this.classData$.subscribe((npcClass) => {
+        this.classDataSource.data = npcClass;
+        this.classData = [...npcClass];
+      })
     });
   }
 

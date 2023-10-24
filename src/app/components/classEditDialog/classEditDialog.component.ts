@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { npcClass } from 'src/app/models';
+import { availableHitDie } from 'src/app/constants';
 
 @Component({
   selector: 'class-edit-dialog',
@@ -10,7 +11,8 @@ import { npcClass } from 'src/app/models';
 })
 export class ClassEditDialogComponent {
   nameControl = new FormControl('');
-  model = this.data;
+  model = Object.assign({}, this.data);
+  availableHitDie = availableHitDie;
 
   constructor(
     public dialogRef: MatDialogRef<ClassEditDialogComponent>,

@@ -23,6 +23,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ClassEditDialogComponent } from './components/classEditDialog/classEditDialog.component';
 import { CharEditDialogComponent } from './components/charEditDialog/charEditDialog.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [AppComponent, homeScreenComponent, ClassEditDialogComponent, CharEditDialogComponent],
@@ -36,6 +38,8 @@ import { CharEditDialogComponent } from './components/charEditDialog/charEditDia
     MatFormFieldModule,
     MatToolbarModule,
     MatSidenavModule,
+    MatSelectModule,
+    MatInputModule,
     MatButtonModule,
     MatIconModule,
     MatTableModule,

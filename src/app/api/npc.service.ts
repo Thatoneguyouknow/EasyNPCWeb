@@ -3,6 +3,7 @@ import { Observable, map } from "rxjs";
 import { npcClass } from "../models";
 import { HttpClient } from "@angular/common/http";
 import { classApi } from "./api.models";
+import { availableHitDie, HitDie } from "../constants";
 
 export interface ApiResponse<T> {
     id: number;
@@ -28,7 +29,7 @@ export class npcService {
                     userId: data.userID,
                     name: data.name,
                     userCreated: data.userID == 100 ? false : true,
-                    hitDie: data.hitDie,
+                    hitDie: availableHitDie.find((hitDie) => hitDie.value == data.hitDie),
                     statPriority: data.statPriority,
                 }))    
             )
