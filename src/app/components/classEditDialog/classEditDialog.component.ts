@@ -13,6 +13,8 @@ export class ClassEditDialogComponent {
   model = Object.assign({}, this.data);
   availableHitDie = availableHitDie;
 
+  //TODO Add Validators
+  
   constructor(
     public dialogRef: MatDialogRef<ClassEditDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: npcClass

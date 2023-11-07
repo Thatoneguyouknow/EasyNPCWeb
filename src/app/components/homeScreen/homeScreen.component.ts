@@ -31,10 +31,17 @@ const RACE_MOC_DATA: npcRace[] = [
   {
     raceId: 1,
     raceName: 'Sugma',
-    asiPrimary: [Stat.Stats.STRENGTH, 1],
-    asiSecondary: [Stat.Stats.DEXTERITY, 2],
+    alignmentSkew: 0,
+    heightRange: [4, 5],
+    weightRange: [100, 350],
     ageRange: [10, 100],
-    nameType: 10,
+    ASI: [0, 1, 2],
+    ASIV: [1, 1, 1],
+    abilityScoreIncrease: [
+      [0, 1],
+      [1, 1],
+      [2, 1],
+    ],
   },
 ];
 
@@ -55,6 +62,8 @@ const CHAR_MOC_DATA: npc[] = [
 })
 export class homeScreenComponent implements AfterViewInit {
   title = 'EasyNPCHome';
+  classSubscriptions: Subscription = Subscription.EMPTY;
+  raceSubscriptions: Subscription = Subscription.EMPTY;
   characterTableColumns: string[] = ['name', 'race', 'class'];
   classTableColumns: string[] = ['name', 'hitDie', 'userCreated'];
   raceTableColumns: string[] = [
@@ -67,18 +76,25 @@ export class homeScreenComponent implements AfterViewInit {
   classDataSource = new MatTableDataSource<npcClass>();
   classData$: Observable<npcClass[]>;
   classData: npcClass[] = [];
-  subscriptions: Subscription = Subscription.EMPTY;
   raceDataSource = new MatTableDataSource<npcRace>(RACE_MOC_DATA);
+  raceData$: Observable<npcRace[]>;
+  raceData: npcRace[] = [];
 
   constructor(private api: npcService, private dialog: MatDialog) {
     this.classData$ = this.api.getAllClasses();
+    this.raceData$ = this.api.getAllRaces();
   }
 
   ngAfterViewInit(): void {
-    this.subscriptions = this.classData$.subscribe((npcClass) => {
+    this.classSubscriptions = this.classData$.subscribe((npcClass) => {
       this.classDataSource.data = npcClass;
       this.classData = [...npcClass];
-    });
+    })
+    this.raceSubscriptions = this.raceData$.subscribe((npcRace) => {
+      // this.raceDataSource.data = npcRace;
+      this.raceData = [...npcRace];
+      console.log(npcRace);
+    })
   }
 
   public convertToStatName(stat: number): string {
@@ -92,32 +108,31 @@ export class homeScreenComponent implements AfterViewInit {
   }
 
   public newClass() {
-    let next_ID: number = this.classData.map(npcClass => npcClass.id).reduce((a, b) => Math.max(a, b));
+    let next_ID: number = this.classData
+      .map((npcClass) => npcClass.id)
+      .reduce((a, b) => Math.max(a, b));
 
     let dialogRef = this.dialog.open(NewClassDialogComponent, {
       height: '400px',
       width: '600px',
-      data: next_ID, 
+      data: next_ID,
     });
 
     dialogRef.afterClosed().subscribe((result: npcClass) => {
       if (result != undefined) {
+        this.classData.push(result);
         console.log(result);
-        // let index = this.classData.findIndex(
-        //   (npcClass) => npcClass.id === result.id
-        // );
-        // this.classData[index] = result;
       }
-      // this.classData$ = of(this.classData);
+      this.classData$ = of(this.classData);
 
       // // TODO: Backend save call
 
-      // this.subscriptions.unsubscribe();
+      this.classSubscriptions.unsubscribe();
 
-      // this.subscriptions = this.classData$.subscribe((npcClass) => {
-      //   this.classDataSource.data = npcClass;
-      //   this.classData = [...npcClass];
-      // });
+      this.classSubscriptions = this.classData$.subscribe((npcClass) => {
+        this.classDataSource.data = npcClass;
+        this.classData = [...npcClass];
+      });
     });
   }
 
@@ -143,9 +158,9 @@ export class homeScreenComponent implements AfterViewInit {
 
       // TODO: Backend save call
 
-      this.subscriptions.unsubscribe();
+      this.classSubscriptions.unsubscribe();
 
-      this.subscriptions = this.classData$.subscribe((npcClass) => {
+      this.classSubscriptions = this.classData$.subscribe((npcClass) => {
         this.classDataSource.data = npcClass;
         this.classData = [...npcClass];
       });

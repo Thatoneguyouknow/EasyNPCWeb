@@ -13,7 +13,6 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <label for="hitDie">Hit Die </label>
-      <!-- <input matInput type="text" [(ngModel)]="model.hitDie" name="hitDie" #hitDie="ngModel"> -->
       <mat-select [(ngModel)]="model.hitDie" name="hitDie" #hitDie="ngModel">
         <mat-option *ngFor="let die of availableHitDie" [value]="die">
           {{die.display}}

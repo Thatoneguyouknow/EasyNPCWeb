@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Observable, map } from "rxjs";
-import { npcClass } from "../models";
+import { npcClass, npcRace } from "../models";
 import { HttpClient } from "@angular/common/http";
-import { classApi } from "./api.models";
+import { classApi, raceApi } from "./api.models";
 import { availableAbilities, availableHitDie, HitDie } from "../constants";
+import { convertASIFromBackend } from "../supporting methods/backendConversion";
 
 export interface ApiResponse<T> {
     id: number;
@@ -35,6 +36,25 @@ export class npcService {
                     ),
                 }))    
             )
+        )
+    }
+
+    getAllRaces(): Observable<npcRace[]>{
+        const url = `api/Races`;
+        return this.http.get<ApiResponse<raceApi>>('http://localhost:8080/Races').pipe(
+            map((npcRaceData: ApiResponse<raceApi>): npcRace[] =>
+                npcRaceData.data.map((data) => ({
+                    raceId: data.id,
+                    raceName: data.name,
+                    alignmentSkew: data.alignmentSkew,
+                    heightRange: [data.heightRange[0], data.heightRange[1]],
+                    weightRange: [data.weightRange[0], data.weightRange[1]],
+                    ageRange: [data.ageRange[0], data.ageRange[1]],
+                    ASI: data.ASI,
+                    ASIV: data.ASIV,
+                    abilityScoreIncrease: convertASIFromBackend(data.ASI, data.ASIV),
+                }))
+                )
         )
     }
 }

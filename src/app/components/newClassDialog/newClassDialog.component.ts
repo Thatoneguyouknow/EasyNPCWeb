@@ -13,6 +13,8 @@ export class NewClassDialogComponent {
   model: npcClass = {} as npcClass;
   availableHitDie = availableHitDie;
 
+  //TODO Add Validators
+
   constructor(
     public dialogRef: MatDialogRef<NewClassDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: number
@@ -21,6 +23,7 @@ export class NewClassDialogComponent {
     this.model.userCreated = true;
     this.model.userId = 1;
     this.model.id = data;
+    this.model.hitDie = availableHitDie[0];
   }
 
   drop(event: CdkDragDrop<string[]>) {
