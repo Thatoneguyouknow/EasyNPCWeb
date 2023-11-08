@@ -16,7 +16,7 @@ export interface raceApi {
   heightRange: number[];
   weightRange: number[];
   ageRange: number[];
-  ASI: number[];
-  ASIV: number[];
+  asi: number[];
+  asiv: number[];
   // abilityScoreIncrease: Array<[number, number]>;
 }

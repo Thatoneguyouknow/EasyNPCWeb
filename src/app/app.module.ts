@@ -24,9 +24,10 @@ import { AppComponent } from './app.component';
 import { homeScreenComponent } from './components/homeScreen/homeScreen.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { ClassEditDialogComponent } from './components/classEditDialog/classEditDialog.component';
-import { CharEditDialogComponent } from './components/charEditDialog/charEditDialog.component';
-import { NewClassDialogComponent } from './components/newClassDialog/newClassDialog.component';
+import { ClassEditDialogComponent } from './components/Edit Dialogs/classEditDialog/classEditDialog.component';
+import { CharEditDialogComponent } from './components/Edit Dialogs/charEditDialog/charEditDialog.component';
+import { NewClassDialogComponent } from './components/New Dialogs/newClassDialog/newClassDialog.component';
+import { RaceEditDialogComponent } from './components/Edit Dialogs/raceEditDialog/raceEditDialog.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { NewClassDialogComponent } from './components/newClassDialog/newClassDia
     homeScreenComponent,
     ClassEditDialogComponent,
     CharEditDialogComponent,
+    RaceEditDialogComponent,
     NewClassDialogComponent,
   ],
   imports: [

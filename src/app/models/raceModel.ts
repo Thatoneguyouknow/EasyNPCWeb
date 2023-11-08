@@ -1,3 +1,5 @@
+import { StatTypes } from "../constants";
+
 export interface npcRace {
     raceId: number;
     raceName: string;
@@ -5,7 +7,7 @@ export interface npcRace {
     heightRange: [number, number];
     weightRange: [number, number];
     ageRange: [number, number];
-    ASI: number[];
-    ASIV: number[];
-    abilityScoreIncrease: Array<[number, number]>;
+    asiRaw: number[];
+    asivRaw: number[];
+    abilityScoreIncrease: Array<[StatTypes, number]>;
 }

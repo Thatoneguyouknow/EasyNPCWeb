@@ -1,9 +1,10 @@
+import { StatTypes } from "../constants";
+
 export function convertASIFromBackend(
-  abilities: number[],
+  abilities: StatTypes[],
   values: number[]
-): Array<[number, number]> {
-  let temp_array = new Array<[number, number]>;
-  console.log(abilities, values);
+): Array<[StatTypes, number]> {
+  let temp_array = new Array<[StatTypes, number]>;
   if (abilities.length == values.length) {
     for (let i = 0; i < abilities.length; i++) {
       temp_array.push([abilities[0], values[0]]);
