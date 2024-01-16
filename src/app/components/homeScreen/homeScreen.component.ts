@@ -90,7 +90,6 @@ export class homeScreenComponent implements AfterViewInit {
     this.raceSubscriptions = this.raceData$.subscribe((npcRace) => {
       this.raceDataSource.data = npcRace;
       this.raceData = [...npcRace];
-      console.log(npcRace);
     });
   }
 
@@ -103,7 +102,7 @@ export class homeScreenComponent implements AfterViewInit {
   public newClass() {
     let next_ID: number = this.classData
       .map((npcClass) => npcClass.id)
-      .reduce((a, b) => Math.max(a, b));
+      .reduce((a, b) => Math.max(a, b)) + 1;
 
     let dialogRef = this.dialog.open(NewClassDialogComponent, {
       height: '400px',
@@ -114,7 +113,6 @@ export class homeScreenComponent implements AfterViewInit {
     dialogRef.afterClosed().subscribe((result: npcClass) => {
       if (result != undefined) {
         this.classData.push(result);
-        console.log(result);
       }
       this.classData$ = of(this.classData);
 
@@ -129,19 +127,15 @@ export class homeScreenComponent implements AfterViewInit {
     });
   }
 
-  public viewClass(classID: number) {
-    let viewClassData = this.classDataSource.data.find(
-      (npcClass) => npcClass.id === classID
-    );
+  public viewClass(classToEdit: npcClass) {
     let dialogRef = this.dialog.open(ClassEditDialogComponent, {
       height: '400px',
       width: '600px',
-      data: viewClassData,
+      data: classToEdit,
     });
 
     dialogRef.afterClosed().subscribe((result: npcClass) => {
       if (result != undefined) {
-        console.log(result);
         let index = this.classData.findIndex(
           (npcClass) => npcClass.id === result.id
         );
@@ -160,16 +154,11 @@ export class homeScreenComponent implements AfterViewInit {
     });
   }
 
-  public viewRace(raceID: number) {
-    // The below logic is flawed, in that it only works when the ID of the race is equal to the row number
-    // This fails because the dwarf is at ID 2, and being the only object, it is at row 0
-    let viewRaceData = this.raceDataSource.data.find(
-      (npcRace) => npcRace.raceId === raceID
-    );
+  public viewRace(raceToEdit: npcRace) {
     let dialogRef = this.dialog.open(RaceEditDialogComponent, {
       height: '400px',
       width: '600px',
-      data: viewRaceData,
+      data: raceToEdit,
     });
 
     // dialogRef.afterClosed().subscribe((result: npcClass) => {

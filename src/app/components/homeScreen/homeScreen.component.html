@@ -98,7 +98,7 @@
           <tr mat-header-row *matHeaderRowDef="classTableColumns"></tr>
           <tr
             mat-row
-            (click)="viewClass(row.id)"
+            (click)="viewClass(row)"
             *matRowDef="let row; columns: classTableColumns"
           ></tr>
         </table>
@@ -133,7 +133,7 @@
             <td mat-cell *matCellDef>false</td>
           </ng-component>
           <tr mat-header-row *matHeaderRowDef="raceTableColumns"></tr>
-          <tr mat-row (click)="viewRace(row.race.raceID)" *matRowDef="let row; columns: raceTableColumns"></tr>
+          <tr mat-row (click)="viewRace(row)" *matRowDef="let row; columns: raceTableColumns"></tr>
         </table>
       </mat-card-content>
     </mat-card>
