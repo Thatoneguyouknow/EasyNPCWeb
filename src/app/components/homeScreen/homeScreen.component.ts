@@ -100,9 +100,10 @@ export class homeScreenComponent implements AfterViewInit {
   }
 
   public newClass() {
-    let next_ID: number = this.classData
-      .map((npcClass) => npcClass.id)
-      .reduce((a, b) => Math.max(a, b)) + 1;
+    let next_ID: number =
+      this.classData
+        .map((npcClass) => npcClass.id)
+        .reduce((a, b) => Math.max(a, b)) + 1;
 
     let dialogRef = this.dialog.open(NewClassDialogComponent, {
       height: '400px',
@@ -161,25 +162,25 @@ export class homeScreenComponent implements AfterViewInit {
       data: raceToEdit,
     });
 
-    // dialogRef.afterClosed().subscribe((result: npcClass) => {
-    //   if (result != undefined) {
-    //     console.log(result);
-    //     let index = this.classData.findIndex(
-    //       (npcClass) => npcClass.id === result.id
-    //     );
-    //     this.classData[index] = result;
-    //   }
-    //   this.classData$ = of(this.classData);
+    dialogRef.afterClosed().subscribe((result: npcRace) => {
+      if (result != undefined) {
+        console.log(result);
+        let index = this.raceData.findIndex(
+          (npcRace) => npcRace.raceId === result.raceId
+        );
+        this.raceData[index] = result;
+      }
+      this.raceData$ = of(this.raceData);
 
-    //   // TODO: Backend save call
+      // TODO: Backend save call
 
-    //   this.classSubscriptions.unsubscribe();
+      this.raceSubscriptions.unsubscribe();
 
-    //   this.classSubscriptions = this.classData$.subscribe((npcClass) => {
-    //     this.classDataSource.data = npcClass;
-    //     this.classData = [...npcClass];
-    //   });
-    // });
+      this.raceSubscriptions = this.raceData$.subscribe((npcRace) => {
+        this.raceDataSource.data = npcRace;
+        this.raceData = [...npcRace];
+      });
+    });
   }
 
   public viewCharacter(charID: number) {
