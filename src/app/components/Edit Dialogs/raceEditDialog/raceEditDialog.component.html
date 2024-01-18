@@ -11,10 +11,44 @@
         #name="ngModel"
       />
     </mat-form-field>
+    <mat-form-field appearance="fill">
+      <label for="age">Age Range </label>
+      <input
+        matInput
+        type="number"
+        [(ngModel)]="model.ageRange[0]"
+        name="age"
+        #name="ngModel"
+      />
+      <input
+        matInput
+        type="number"
+        [(ngModel)]="model.ageRange[1]"
+        name="age"
+        #name="ngModel"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <label for="age">Height Range </label>
+      <input
+        matInput
+        type="number"
+        [(ngModel)]="model.ageRange[0]"
+        name="age"
+        #name="ngModel"
+      />
+      <input
+        matInput
+        type="number"
+        [(ngModel)]="model.ageRange[1]"
+        name="age"
+        #name="ngModel"
+      />
+    </mat-form-field>
     <!-- <mat-form-field appearance="fill">
       <label for="hitDie">Hit Die </label> -->
-      <!-- <input matInput type="text" [(ngModel)]="model.hitDie" name="hitDie" #hitDie="ngModel"> -->
-      <!-- <mat-select [(ngModel)]="model.hitDie" name="hitDie" #hitDie="ngModel">
+    <!-- <input matInput type="text" [(ngModel)]="model.hitDie" name="hitDie" #hitDie="ngModel"> -->
+    <!-- <mat-select [(ngModel)]="model.hitDie" name="hitDie" #hitDie="ngModel">
         <mat-option *ngFor="let die of availableHitDie" [value]="die">
           {{die.display}}
         </mat-option>

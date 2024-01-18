@@ -17,6 +17,9 @@ export class RaceEditDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: npcRace
   ) {}
 
+  // TODO:
+  // User should be able to edit name, height range, age range, weight range, asi stats and values
+
   closeDialog() {
     this.dialogRef.close();
   }
