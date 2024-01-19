@@ -28,6 +28,7 @@ import { ClassEditDialogComponent } from './components/Edit Dialogs/classEditDia
 import { CharEditDialogComponent } from './components/Edit Dialogs/charEditDialog/charEditDialog.component';
 import { NewClassDialogComponent } from './components/New Dialogs/newClassDialog/newClassDialog.component';
 import { RaceEditDialogComponent } from './components/Edit Dialogs/raceEditDialog/raceEditDialog.component';
+import { NewRaceDialogComponent } from './components/New Dialogs/newRaceDialog/newRaceDialog.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { RaceEditDialogComponent } from './components/Edit Dialogs/raceEditDialo
     CharEditDialogComponent,
     RaceEditDialogComponent,
     NewClassDialogComponent,
+    NewRaceDialogComponent,
   ],
   imports: [
     BrowserAnimationsModule,

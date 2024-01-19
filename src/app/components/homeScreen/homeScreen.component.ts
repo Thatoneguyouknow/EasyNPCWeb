@@ -16,6 +16,7 @@ import { UntypedFormBuilder } from '@angular/forms';
 import { NewClassDialogComponent } from '../New Dialogs/newClassDialog/newClassDialog.component';
 import { findLargestNumber } from 'src/app/supporting methods/mathOperations';
 import { RaceEditDialogComponent } from '../Edit Dialogs/raceEditDialog/raceEditDialog.component';
+import { NewRaceDialogComponent } from '../New Dialogs/newRaceDialog/newRaceDialog.component';
 
 const CLASS_MOC_DATA: npcClass[] = [
   {
@@ -125,6 +126,23 @@ export class homeScreenComponent implements AfterViewInit {
         this.classDataSource.data = npcClass;
         this.classData = [...npcClass];
       });
+    });
+  }
+
+  public newRace() {
+    let next_ID: number =
+      this.raceData
+        .map((npcRace) => npcRace.raceId)
+        .reduce((a, b) => Math.max(a, b)) + 1;
+
+    let dialogRef = this.dialog.open(NewRaceDialogComponent, {
+      height: '400px',
+      width: '600px',
+      data: next_ID,
+    });
+
+    dialogRef.afterClosed().subscribe((result: npcRace) => {
+      console.log(result);
     });
   }
 

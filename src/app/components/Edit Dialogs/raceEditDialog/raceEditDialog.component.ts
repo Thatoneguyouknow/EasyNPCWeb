@@ -11,14 +11,14 @@ export class RaceEditDialogComponent {
   model = Object.assign({}, this.data);
 
   //TODO Add Validators
-  
+
   constructor(
     public dialogRef: MatDialogRef<RaceEditDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: npcRace
   ) {}
 
   // TODO:
-  // User should be able to edit name, height range, age range, weight range, asi stats and values
+  // User should be able to edit asi stats and values
 
   closeDialog() {
     this.dialogRef.close();
