@@ -12,7 +12,7 @@ export interface raceApi {
   id: number;
   userID: number;
   name: string;
-  alignmentSkew: number;
+  alignment: number;
   heightRange: number[];
   weightRange: number[];
   ageRange: number[];

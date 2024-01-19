@@ -51,7 +51,7 @@ export class npcService {
           npcRaceData.data.map((data) => ({
             raceId: data.id,
             raceName: data.name,
-            alignmentSkew: data.alignmentSkew,
+            alignmentSkew: data.alignment,
             heightRange: [data.heightRange[0], data.heightRange[1]],
             weightRange: [data.weightRange[0], data.weightRange[1]],
             ageRange: [data.ageRange[0], data.ageRange[1]],
