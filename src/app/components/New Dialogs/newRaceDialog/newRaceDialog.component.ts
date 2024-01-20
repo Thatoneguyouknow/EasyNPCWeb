@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { npcRace } from 'src/app/models';
+import { availableAbilities } from 'src/app/constants'; 
 
 @Component({
   selector: 'new-race-dialog',
@@ -20,6 +21,7 @@ export class NewRaceDialogComponent {
     this.model.ageRange = [0, 0];
     this.model.heightRange = [0, 0];
     this.model.weightRange = [0, 0];
+    this.model.abilityScoreIncrease = [[availableAbilities[0], 1]]
   }
 
   closeDialog() {

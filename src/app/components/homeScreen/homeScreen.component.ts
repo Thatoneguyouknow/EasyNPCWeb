@@ -54,6 +54,13 @@ const CHAR_MOC_DATA: npc[] = [
     charName: 'Jeffery',
     charRace: RACE_MOC_DATA[0],
     charClass: CLASS_MOC_DATA[0],
+    alignment: 8,
+    personalityTraits: ["stupid"],
+    level: 1,
+    stats: [{stat: Stat.availableAbilities[0], statValue: 15, statModifier: 3}],
+    hitPoints: 12,
+    armorClass: 6,
+    speed: 100
   },
 ];
 
@@ -117,9 +124,6 @@ export class homeScreenComponent implements AfterViewInit {
         this.classData.push(result);
       }
       this.classData$ = of(this.classData);
-
-      // // TODO: Backend save call
-
       this.classSubscriptions.unsubscribe();
 
       this.classSubscriptions = this.classData$.subscribe((npcClass) => {
@@ -142,7 +146,16 @@ export class homeScreenComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe((result: npcRace) => {
-      console.log(result);
+      if(result != undefined) {
+        this.raceData.push(result);
+      }
+      this.raceData$ = of(this.raceData);
+      this.raceSubscriptions.unsubscribe();
+
+      this.raceSubscriptions = this.raceData$.subscribe((npcRace) => {
+        this.raceDataSource.data = npcRace;
+        this.raceData = [...npcRace];
+      });
     });
   }
 
@@ -201,14 +214,18 @@ export class homeScreenComponent implements AfterViewInit {
     });
   }
 
-  public viewCharacter(charID: number) {
-    let charData = this.characterDataSource.data.find(
-      (npc) => npc.charId === charID
-    );
+  public viewCharacter(charToEdit: npc) {
+
+    // Need to create deep copies here, so that the character references its own version of the race, not the global race object
+    const classDataCopy: npcClass[] = [];
+    this.classData.forEach(val => classDataCopy.push(Object.assign({}, val)));
+    const raceDataCopy: npcRace[] = [];
+    this.raceData.forEach(val => raceDataCopy.push(Object.assign({}, val)));
+
     let dialogRef = this.dialog.open(CharEditDialogComponent, {
       height: '400px',
       width: '600px',
-      data: charData,
+      data: {charToEdit, classDataCopy, raceDataCopy},      
     });
 
     dialogRef.afterClosed().subscribe((result) => {

@@ -17,9 +17,6 @@ export class RaceEditDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: npcRace
   ) {}
 
-  // TODO:
-  // User should be able to edit asi stats and values
-
   closeDialog() {
     this.dialogRef.close();
   }

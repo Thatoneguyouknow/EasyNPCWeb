@@ -55,3 +55,9 @@ export const availableHitDie: HitDie[] = [
     {value: 12, display: 'd12'},
     {value: 20, display: 'd20'},
 ]
+
+export interface characterStat{
+    stat: StatTypes;
+    statValue: number;
+    statModifier: number;
+}

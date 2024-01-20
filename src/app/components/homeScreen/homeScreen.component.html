@@ -62,7 +62,7 @@
           <tr mat-header-row *matHeaderRowDef="characterTableColumns"></tr>
           <tr
             mat-row
-            (click)="viewCharacter(row.id)"
+            (click)="viewCharacter(row)"
             *matRowDef="let row; columns: characterTableColumns"
           ></tr>
         </table>
