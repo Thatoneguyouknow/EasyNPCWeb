@@ -2,7 +2,7 @@
   <h1 mat-dialog-title>View/Edit {{ data.charToEdit.charName }}</h1>
   <div mat-dialog-content>
     <mat-form-field appearance="fill">
-        <label for="name">Character Name</label>
+      <label for="name">Character Name</label>
       <input
         matInput
         type="text"
@@ -11,5 +11,83 @@
         #name="ngModel"
       />
     </mat-form-field>
+    <mat-form-field>
+      <label for="class">Class</label>
+      <mat-select [(ngModel)]="model.charClass" name="class" #class="ngModel">
+        <mat-option *ngFor="let cClass of classData" [value]="cClass">
+          {{ cClass.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <label for="race">Race</label>
+      <mat-select [(ngModel)]="model.charRace" name="race" #race="ngModel">
+        <mat-option *ngFor="let cRace of raceData" [value]="cRace">
+          {{ cRace.raceName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <label for="alignment">alignment</label>
+      <mat-select
+        [(ngModel)]="model.alignment"
+        name="alignment"
+        #alignment="ngModel"
+      >
+        <mat-option [value]="0">Lawful Good</mat-option>
+        <mat-option [value]="1">Neutral Good</mat-option>
+        <mat-option [value]="2">Chaotic Good</mat-option>
+        <mat-option [value]="3">Lawful Neutral</mat-option>
+        <mat-option [value]="4">True Neutral</mat-option>
+        <mat-option [value]="5">Chaotic Neutral</mat-option>
+        <mat-option [value]="6">Lawful Evil</mat-option>
+        <mat-option [value]="7">Neutral Evil</mat-option>
+        <mat-option [value]="8">Chaotic Evil</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <label for="level">level</label>
+      <input
+        matInput
+        type="number"
+        [(ngModel)]="model.level"
+        name="level"
+        #level="ngModel"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <label for="hp">hit points</label>
+      <input
+        matInput
+        type="number"
+        [(ngModel)]="model.hitPoints"
+        name="hp"
+        #hp="ngModel"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <label for="ac">armor class</label>
+      <input
+        matInput
+        type="number"
+        [(ngModel)]="model.armorClass"
+        name="ac"
+        #ac="ngModel"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <label for="speed">speed</label>
+      <input
+        matInput
+        type="number"
+        [(ngModel)]="model.speed"
+        name="speed"
+        #speed="ngModel"
+      />
+    </mat-form-field>
+    <div>
+      <button mat-button [mat-dialog-close]="model">Save</button>
+      <button mat-button (click)="closeDialog()">Cancel</button>
+    </div>
   </div>
 </div>

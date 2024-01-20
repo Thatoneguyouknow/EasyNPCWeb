@@ -222,15 +222,22 @@ export class homeScreenComponent implements AfterViewInit {
     const raceDataCopy: npcRace[] = [];
     this.raceData.forEach(val => raceDataCopy.push(Object.assign({}, val)));
 
+    // REMOVE THIS after mock data is not necessary
+    charToEdit.charClass = classDataCopy[0];
+    charToEdit.charRace = raceDataCopy[0];
+
     let dialogRef = this.dialog.open(CharEditDialogComponent, {
-      height: '400px',
+      height: '800px',
       width: '600px',
-      data: {charToEdit, classDataCopy, raceDataCopy},      
+      data: {charToEdit, classData: classDataCopy, raceData: raceDataCopy},      
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('Dialog closed');
-      console.log(result);
+    dialogRef.afterClosed().subscribe((result: npc) => {
+      if(result != undefined){
+        console.log(result);
+      } else {
+        console.log(result);
+      }
     });
   }
 }
