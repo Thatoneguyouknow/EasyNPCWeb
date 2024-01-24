@@ -55,12 +55,19 @@ const CHAR_MOC_DATA: npc[] = [
     charRace: RACE_MOC_DATA[0],
     charClass: CLASS_MOC_DATA[0],
     alignment: 8,
-    personalityTraits: ["stupid"],
+    personalityTraits: ['stupid'],
     level: 1,
-    stats: [{stat: Stat.availableAbilities[0], statValue: 15, statModifier: 3}],
+    stats: [
+      { stat: Stat.availableAbilities[0], statValue: 15, statModifier: 3 },
+      { stat: Stat.availableAbilities[1], statValue: 14, statModifier: 3 },
+      { stat: Stat.availableAbilities[2], statValue: 13, statModifier: 3 },
+      { stat: Stat.availableAbilities[3], statValue: 12, statModifier: 3 },
+      { stat: Stat.availableAbilities[4], statValue: 11, statModifier: 3 },
+      { stat: Stat.availableAbilities[5], statValue: 10, statModifier: 3 },
+    ],
     hitPoints: 12,
     armorClass: 6,
-    speed: 100
+    speed: 100,
   },
 ];
 
@@ -146,7 +153,7 @@ export class homeScreenComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe((result: npcRace) => {
-      if(result != undefined) {
+      if (result != undefined) {
         this.raceData.push(result);
       }
       this.raceData$ = of(this.raceData);
@@ -215,12 +222,11 @@ export class homeScreenComponent implements AfterViewInit {
   }
 
   public viewCharacter(charToEdit: npc) {
-
     // Need to create deep copies here, so that the character references its own version of the race, not the global race object
     const classDataCopy: npcClass[] = [];
-    this.classData.forEach(val => classDataCopy.push(Object.assign({}, val)));
+    this.classData.forEach((val) => classDataCopy.push(Object.assign({}, val)));
     const raceDataCopy: npcRace[] = [];
-    this.raceData.forEach(val => raceDataCopy.push(Object.assign({}, val)));
+    this.raceData.forEach((val) => raceDataCopy.push(Object.assign({}, val)));
 
     // REMOVE THIS after mock data is not necessary
     charToEdit.charClass = classDataCopy[0];
@@ -229,11 +235,11 @@ export class homeScreenComponent implements AfterViewInit {
     let dialogRef = this.dialog.open(CharEditDialogComponent, {
       height: '800px',
       width: '600px',
-      data: {charToEdit, classData: classDataCopy, raceData: raceDataCopy},      
+      data: { charToEdit, classData: classDataCopy, raceData: raceDataCopy },
     });
 
     dialogRef.afterClosed().subscribe((result: npc) => {
-      if(result != undefined){
+      if (result != undefined) {
         console.log(result);
       } else {
         console.log(result);
