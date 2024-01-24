@@ -17,6 +17,8 @@ import { NewClassDialogComponent } from '../New Dialogs/newClassDialog/newClassD
 import { findLargestNumber } from 'src/app/supporting methods/mathOperations';
 import { RaceEditDialogComponent } from '../Edit Dialogs/raceEditDialog/raceEditDialog.component';
 import { NewRaceDialogComponent } from '../New Dialogs/newRaceDialog/newRaceDialog.component';
+import { NewCharDialogComponent } from '../New Dialogs/newCharacterDialog/newCharacterDialog.component';
+import { ObserversModule } from '@angular/cdk/observers';
 
 const CLASS_MOC_DATA: npcClass[] = [
   {
@@ -81,10 +83,13 @@ export class homeScreenComponent implements AfterViewInit {
   title = 'EasyNPCHome';
   classSubscriptions: Subscription = Subscription.EMPTY;
   raceSubscriptions: Subscription = Subscription.EMPTY;
+  characterSubscriptions: Subscription = Subscription.EMPTY;
   characterTableColumns: string[] = ['name', 'race', 'class'];
   classTableColumns: string[] = ['name', 'hitDie', 'userCreated'];
   raceTableColumns: string[] = ['name', 'asi', 'userCreated'];
-  characterDataSource = new MatTableDataSource<npc>(CHAR_MOC_DATA);
+  characterDataSource = new MatTableDataSource<npc>();
+  characterData$: Observable<npc[]>;
+  characterData: npc[] = [];
   classDataSource = new MatTableDataSource<npcClass>();
   classData$: Observable<npcClass[]>;
   classData: npcClass[] = [];
@@ -95,6 +100,8 @@ export class homeScreenComponent implements AfterViewInit {
   constructor(private api: npcService, private dialog: MatDialog) {
     this.classData$ = this.api.getAllClasses();
     this.raceData$ = this.api.getAllRaces();
+    // TODO
+    this.characterData$ = of(CHAR_MOC_DATA);
   }
 
   ngAfterViewInit(): void {
@@ -105,6 +112,10 @@ export class homeScreenComponent implements AfterViewInit {
     this.raceSubscriptions = this.raceData$.subscribe((npcRace) => {
       this.raceDataSource.data = npcRace;
       this.raceData = [...npcRace];
+    });
+    this.characterSubscriptions = this.characterData$.subscribe((npc) => {
+      this.characterDataSource.data = npc;
+      this.characterData = [...npc];
     });
   }
 
@@ -163,6 +174,30 @@ export class homeScreenComponent implements AfterViewInit {
         this.raceDataSource.data = npcRace;
         this.raceData = [...npcRace];
       });
+    });
+  }
+
+  public newCharacter() {
+    let next_ID: number =
+      this.characterData
+        .map((npc) => npc.charId)
+        .reduce((a, b) => Math.max(a, b)) + 1;
+    // Need to create deep copies here, so that the character references its own version of the race, not the global race object
+    const classDataCopy: npcClass[] = [];
+    this.classData.forEach((val) => classDataCopy.push(Object.assign({}, val)));
+    const raceDataCopy: npcRace[] = [];
+    this.raceData.forEach((val) => raceDataCopy.push(Object.assign({}, val)));
+
+    let dialogRef = this.dialog.open(NewCharDialogComponent, {
+      height: '800px',
+      width: '600px',
+      data: { next_ID, classData: classDataCopy, raceData: raceDataCopy },
+    });
+
+    dialogRef.afterClosed().subscribe((result: npc) => {
+      if (result != undefined) {
+        console.log(result);
+      }
     });
   }
 
@@ -229,7 +264,13 @@ export class homeScreenComponent implements AfterViewInit {
     this.raceData.forEach((val) => raceDataCopy.push(Object.assign({}, val)));
 
     // REMOVE THIS after mock data is not necessary
-    charToEdit.charClass = classDataCopy[0];
+    if (
+      this.classData.find(
+        (npcClass) => npcClass.name == charToEdit.charClass.name
+      ) == undefined
+    ) {
+      charToEdit.charClass = classDataCopy[0];
+    }
     charToEdit.charRace = raceDataCopy[0];
 
     let dialogRef = this.dialog.open(CharEditDialogComponent, {
@@ -241,9 +282,19 @@ export class homeScreenComponent implements AfterViewInit {
     dialogRef.afterClosed().subscribe((result: npc) => {
       if (result != undefined) {
         console.log(result);
-      } else {
-        console.log(result);
+        let index = this.characterData.findIndex(
+          (npcChar) => npcChar.charId === result.charId
+        );
+        this.characterData[index] = result;
       }
+      this.characterData$ = of(this.characterData);
+
+      this.characterSubscriptions.unsubscribe();
+
+      this.characterSubscriptions = this.characterData$.subscribe((npcChar) => {
+        this.characterDataSource.data = npcChar;
+        this.characterData = [...npcChar];
+      });
     });
   }
 }

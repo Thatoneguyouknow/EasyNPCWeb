@@ -30,6 +30,7 @@ import { CharEditDialogComponent } from './components/Edit Dialogs/charEditDialo
 import { NewClassDialogComponent } from './components/New Dialogs/newClassDialog/newClassDialog.component';
 import { RaceEditDialogComponent } from './components/Edit Dialogs/raceEditDialog/raceEditDialog.component';
 import { NewRaceDialogComponent } from './components/New Dialogs/newRaceDialog/newRaceDialog.component';
+import { NewCharDialogComponent } from './components/New Dialogs/newCharacterDialog/newCharacterDialog.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { NewRaceDialogComponent } from './components/New Dialogs/newRaceDialog/n
     ClassEditDialogComponent,
     CharEditDialogComponent,
     RaceEditDialogComponent,
+    NewCharDialogComponent,
     NewClassDialogComponent,
     NewRaceDialogComponent,
   ],

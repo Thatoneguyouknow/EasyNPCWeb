@@ -11,7 +11,6 @@ export interface npc {
     alignment: number;
     personalityTraits: string[];
     level: number;
-    // Stats will need its own type to hold stat: modifier
     stats: characterStat[];
     hitPoints: number;
     armorClass: number;
