@@ -19,6 +19,7 @@ import { RaceEditDialogComponent } from '../Edit Dialogs/raceEditDialog/raceEdit
 import { NewRaceDialogComponent } from '../New Dialogs/newRaceDialog/newRaceDialog.component';
 import { NewCharDialogComponent } from '../New Dialogs/newCharacterDialog/newCharacterDialog.component';
 import { ObserversModule } from '@angular/cdk/observers';
+import { generateCharacter } from 'src/app/supporting methods/generateCharacter';
 
 const CLASS_MOC_DATA: npcClass[] = [
   {
@@ -209,7 +210,7 @@ export class homeScreenComponent implements AfterViewInit {
   }
 
   public generateNewCharacter() {
-    
+    generateCharacter(this.raceData, this.classData);
   }
 
   public viewClass(classToEdit: npcClass) {
