@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { npcRace } from 'src/app/models';
+import { availableAbilities } from 'src/app/constants';
 
 @Component({
   selector: 'race-edit-dialog',
@@ -9,6 +10,7 @@ import { npcRace } from 'src/app/models';
 })
 export class RaceEditDialogComponent {
   model = Object.assign({}, this.data);
+  abilities = availableAbilities;
 
   //TODO Add Validators
 

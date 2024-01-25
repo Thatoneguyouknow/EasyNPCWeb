@@ -80,6 +80,17 @@
         <mat-option [value]="8">Chaotic Evil</mat-option>
       </mat-select>
     </mat-form-field>
+    <mat-form-field>
+      <label for="asiField">Ability Score Increases</label>
+      <div *ngFor="let asi of model.abilityScoreIncrease">
+        <mat-select [(ngModel)]="asi[0]" name="asiStat" #asiStat="ngModel">
+          <mat-option *ngFor="let stat of abilities">
+            {{ stat.name }}
+          </mat-option>
+        </mat-select>
+        <input matInput type="number" [(ngModel)]="asi[1]" />
+      </div>
+    </mat-form-field>
     <div>
       <button mat-button [mat-dialog-close]="model">Save</button>
       <button mat-button (click)="closeDialog()">Cancel</button>

@@ -191,14 +191,25 @@ export class homeScreenComponent implements AfterViewInit {
     let dialogRef = this.dialog.open(NewCharDialogComponent, {
       height: '800px',
       width: '600px',
-      data: { next_ID, classData: classDataCopy, raceData: raceDataCopy },
+      data: { next_ID, classData: this.classData, raceData: this.raceData },
     });
 
     dialogRef.afterClosed().subscribe((result: npc) => {
       if (result != undefined) {
-        console.log(result);
+        this.characterData.push(result);
       }
+      this.characterData$ = of(this.characterData);
+      this.characterSubscriptions.unsubscribe();
+
+      this.characterSubscriptions = this.characterData$.subscribe((npcChar) => {
+        this.characterDataSource.data = npcChar;
+        this.characterData = [...npcChar];
+      });
     });
+  }
+
+  public generateNewCharacter() {
+    
   }
 
   public viewClass(classToEdit: npcClass) {
@@ -258,6 +269,7 @@ export class homeScreenComponent implements AfterViewInit {
 
   public viewCharacter(charToEdit: npc) {
     // Need to create deep copies here, so that the character references its own version of the race, not the global race object
+    // Actually copies create a problem with saving and re-editing
     const classDataCopy: npcClass[] = [];
     this.classData.forEach((val) => classDataCopy.push(Object.assign({}, val)));
     const raceDataCopy: npcRace[] = [];
@@ -269,19 +281,25 @@ export class homeScreenComponent implements AfterViewInit {
         (npcClass) => npcClass.name == charToEdit.charClass.name
       ) == undefined
     ) {
-      charToEdit.charClass = classDataCopy[0];
+      charToEdit.charClass = this.classData[0];
     }
-    charToEdit.charRace = raceDataCopy[0];
+    // REMOVE THIS AS WELL
+    if (
+      this.raceData.find(
+        (npcRace) => npcRace.raceName == charToEdit.charRace.raceName
+      ) == undefined
+    ) {
+      charToEdit.charRace = this.raceData[0];
+    }
 
     let dialogRef = this.dialog.open(CharEditDialogComponent, {
       height: '800px',
       width: '600px',
-      data: { charToEdit, classData: classDataCopy, raceData: raceDataCopy },
+      data: { charToEdit, classData: this.classData, raceData: this.raceData },
     });
 
     dialogRef.afterClosed().subscribe((result: npc) => {
       if (result != undefined) {
-        console.log(result);
         let index = this.characterData.findIndex(
           (npcChar) => npcChar.charId === result.charId
         );

@@ -17,7 +17,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { MatList, MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatListModule } from '@angular/material/list';
 
 // App imports
 import { AppRoutingModule } from './app-routing.module';
@@ -59,6 +60,7 @@ import { NewCharDialogComponent } from './components/New Dialogs/newCharacterDia
     MatButtonModule,
     MatIconModule,
     MatTableModule,
+    MatMenuModule,
     MatPaginatorModule,
     MatDialogModule,
     MatListModule,
