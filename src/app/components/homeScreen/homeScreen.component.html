@@ -30,9 +30,13 @@
       <mat-card-header>
         <mat-card-title>Characters</mat-card-title>
         <mat-card-subtitle>Characters you've created</mat-card-subtitle>
-        <button mat-icon-button [color]="'primary'">
+        <button mat-icon-button [color]="'primary'" [matMenuTriggerFor]="menu">
           <mat-icon>playlist_add</mat-icon>
         </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="generateNewCharacter()">generate character</button>
+          <button mat-menu-item (click)="newCharacter()"> blank character</button>
+        </mat-menu>
       </mat-card-header>
       <mat-card-content>
         <table
@@ -60,7 +64,11 @@
           </ng-component>
 
           <tr mat-header-row *matHeaderRowDef="characterTableColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: characterTableColumns"></tr>
+          <tr
+            mat-row
+            (click)="viewCharacter(row)"
+            *matRowDef="let row; columns: characterTableColumns"
+          ></tr>
         </table>
       </mat-card-content>
     </mat-card>
@@ -68,7 +76,7 @@
       <mat-card-header [ngClass]="'card-header'">
         <mat-card-title>Classes</mat-card-title>
         <mat-card-subtitle>Classes you've created</mat-card-subtitle>
-        <button mat-icon-button [color]="'primary'" (click)="classButtonTest()">
+        <button mat-icon-button [color]="'primary'" (click)="newClass()">
           <mat-icon>add</mat-icon>
         </button>
       </mat-card-header>
@@ -84,7 +92,7 @@
           </ng-component>
           <ng-component matColumnDef="hitDie">
             <th mat-header-cell *matHeaderCellDef>Hit Die</th>
-            <td mat-cell *matCellDef="let class">d{{ class.hitDie }}</td>
+            <td mat-cell *matCellDef="let class">{{ class.hitDie.display }}</td>
           </ng-component>
           <ng-component matColumnDef="userCreated">
             <th mat-header-cell *matHeaderCellDef>User Created</th>
@@ -92,9 +100,11 @@
           </ng-component>
 
           <tr mat-header-row *matHeaderRowDef="classTableColumns"></tr>
-          <tr mat-row 
-              (click)="viewClass(row.id)"
-          *matRowDef="let row; columns: classTableColumns"></tr>
+          <tr
+            mat-row
+            (click)="viewClass(row)"
+            *matRowDef="let row; columns: classTableColumns"
+          ></tr>
         </table>
       </mat-card-content>
     </mat-card>
@@ -102,7 +112,7 @@
       <mat-card-header>
         <mat-card-title>Races</mat-card-title>
         <mat-card-subtitle>Races you've created</mat-card-subtitle>
-        <button mat-icon-button [color]="'primary'">
+        <button mat-icon-button [color]="'primary'" (click)="newRace()">
           <mat-icon>library_add</mat-icon>
         </button>
       </mat-card-header>
@@ -116,29 +126,18 @@
             <th mat-header-cell *matHeaderCellDef>Name</th>
             <td mat-cell *matCellDef="let race">{{ race.raceName }}</td>
           </ng-component>
-          <ng-component matColumnDef="asiPrimary">
+          <ng-component matColumnDef="asi">
             <th mat-header-cell *matHeaderCellDef>Primary ASI</th>
             <td mat-cell *matCellDef="let race">
-              {{ convertToStatName(race.asiPrimary[0]) }}:
-              {{ race.asiPrimary[1] }}
+              {{ race.abilityScoreIncrease[0][0].name }}, {{race.abilityScoreIncrease[0][1]}}
             </td>
           </ng-component>
-          <ng-component matColumnDef="asiSecondary">
-            <th mat-header-cell *matHeaderCellDef>Secondary ASI</th>
-            <td mat-cell *matCellDef="let race">
-              {{ convertToStatName(race.asiSecondary[0]) }}:
-              {{ race.asiSecondary[1] }}
-            </td>
+          <ng-component matColumnDef="userCreated">
+            <th mat-header-cell *matHeaderCellDef>User Created</th>
+            <td mat-cell *matCellDef>false</td>
           </ng-component>
-          <ng-component matColumnDef="ageRange">
-            <th mat-header-cell *matHeaderCellDef>age range</th>
-            <td mat-cell *matCellDef="let race">
-              {{ race.ageRange[0] }} - {{ race.ageRange[1] }}
-            </td>
-          </ng-component>
-
           <tr mat-header-row *matHeaderRowDef="raceTableColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: raceTableColumns"></tr>
+          <tr mat-row (click)="viewRace(row)" *matRowDef="let row; columns: raceTableColumns"></tr>
         </table>
       </mat-card-content>
     </mat-card>

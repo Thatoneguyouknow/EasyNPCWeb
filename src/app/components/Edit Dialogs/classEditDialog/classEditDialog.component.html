@@ -1,0 +1,31 @@
+<div>
+  <h1 mat-dialog-title>View/Edit {{ data.name }}</h1>
+  <div mat-dialog-content>
+    <mat-form-field appearance="fill">
+      <label for="name">Class Name </label>
+      <input
+        matInput
+        type="text"
+        [(ngModel)]="model.name"
+        name="name"
+        #name="ngModel"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <label for="hitDie">Hit Die </label>
+      <!-- <input matInput type="text" [(ngModel)]="model.hitDie" name="hitDie" #hitDie="ngModel"> -->
+      <mat-select [(ngModel)]="model.hitDie" name="hitDie" #hitDie="ngModel">
+        <mat-option *ngFor="let die of availableHitDie" [value]="die">
+          {{die.display}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let stat of model.statPriority" cdkDrag>{{stat.name}}</div>
+    </div>
+    <div>
+      <button mat-button [mat-dialog-close]="model">Save</button>
+      <button mat-button (click)="closeDialog()">Cancel</button>
+    </div>
+  </div>
+</div>
