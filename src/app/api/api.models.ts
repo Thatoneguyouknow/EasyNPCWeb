@@ -18,7 +18,7 @@ export interface raceApi {
   ageRange: number[];
   asi: number[];
   asiv: number[];
-  // subraces: number[]
+  subraces: number[];
 }
 
 export interface subraceApi {

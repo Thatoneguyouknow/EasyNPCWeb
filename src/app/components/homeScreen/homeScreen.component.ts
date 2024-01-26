@@ -12,7 +12,6 @@ import { findLargestNumber } from 'src/app/supporting methods/mathOperations';
 import { RaceEditDialogComponent } from '../Edit Dialogs/raceEditDialog/raceEditDialog.component';
 import { NewRaceDialogComponent } from '../New Dialogs/newRaceDialog/newRaceDialog.component';
 import { NewCharDialogComponent } from '../New Dialogs/newCharacterDialog/newCharacterDialog.component';
-import { ObserversModule } from '@angular/cdk/observers';
 import { generateCharacter } from 'src/app/supporting methods/generateCharacter';
 
 const CLASS_MOC_DATA: npcClass[] = [
@@ -42,6 +41,7 @@ const RACE_MOC_DATA: npcRace[] = [
       [Stat.availableAbilities[0], 1],
       [Stat.availableAbilities[0], 1],
     ],
+    subraces: [1],
   },
 ];
 
@@ -211,7 +211,7 @@ export class homeScreenComponent implements AfterViewInit {
   }
 
   public generateNewCharacter() {
-    generateCharacter(this.raceData, this.classData);
+    generateCharacter(this.raceData, this.classData, this.subraceData);
   }
 
   public viewClass(classToEdit: npcClass) {

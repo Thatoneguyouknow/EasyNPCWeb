@@ -65,6 +65,7 @@ export class npcService {
               ),
               data.asiv
             ),
+            subraces: data.subraces,
           }))
         )
       );
