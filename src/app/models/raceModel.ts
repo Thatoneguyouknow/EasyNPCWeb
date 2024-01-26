@@ -10,6 +10,6 @@ export interface npcRace {
     asiRaw: number[];
     asivRaw: number[];
     abilityScoreIncrease: Array<[StatTypes, number]>;
-    // Todo: associated subraces 
+    nameType: number;
     subraces: number[];
 }

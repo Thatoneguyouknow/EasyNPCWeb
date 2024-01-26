@@ -1,10 +1,12 @@
-import { npcClass, npcRace, npcSubrace } from '../models';
+import { RandomPicker } from 'wrand/lib/randomPicker';
+import { npcClass, npcRace, npcSubrace, raceNameScheme } from '../models';
 import { generateName } from './nameGeneration';
 
 export function generateCharacter(
   availableRaces: npcRace[],
   availableClasses: npcClass[],
-  availableSubraces: npcSubrace[]
+  availableSubraces: npcSubrace[],
+  nameSchemes: raceNameScheme[]
 ) {
   // Orders
   // Race -> Subrace? -> Name -> Alignment
@@ -24,7 +26,7 @@ export function generateCharacter(
   }
   const alignment = generateAlignment(selectedRace, selectedSubrace);
   console.log(alignment);
-  const name: string = generateName(selectedRace, selectedSubrace);
+  const name: string = generateName(selectedRace, nameSchemes, selectedSubrace);
   console.log(name);
   return null;
 }
@@ -68,7 +70,52 @@ function generateAlignment(
   // row +- 2 & col +- 2 (4 steps)
   // weights to use:
   // 0 steps: 70%, 1 step: 15%, 2 steps: 10%, 3 steps: 4%, 4 steps: 1%
-  return 0;
+  let alignmentItems = [];
+  let alignmentMatrix: number[][] = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+  ];
+  const alignmentSkew: number = selectedRace.alignmentSkew;
+  let skewPosition = [Math.trunc(alignmentSkew / 3), alignmentSkew % 3];
+  for (let row = 0; row < alignmentMatrix.length; row++) {
+    for (let col = 0; col < alignmentMatrix[row].length; col++) {
+      // Math.abs()
+      let compare: number =
+        Math.abs(skewPosition[0] - row) + Math.abs(skewPosition[1] - col);
+      switch (compare) {
+        case 0:
+          alignmentItems.push({ original: alignmentSkew, weight: 70 });
+          break;
+        case 1:
+          alignmentItems.push({
+            original: alignmentMatrix[row][col],
+            weight: 15,
+          });
+          break;
+        case 2:
+          alignmentItems.push({
+            original: alignmentMatrix[row][col],
+            weight: 10,
+          });
+          break;
+        case 3:
+          alignmentItems.push({
+            original: alignmentMatrix[row][col],
+            weight: 4,
+          });
+          break;
+        case 4:
+          alignmentItems.push({
+            original: alignmentMatrix[row][col],
+            weight: 1,
+          });
+          break;
+      }
+    }
+  }
+  const picker = new RandomPicker(alignmentItems);
+  return picker.pick();
 }
 
 function generatePersonality() {
@@ -80,7 +127,7 @@ function generateLevel() {
   return 1;
 }
 
-function generateStats() {
+function generateStats(selectedClass: npcClass, selectedRace: npcRace, selectedSubrace?: npcSubrace) {
   // Improvement idea: Let DM's decide if they want stats rolled the dnd 5e way, or just a d20 like a madman
   // Roll 6 stats, place them according to class stat priority
   // Add from race modifiers, ensure that in edit page when race changes old asis are subtracted, and new are added

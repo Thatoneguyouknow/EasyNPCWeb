@@ -19,6 +19,7 @@ export interface raceApi {
   asi: number[];
   asiv: number[];
   subraces: number[];
+  nameType: number;
 }
 
 export interface subraceApi {

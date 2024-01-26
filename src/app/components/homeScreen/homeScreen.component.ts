@@ -49,6 +49,7 @@ const RACE_MOC_DATA: npcRace[] = [
       [Stat.availableAbilities[0], 1],
     ],
     subraces: [1],
+    nameType: 1,
   },
 ];
 
@@ -131,7 +132,6 @@ export class homeScreenComponent implements AfterViewInit {
     });
     this.nameData$.subscribe((npcNameScheme) => {
       this.nameData = [...npcNameScheme];
-      console.log(npcNameScheme);
     });
   }
 
@@ -225,7 +225,12 @@ export class homeScreenComponent implements AfterViewInit {
   }
 
   public generateNewCharacter() {
-    generateCharacter(this.raceData, this.classData, this.subraceData);
+    generateCharacter(
+      this.raceData,
+      this.classData,
+      this.subraceData,
+      this.nameData
+    );
   }
 
   public viewClass(classToEdit: npcClass) {
