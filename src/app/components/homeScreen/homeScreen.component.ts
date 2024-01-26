@@ -76,6 +76,7 @@ export class homeScreenComponent implements AfterViewInit {
   title = 'EasyNPCHome';
   classSubscriptions: Subscription = Subscription.EMPTY;
   raceSubscriptions: Subscription = Subscription.EMPTY;
+  subraceSubscriptions: Subscription = Subscription.EMPTY;
   characterSubscriptions: Subscription = Subscription.EMPTY;
   characterTableColumns: string[] = ['name', 'race', 'class'];
   classTableColumns: string[] = ['name', 'hitDie', 'userCreated'];
@@ -113,8 +114,8 @@ export class homeScreenComponent implements AfterViewInit {
       this.characterDataSource.data = npc;
       this.characterData = [...npc];
     });
-    this.subraceData$.subscribe((npcSubrace) => {
-      console.log(npcSubrace);
+    this.subraceSubscriptions = this.subraceData$.subscribe((npcSubrace) => {
+      this.subraceData = [...npcSubrace];
     });
   }
 
