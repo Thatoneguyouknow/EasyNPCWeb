@@ -29,3 +29,14 @@ export interface subraceApi {
   asiv: number[] | null;
 }
 
+export interface nameSchemeApi {
+  id: number;
+  firstHalves: string[];
+  secondHalves: string[];
+}
+
+export interface raceNameSchemeApi {
+  id: number;
+  firstNames: nameSchemeApi[];
+  lastNames: nameSchemeApi[];
+}

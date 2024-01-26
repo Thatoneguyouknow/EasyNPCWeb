@@ -1,8 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { npcClass, npcRace } from '../models';
+import { nameScheme, npcClass, npcRace, raceNameScheme } from '../models';
 import { HttpClient } from '@angular/common/http';
-import { classApi, raceApi, subraceApi } from './api.models';
+import {
+  classApi,
+  nameSchemeApi,
+  raceApi,
+  raceNameSchemeApi,
+  subraceApi,
+} from './api.models';
 import { availableAbilities, availableHitDie, HitDie } from '../constants';
 import { convertASIFromBackend } from '../supporting methods/backendConversion';
 import { npcSubrace } from '../models/subraceModel';
@@ -83,14 +89,47 @@ export class npcService {
             nameScheme: data.nameScheme,
             asiRaw: data.asi,
             asivRaw: data.asiv,
-            abilityScoreIncrease: (data.asi != null && data.asiv != null ? convertASIFromBackend(
-              data.asi.map(
-                (stat) =>
-                  availableAbilities.filter((val) => val.value == stat)[0]
-              ),
-              data.asiv
-            ) : null),
+            abilityScoreIncrease:
+              data.asi != null && data.asiv != null
+                ? convertASIFromBackend(
+                    data.asi.map(
+                      (stat) =>
+                        availableAbilities.filter((val) => val.value == stat)[0]
+                    ),
+                    data.asiv
+                  )
+                : null,
           }))
+        )
+      );
+  }
+
+  getAllNameSchemes(): Observable<raceNameScheme[]> {
+    const url = `api/Names`;
+    return this.http
+      .get<ApiResponse<raceNameSchemeApi>>('http://localhost:8080/Names')
+      .pipe(
+        map(
+          (
+            npcNameShemeData: ApiResponse<raceNameSchemeApi>
+          ): raceNameScheme[] =>
+            npcNameShemeData.data.map((data) => ({
+              id: data.id,
+              firstNames: data.firstNames.map(
+                (val): nameScheme => ({
+                  id: val.id,
+                  firstHalf: val.firstHalves,
+                  secondHalf: val.secondHalves,
+                })
+              ),
+              lastNames: data.lastNames.map(
+                (val): nameScheme => ({
+                  id: val.id,
+                  firstHalf: val.firstHalves,
+                  secondHalf: val.secondHalves,
+                })
+              ),
+            }))
         )
       );
   }

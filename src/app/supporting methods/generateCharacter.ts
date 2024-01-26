@@ -1,4 +1,5 @@
 import { npcClass, npcRace, npcSubrace } from '../models';
+import { generateName } from './nameGeneration';
 
 export function generateCharacter(
   availableRaces: npcRace[],
@@ -7,29 +8,25 @@ export function generateCharacter(
 ) {
   // Orders
   // Race -> Subrace? -> Name -> Alignment
-  // Class -> Stats
+  // Class -> Race/Subrace -> Stats
   // Alignment is associated with subrace for DROW, Dragonborn?
   const selectedClass = generateClass(availableClasses);
-  console.log(selectedClass.name);
+  console.log(selectedClass);
   const selectedRace = generateRace(availableRaces);
   console.log(selectedRace);
-  const alignment = generateAlignment(selectedRace);
+  let selectedSubrace = undefined;
   if (selectedRace.subraces.length >= 1) {
     let subraces: npcSubrace[] = availableSubraces.filter((subrace) =>
       selectedRace.subraces.includes(subrace.id)
     );
-    const selectedSubrace = generateSubrace(subraces);
+    selectedSubrace = generateSubrace(subraces);
     console.log(selectedSubrace);
-    
   }
-  // const name = generateName(selectedSubrace);
-  // const alignment = generateAlignment(selectedRace, selectedSubrace);
+  const alignment = generateAlignment(selectedRace, selectedSubrace);
+  console.log(alignment);
+  const name: string = generateName(selectedRace, selectedSubrace);
+  console.log(name);
   return null;
-}
-
-function generateName(selectedRace: npcRace, selectedSubrace?: npcSubrace) {
-  // Names have specific generation based on race/subrace
-  return 'JEFF';
 }
 
 function generateRace(availableRaces: npcRace[]) {

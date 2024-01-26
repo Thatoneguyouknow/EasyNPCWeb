@@ -1,7 +1,14 @@
 import { AfterViewInit, Component, ViewEncapsulation } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import * as Stat from 'src/app/constants';
-import { npcClass, npcRace, npcSubrace, npc } from 'src/app/models';
+import {
+  npcClass,
+  npcRace,
+  npcSubrace,
+  npc,
+  nameScheme,
+  raceNameScheme,
+} from 'src/app/models';
 import { npcService } from 'src/app/api/npc.service';
 import { CharEditDialogComponent } from '../Edit Dialogs/charEditDialog/charEditDialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -94,6 +101,8 @@ export class homeScreenComponent implements AfterViewInit {
   raceData: npcRace[] = [];
   subraceData$: Observable<npcSubrace[]>;
   subraceData: npcSubrace[] = [];
+  nameData$: Observable<raceNameScheme[]>;
+  nameData: raceNameScheme[] = [];
 
   constructor(private api: npcService, private dialog: MatDialog) {
     this.classData$ = this.api.getAllClasses();
@@ -101,6 +110,7 @@ export class homeScreenComponent implements AfterViewInit {
     // TODO
     this.characterData$ = of(CHAR_MOC_DATA);
     this.subraceData$ = this.api.getAllSubraces();
+    this.nameData$ = this.api.getAllNameSchemes();
   }
 
   ngAfterViewInit(): void {
@@ -118,6 +128,10 @@ export class homeScreenComponent implements AfterViewInit {
     });
     this.subraceSubscriptions = this.subraceData$.subscribe((npcSubrace) => {
       this.subraceData = [...npcSubrace];
+    });
+    this.nameData$.subscribe((npcNameScheme) => {
+      this.nameData = [...npcNameScheme];
+      console.log(npcNameScheme);
     });
   }
 
