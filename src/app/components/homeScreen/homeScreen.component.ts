@@ -1,24 +1,17 @@
-import {
-  AfterViewInit,
-  Component,
-  ViewEncapsulation,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, ViewEncapsulation } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import * as Stat from 'src/app/constants';
-import { npcClass, npcRace, npc } from 'src/app/models';
+import { npcClass, npcRace, npcSubrace, npc } from 'src/app/models';
 import { npcService } from 'src/app/api/npc.service';
 import { CharEditDialogComponent } from '../Edit Dialogs/charEditDialog/charEditDialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ClassEditDialogComponent } from '../Edit Dialogs/classEditDialog/classEditDialog.component';
 import { Observable, of, Subscription } from 'rxjs';
-import { UntypedFormBuilder } from '@angular/forms';
 import { NewClassDialogComponent } from '../New Dialogs/newClassDialog/newClassDialog.component';
 import { findLargestNumber } from 'src/app/supporting methods/mathOperations';
 import { RaceEditDialogComponent } from '../Edit Dialogs/raceEditDialog/raceEditDialog.component';
 import { NewRaceDialogComponent } from '../New Dialogs/newRaceDialog/newRaceDialog.component';
 import { NewCharDialogComponent } from '../New Dialogs/newCharacterDialog/newCharacterDialog.component';
-import { ObserversModule } from '@angular/cdk/observers';
 
 const CLASS_MOC_DATA: npcClass[] = [
   {
@@ -96,12 +89,15 @@ export class homeScreenComponent implements AfterViewInit {
   raceDataSource = new MatTableDataSource<npcRace>();
   raceData$: Observable<npcRace[]>;
   raceData: npcRace[] = [];
+  subraceData$: Observable<npcSubrace[]>;
+  subraceData: npcSubrace[] = [];
 
   constructor(private api: npcService, private dialog: MatDialog) {
     this.classData$ = this.api.getAllClasses();
     this.raceData$ = this.api.getAllRaces();
     // TODO
     this.characterData$ = of(CHAR_MOC_DATA);
+    this.subraceData$ = this.api.getAllSubraces();
   }
 
   ngAfterViewInit(): void {
@@ -116,6 +112,9 @@ export class homeScreenComponent implements AfterViewInit {
     this.characterSubscriptions = this.characterData$.subscribe((npc) => {
       this.characterDataSource.data = npc;
       this.characterData = [...npc];
+    });
+    this.subraceData$.subscribe((npcSubrace) => {
+      console.log(npcSubrace);
     });
   }
 
@@ -208,9 +207,7 @@ export class homeScreenComponent implements AfterViewInit {
     });
   }
 
-  public generateNewCharacter() {
-    
-  }
+  public generateNewCharacter() {}
 
   public viewClass(classToEdit: npcClass) {
     let dialogRef = this.dialog.open(ClassEditDialogComponent, {

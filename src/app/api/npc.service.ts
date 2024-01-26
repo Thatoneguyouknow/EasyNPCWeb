@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { npcClass, npcRace } from '../models';
 import { HttpClient } from '@angular/common/http';
-import { classApi, raceApi } from './api.models';
+import { classApi, raceApi, subraceApi } from './api.models';
 import { availableAbilities, availableHitDie, HitDie } from '../constants';
 import { convertASIFromBackend } from '../supporting methods/backendConversion';
+import { npcSubrace } from '../models/subraceModel';
 
 export interface ApiResponse<T> {
   id: number;
@@ -57,10 +58,37 @@ export class npcService {
             ageRange: [data.ageRange[0], data.ageRange[1]],
             asiRaw: data.asi,
             asivRaw: data.asiv,
-            abilityScoreIncrease: convertASIFromBackend(data.asi.map(
-                (stat) => availableAbilities.filter((val) => val.value == stat)[0]
-            ), data.asiv),
-            // abilityScoreIncrease: null,
+            abilityScoreIncrease: convertASIFromBackend(
+              data.asi.map(
+                (stat) =>
+                  availableAbilities.filter((val) => val.value == stat)[0]
+              ),
+              data.asiv
+            ),
+          }))
+        )
+      );
+  }
+
+  getAllSubraces(): Observable<npcSubrace[]> {
+    const url = `api/Subraces`;
+    return this.http
+      .get<ApiResponse<subraceApi>>('http://localhost:8080/Subraces')
+      .pipe(
+        map((npcSubraceData: ApiResponse<subraceApi>): npcSubrace[] =>
+          npcSubraceData.data.map((data) => ({
+            id: data.id,
+            name: data.name,
+            nameScheme: data.nameScheme,
+            asiRaw: data.asi,
+            asivRaw: data.asiv,
+            abilityScoreIncrease: (data.asi != null && data.asiv != null ? convertASIFromBackend(
+              data.asi.map(
+                (stat) =>
+                  availableAbilities.filter((val) => val.value == stat)[0]
+              ),
+              data.asiv
+            ) : null),
           }))
         )
       );
