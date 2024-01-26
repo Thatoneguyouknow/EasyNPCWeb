@@ -18,5 +18,14 @@ export interface raceApi {
   ageRange: number[];
   asi: number[];
   asiv: number[];
-  // abilityScoreIncrease: Array<[number, number]>;
+  // subraces: number[]
 }
+
+export interface subraceApi {
+  id: number;
+  name: string;
+  nameScheme: number | null;
+  asi: number[] | null;
+  asiv: number[] | null;
+}
+
