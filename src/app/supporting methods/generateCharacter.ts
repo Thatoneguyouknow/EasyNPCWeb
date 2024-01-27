@@ -1,6 +1,7 @@
 import { RandomPicker } from 'wrand/lib/randomPicker';
 import { npcClass, npcRace, npcSubrace, raceNameScheme } from '../models';
 import { generateName } from './nameGeneration';
+import { positivePersonalityTraits } from '../constants/positivePersonality';
 
 export function generateCharacter(
   availableRaces: npcRace[],
@@ -119,7 +120,9 @@ function generateAlignment(
 }
 
 function generatePersonality() {
-  // Take base personality traits from old C++ project
+  // One positive, one neutral, one negative
+  let personality: string = '';
+  personality = personality + positivePersonalityTraits[0];
 }
 
 function generateLevel() {
@@ -127,7 +130,11 @@ function generateLevel() {
   return 1;
 }
 
-function generateStats(selectedClass: npcClass, selectedRace: npcRace, selectedSubrace?: npcSubrace) {
+function generateStats(
+  selectedClass: npcClass,
+  selectedRace: npcRace,
+  selectedSubrace?: npcSubrace
+) {
   // Improvement idea: Let DM's decide if they want stats rolled the dnd 5e way, or just a d20 like a madman
   // Roll 6 stats, place them according to class stat priority
   // Add from race modifiers, ensure that in edit page when race changes old asis are subtracted, and new are added
