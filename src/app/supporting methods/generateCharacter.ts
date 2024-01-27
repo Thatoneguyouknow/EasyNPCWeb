@@ -9,13 +9,8 @@ export function generateCharacter(
   availableSubraces: npcSubrace[],
   nameSchemes: raceNameScheme[]
 ) {
-  // Orders
-  // Race -> Subrace? -> Name -> Alignment
-  // Class -> Race/Subrace -> Stats
-  // Alignment is associated with subrace for DROW, Dragonborn?
-  const selectedClass = generateClass(availableClasses);
-  console.log(selectedClass);
-  const selectedRace = generateRace(availableRaces);
+  // Race and associated attributes
+  const selectedRace: npcRace = generateRace(availableRaces);
   console.log(selectedRace);
   let selectedSubrace = undefined;
   if (selectedRace.subraces.length >= 1) {
@@ -25,10 +20,29 @@ export function generateCharacter(
     selectedSubrace = generateSubrace(subraces);
     console.log(selectedSubrace);
   }
-  const alignment = generateAlignment(selectedRace, selectedSubrace);
-  console.log(alignment);
+
+  // Class and associated attributes
+  const selectedClass: npcClass = generateClass(availableClasses);
+  console.log(selectedClass);
+  const selectedLevel: number = generateLevel();
+  const rolledStats = generateStats(
+    selectedClass,
+    selectedRace,
+    selectedSubrace
+  );
+  console.log(rolledStats);
+  const hitPoints: number = 0;
+
+  // Description
   const name: string = generateName(selectedRace, nameSchemes, selectedSubrace);
   console.log(name);
+  const alignment = generateAlignment(selectedRace, selectedSubrace);
+  console.log(alignment);
+  const personalityTraits = '';
+  const age = 0;
+  const height = 0;
+  const weight = 0;
+
   return null;
 }
 

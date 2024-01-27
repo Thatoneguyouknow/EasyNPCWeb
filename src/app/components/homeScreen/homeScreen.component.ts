@@ -71,8 +71,9 @@ const CHAR_MOC_DATA: npc[] = [
       { stat: Stat.availableAbilities[5], statValue: 10, statModifier: 3 },
     ],
     hitPoints: 12,
-    armorClass: 6,
-    speed: 100,
+    age: 50,
+    height: 5,
+    weight: 120
   },
 ];
 
