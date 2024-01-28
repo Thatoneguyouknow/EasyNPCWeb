@@ -4,6 +4,8 @@ import { generateName } from './nameGeneration';
 import { positivePersonalityTraits } from '../constants/positivePersonality';
 import { neutralPersonalityTraits } from '../constants/neutralPersonality';
 import { negativePersonalityTraits } from '../constants/negativePersonality';
+import { Dice } from 'dice-typescript';
+import { characterStat } from '../constants';
 
 export function generateCharacter(
   availableRaces: npcRace[],
@@ -40,12 +42,12 @@ export function generateCharacter(
   console.log(name);
   const alignment = generateAlignment(selectedRace, selectedSubrace);
   console.log(alignment);
-  const personalityTraits = generatePersonality;
+  const personalityTraits = generatePersonality();
   console.log(personalityTraits);
   const age = generateNumFromRange(selectedRace.ageRange);
   const height = generateHeight(selectedRace.heightRange);
   const weight = generateNumFromRange(selectedRace.weightRange);
-  console.log('age, height, weight' + age + ', ' + height + ', ' + weight);
+  console.log('age, height, weight: ' + age + ', ' + height + ', ' + weight);
 
   return null;
 }
@@ -175,6 +177,48 @@ function generateStats(
   // Add from race modifiers, ensure that in edit page when race changes old asis are subtracted, and new are added
   // similarly when classes are changed they should refactor stats based on priority
   // Improvement idea: add a toggleable setting for both races and classes to remove the above functionality
+
+  // Roll 4 6-sided die, record total of theh highest 3
+  // Repeat
+  const dice = new Dice();
+  let resultsSet: number[] = [];
+  let lowestIndex: number;
+  let stats: number[] = [];
+  for (let counter = 6; counter > 0; counter--) {
+    for (let roll = 4; roll > 0; roll--) {
+      resultsSet.push(dice.roll('1d6').total);
+    }
+    lowestIndex = resultsSet.indexOf(Math.min(...resultsSet));
+    resultsSet.splice(lowestIndex, 1);
+    stats.push(resultsSet.flat().reduce((a, b) => a + b));
+    resultsSet = [];
+  }
+  console.log(stats);
+
+  // Put stats in order based on class stat priority
+  // for each in stat priority:
+  // find highest stat
+  // Add highest stat to temp array
+  // Remove highest stat from stat array
+  let tempStatArray: number[] = [0, 0, 0, 0, 0, 0];
+  let largestIndex: number;
+  for (let index = 0; index < selectedClass.statPriority.length; index++) {
+    largestIndex = stats.indexOf(Math.max(...stats));
+    tempStatArray[selectedClass.statPriority[index].value] =
+      stats[largestIndex];
+    stats.splice(largestIndex, 1);
+  }
+
+  // Turn stats into characterStat objects
+  let characterStats: characterStat[] = [];
+  for (let index = 0; index < tempStatArray.length; index++) {
+    let stat: characterStat = {stat: selectedClass.statPriority[index], statValue: tempStatArray[index], statModifier: (tempStatArray[index] - 10) % 2};
+    characterStats.push(stat);
+  }
+
+  console.log(characterStats);
+
+  // Add ASI vals
 }
 
 function generateHitPoints() {}
@@ -193,3 +237,19 @@ function generateHeight(feetRange: number[]): number[] {
   let inches: number = Math.floor(Math.random() * 12);
   return [feet, inches];
 }
+
+/*
+Race  Base Height Hieght Mod  Base W  W Mod
+Human 4'8" +2d10 110 lb. x (2d4) lb.
+Dwarf, hill 3'8” +2d4 115 lb. x (2d6) lb.
+Dwarf, mountain 4' +2d4 130 lb. x (2d6) lb.
+Elf, high 4’6" +2d10 90 lb. x (1d4) lb.
+Elf, wood 4'6" +2d10 100 lb. x (1d4) lb.
+Elf, drow 4'5" +2d6 75 lb. x (1d6) lb.
+Halfling 2'7" +2d4 35 lb. x 1 lb.
+Dragonborn 5'6" +2d8 175 lb. x (2d6) lb.
+Gnome 2' 11" +2d4 35 lb. x 1 lb.
+Half-elf 4'9" +2d8 110 lb. x (2d4) lb.
+Half-orc 4'10" +2d10 140 lb. x (2d6) lb.
+Tiefling 4'9" +2d8 110 lb. x (2d4) lb.
+*/
