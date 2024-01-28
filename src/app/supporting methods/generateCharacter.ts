@@ -2,6 +2,8 @@ import { RandomPicker } from 'wrand/lib/randomPicker';
 import { npcClass, npcRace, npcSubrace, raceNameScheme } from '../models';
 import { generateName } from './nameGeneration';
 import { positivePersonalityTraits } from '../constants/positivePersonality';
+import { neutralPersonalityTraits } from '../constants/neutralPersonality';
+import { negativePersonalityTraits } from '../constants/negativePersonality';
 
 export function generateCharacter(
   availableRaces: npcRace[],
@@ -38,10 +40,12 @@ export function generateCharacter(
   console.log(name);
   const alignment = generateAlignment(selectedRace, selectedSubrace);
   console.log(alignment);
-  const personalityTraits = '';
-  const age = 0;
-  const height = 0;
-  const weight = 0;
+  const personalityTraits = generatePersonality;
+  console.log(personalityTraits);
+  const age = generateNumFromRange(selectedRace.ageRange);
+  const height = generateHeight(selectedRace.heightRange);
+  const weight = generateNumFromRange(selectedRace.weightRange);
+  console.log('age, height, weight' + age + ', ' + height + ', ' + weight);
 
   return null;
 }
@@ -133,10 +137,27 @@ function generateAlignment(
   return picker.pick();
 }
 
-function generatePersonality() {
+function generatePersonality(): string {
   // One positive, one neutral, one negative
   let personality: string = '';
-  personality = personality + positivePersonalityTraits[0];
+  personality =
+    personality +
+    positivePersonalityTraits[
+      Math.floor(Math.random() * positivePersonalityTraits.length)
+    ];
+  personality =
+    personality +
+    ', ' +
+    neutralPersonalityTraits[
+      Math.floor(Math.random() * neutralPersonalityTraits.length)
+    ];
+  personality =
+    personality +
+    ', ' +
+    negativePersonalityTraits[
+      Math.floor(Math.random() * negativePersonalityTraits.length)
+    ];
+  return personality;
 }
 
 function generateLevel() {
@@ -158,6 +179,17 @@ function generateStats(
 
 function generateHitPoints() {}
 
-function generateArmorClass() {}
+function generateNumFromRange(range: number[]): number {
+  // assume range is {low, high}
+  let difference: number = range[1] - range[0];
+  let generated: number = Math.floor(Math.random() * difference) + range[0];
+  return generated;
+}
 
-function generateSpeed() {}
+function generateHeight(feetRange: number[]): number[] {
+  // assume range is {low, high}
+  let difference: number = feetRange[1] - feetRange[0];
+  let feet: number = Math.floor(Math.random() * difference) + feetRange[0];
+  let inches: number = Math.floor(Math.random() * 12);
+  return [feet, inches];
+}

@@ -14,7 +14,7 @@ export interface npc {
     alignment: number;
     personalityTraits: string[];
     age: number;
-    height: number;
+    height: number[];
     weight: number;
 }
 

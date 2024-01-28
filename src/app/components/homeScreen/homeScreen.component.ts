@@ -72,7 +72,7 @@ const CHAR_MOC_DATA: npc[] = [
     ],
     hitPoints: 12,
     age: 50,
-    height: 5,
+    height: [5,11],
     weight: 120
   },
 ];
