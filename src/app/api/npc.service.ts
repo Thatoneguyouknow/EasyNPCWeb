@@ -65,10 +65,7 @@ export class npcService {
             asiRaw: data.asi,
             asivRaw: data.asiv,
             abilityScoreIncrease: convertASIFromBackend(
-              data.asi.map(
-                (stat) =>
-                  availableAbilities.filter((val) => val.value == stat)[0]
-              ),
+              data.asi,
               data.asiv
             ),
             subraces: data.subraces,
@@ -93,10 +90,7 @@ export class npcService {
             abilityScoreIncrease:
               data.asi != null && data.asiv != null
                 ? convertASIFromBackend(
-                    data.asi.map(
-                      (stat) =>
-                        availableAbilities.filter((val) => val.value == stat)[0]
-                    ),
+                    data.asi,
                     data.asiv
                   )
                 : null,

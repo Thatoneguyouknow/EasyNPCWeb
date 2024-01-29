@@ -72,8 +72,8 @@ const CHAR_MOC_DATA: npc[] = [
     ],
     hitPoints: 12,
     age: 50,
-    height: [5,11],
-    weight: 120
+    height: [5, 11],
+    weight: 120,
   },
 ];
 
@@ -226,12 +226,15 @@ export class homeScreenComponent implements AfterViewInit {
   }
 
   public generateNewCharacter() {
-    generateCharacter(
+    let nextID = 1;
+    let character: npc = generateCharacter(
       this.raceData,
       this.classData,
       this.subraceData,
-      this.nameData
+      this.nameData,
+      nextID
     );
+    console.log(character);
   }
 
   public viewClass(classToEdit: npcClass) {

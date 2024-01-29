@@ -1,18 +1,19 @@
 import { RandomPicker } from 'wrand/lib/randomPicker';
-import { npcClass, npcRace, npcSubrace, raceNameScheme } from '../models';
+import { npc, npcClass, npcRace, npcSubrace, raceNameScheme } from '../models';
 import { generateName } from './nameGeneration';
 import { positivePersonalityTraits } from '../constants/positivePersonality';
 import { neutralPersonalityTraits } from '../constants/neutralPersonality';
 import { negativePersonalityTraits } from '../constants/negativePersonality';
 import { Dice } from 'dice-typescript';
-import { characterStat } from '../constants';
+import { StatTypes, Stats, characterStat } from '../constants';
 
 export function generateCharacter(
   availableRaces: npcRace[],
   availableClasses: npcClass[],
   availableSubraces: npcSubrace[],
-  nameSchemes: raceNameScheme[]
-) {
+  nameSchemes: raceNameScheme[],
+  nextID: number,
+): npc {
   // Race and associated attributes
   const selectedRace: npcRace = generateRace(availableRaces);
   console.log(selectedRace);
@@ -29,13 +30,14 @@ export function generateCharacter(
   const selectedClass: npcClass = generateClass(availableClasses);
   console.log(selectedClass);
   const selectedLevel: number = generateLevel();
-  const rolledStats = generateStats(
+  const rolledStats: characterStat[] = generateStats(
     selectedClass,
     selectedRace,
     selectedSubrace
   );
   console.log(rolledStats);
-  const hitPoints: number = 0;
+  const hitPoints: number = selectedClass.hitDie.value + rolledStats[Stats.CONSTITUTION].statModifier;
+  console.log(hitPoints);
 
   // Description
   const name: string = generateName(selectedRace, nameSchemes, selectedSubrace);
@@ -49,7 +51,8 @@ export function generateCharacter(
   const weight = generateNumFromRange(selectedRace.weightRange);
   console.log('age, height, weight: ' + age + ', ' + height + ', ' + weight);
 
-  return null;
+  const character: npc = {charId: nextID, charName: name, charRace: selectedRace, charSubrace: selectedSubrace, charClass: selectedClass, level: selectedLevel, stats: rolledStats, hitPoints: hitPoints, alignment: alignment, personalityTraits: personalityTraits, age: age, height: height, weight: weight};
+  return character;
 }
 
 function generateRace(availableRaces: npcRace[]) {
@@ -139,26 +142,21 @@ function generateAlignment(
   return picker.pick();
 }
 
-function generatePersonality(): string {
+function generatePersonality(): string[] {
   // One positive, one neutral, one negative
-  let personality: string = '';
-  personality =
-    personality +
+  let personality: string[] = [];
+  personality.push(
     positivePersonalityTraits[
       Math.floor(Math.random() * positivePersonalityTraits.length)
-    ];
-  personality =
-    personality +
-    ', ' +
+    ]);
+  personality.push(
     neutralPersonalityTraits[
       Math.floor(Math.random() * neutralPersonalityTraits.length)
-    ];
-  personality =
-    personality +
-    ', ' +
+    ]);
+  personality.push(
     negativePersonalityTraits[
       Math.floor(Math.random() * negativePersonalityTraits.length)
-    ];
+    ]);
   return personality;
 }
 
@@ -193,35 +191,61 @@ function generateStats(
     stats.push(resultsSet.flat().reduce((a, b) => a + b));
     resultsSet = [];
   }
-  console.log(stats);
 
   // Put stats in order based on class stat priority
   // for each in stat priority:
   // find highest stat
   // Add highest stat to temp array
   // Remove highest stat from stat array
-  let tempStatArray: number[] = [0, 0, 0, 0, 0, 0];
+  let charStatsArray: characterStat[] = [];
   let largestIndex: number;
   for (let index = 0; index < selectedClass.statPriority.length; index++) {
     largestIndex = stats.indexOf(Math.max(...stats));
-    tempStatArray[selectedClass.statPriority[index].value] =
-      stats[largestIndex];
+    let stat: characterStat = {
+      stat: selectedClass.statPriority[index],
+      statValue: stats[largestIndex],
+      statModifier: Math.floor((stats[largestIndex] - 10) / 2),
+    };
+    charStatsArray.push(stat);
     stats.splice(largestIndex, 1);
   }
 
-  // Turn stats into characterStat objects
-  let characterStats: characterStat[] = [];
-  for (let index = 0; index < tempStatArray.length; index++) {
-    let stat: characterStat = {stat: selectedClass.statPriority[index], statValue: tempStatArray[index], statModifier: (tempStatArray[index] - 10) % 2};
-    characterStats.push(stat);
-  }
-
-  console.log(characterStats);
+  charStatsArray.sort((first, second) => first.stat.value - second.stat.value);
 
   // Add ASI vals
-}
+  for (
+    let index = 0;
+    index < selectedRace.abilityScoreIncrease.length;
+    index++
+  ) {
+    let asi: [StatTypes, number] = selectedRace.abilityScoreIncrease[index];
+    charStatsArray[asi[0].value].statValue =
+      charStatsArray[asi[0].value].statValue + asi[1];
 
-function generateHitPoints() {}
+    charStatsArray[asi[0].value].statModifier = Math.floor(
+      (charStatsArray[asi[0].value].statValue - 10) / 2
+    );
+  }
+
+  if (selectedSubrace && selectedSubrace.abilityScoreIncrease) {
+    for (
+      let index = 0;
+      index < selectedSubrace.abilityScoreIncrease.length;
+      index++
+    ) {
+      let asi: [StatTypes, number] =
+        selectedSubrace.abilityScoreIncrease[index];
+      charStatsArray[asi[0].value].statValue =
+        charStatsArray[asi[0].value].statValue + asi[1];
+
+      charStatsArray[asi[0].value].statModifier = Math.floor(
+        (charStatsArray[asi[0].value].statValue - 10) / 2
+      );
+    }
+  }
+
+  return charStatsArray;
+}
 
 function generateNumFromRange(range: number[]): number {
   // assume range is {low, high}
