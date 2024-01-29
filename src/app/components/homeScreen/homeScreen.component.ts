@@ -1,7 +1,14 @@
 import { AfterViewInit, Component, ViewEncapsulation } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import * as Stat from 'src/app/constants';
-import { npcClass, npcRace, npcSubrace, npc } from 'src/app/models';
+import {
+  npcClass,
+  npcRace,
+  npcSubrace,
+  npc,
+  nameScheme,
+  raceNameScheme,
+} from 'src/app/models';
 import { npcService } from 'src/app/api/npc.service';
 import { CharEditDialogComponent } from '../Edit Dialogs/charEditDialog/charEditDialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,6 +19,7 @@ import { findLargestNumber } from 'src/app/supporting methods/mathOperations';
 import { RaceEditDialogComponent } from '../Edit Dialogs/raceEditDialog/raceEditDialog.component';
 import { NewRaceDialogComponent } from '../New Dialogs/newRaceDialog/newRaceDialog.component';
 import { NewCharDialogComponent } from '../New Dialogs/newCharacterDialog/newCharacterDialog.component';
+import { generateCharacter } from 'src/app/supporting methods/generateCharacter';
 
 const CLASS_MOC_DATA: npcClass[] = [
   {
@@ -40,6 +48,8 @@ const RACE_MOC_DATA: npcRace[] = [
       [Stat.availableAbilities[0], 1],
       [Stat.availableAbilities[0], 1],
     ],
+    subraces: [1],
+    nameType: 1,
   },
 ];
 
@@ -61,8 +71,9 @@ const CHAR_MOC_DATA: npc[] = [
       { stat: Stat.availableAbilities[5], statValue: 10, statModifier: 3 },
     ],
     hitPoints: 12,
-    armorClass: 6,
-    speed: 100,
+    age: 50,
+    height: [5, 11],
+    weight: 120,
   },
 ];
 
@@ -92,6 +103,8 @@ export class homeScreenComponent implements AfterViewInit {
   raceData: npcRace[] = [];
   subraceData$: Observable<npcSubrace[]>;
   subraceData: npcSubrace[] = [];
+  nameData$: Observable<raceNameScheme[]>;
+  nameData: raceNameScheme[] = [];
 
   constructor(private api: npcService, private dialog: MatDialog) {
     this.classData$ = this.api.getAllClasses();
@@ -99,6 +112,7 @@ export class homeScreenComponent implements AfterViewInit {
     // TODO
     this.characterData$ = of(CHAR_MOC_DATA);
     this.subraceData$ = this.api.getAllSubraces();
+    this.nameData$ = this.api.getAllNameSchemes();
   }
 
   ngAfterViewInit(): void {
@@ -116,6 +130,9 @@ export class homeScreenComponent implements AfterViewInit {
     });
     this.subraceSubscriptions = this.subraceData$.subscribe((npcSubrace) => {
       this.subraceData = [...npcSubrace];
+    });
+    this.nameData$.subscribe((npcNameScheme) => {
+      this.nameData = [...npcNameScheme];
     });
   }
 
@@ -208,7 +225,17 @@ export class homeScreenComponent implements AfterViewInit {
     });
   }
 
-  public generateNewCharacter() {}
+  public generateNewCharacter() {
+    let nextID = 1;
+    let character: npc = generateCharacter(
+      this.raceData,
+      this.classData,
+      this.subraceData,
+      this.nameData,
+      nextID
+    );
+    console.log(character);
+  }
 
   public viewClass(classToEdit: npcClass) {
     let dialogRef = this.dialog.open(ClassEditDialogComponent, {

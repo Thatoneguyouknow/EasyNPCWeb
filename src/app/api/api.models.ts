@@ -18,7 +18,8 @@ export interface raceApi {
   ageRange: number[];
   asi: number[];
   asiv: number[];
-  // subraces: number[]
+  subraces: number[];
+  nameType: number;
 }
 
 export interface subraceApi {
@@ -29,3 +30,14 @@ export interface subraceApi {
   asiv: number[] | null;
 }
 
+export interface nameSchemeApi {
+  id: number;
+  firstHalves: string[];
+  secondHalves: string[];
+}
+
+export interface raceNameSchemeApi {
+  id: number;
+  firstNames: nameSchemeApi[];
+  lastNames: nameSchemeApi[];
+}
