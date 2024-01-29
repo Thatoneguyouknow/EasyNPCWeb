@@ -12,46 +12,52 @@ export function generateCharacter(
   availableClasses: npcClass[],
   availableSubraces: npcSubrace[],
   nameSchemes: raceNameScheme[],
-  nextID: number,
+  nextID: number
 ): npc {
   // Race and associated attributes
   const selectedRace: npcRace = generateRace(availableRaces);
-  console.log(selectedRace);
   let selectedSubrace = undefined;
   if (selectedRace.subraces.length >= 1) {
     let subraces: npcSubrace[] = availableSubraces.filter((subrace) =>
       selectedRace.subraces.includes(subrace.id)
     );
     selectedSubrace = generateSubrace(subraces);
-    console.log(selectedSubrace);
   }
 
   // Class and associated attributes
   const selectedClass: npcClass = generateClass(availableClasses);
-  console.log(selectedClass);
   const selectedLevel: number = generateLevel();
   const rolledStats: characterStat[] = generateStats(
     selectedClass,
     selectedRace,
     selectedSubrace
   );
-  console.log(rolledStats);
-  const hitPoints: number = selectedClass.hitDie.value + rolledStats[Stats.CONSTITUTION].statModifier;
-  console.log(hitPoints);
+  const hitPoints: number =
+    selectedClass.hitDie.value + rolledStats[Stats.CONSTITUTION].statModifier;
 
   // Description
   const name: string = generateName(selectedRace, nameSchemes, selectedSubrace);
-  console.log(name);
   const alignment = generateAlignment(selectedRace, selectedSubrace);
-  console.log(alignment);
   const personalityTraits = generatePersonality();
-  console.log(personalityTraits);
   const age = generateNumFromRange(selectedRace.ageRange);
   const height = generateHeight(selectedRace.heightRange);
   const weight = generateNumFromRange(selectedRace.weightRange);
-  console.log('age, height, weight: ' + age + ', ' + height + ', ' + weight);
 
-  const character: npc = {charId: nextID, charName: name, charRace: selectedRace, charSubrace: selectedSubrace, charClass: selectedClass, level: selectedLevel, stats: rolledStats, hitPoints: hitPoints, alignment: alignment, personalityTraits: personalityTraits, age: age, height: height, weight: weight};
+  const character: npc = {
+    charId: nextID,
+    charName: name,
+    charRace: selectedRace,
+    charSubrace: selectedSubrace,
+    charClass: selectedClass,
+    level: selectedLevel,
+    stats: rolledStats,
+    hitPoints: hitPoints,
+    alignment: alignment,
+    personalityTraits: personalityTraits,
+    age: age,
+    height: height,
+    weight: weight,
+  };
   return character;
 }
 
@@ -148,15 +154,18 @@ function generatePersonality(): string[] {
   personality.push(
     positivePersonalityTraits[
       Math.floor(Math.random() * positivePersonalityTraits.length)
-    ]);
+    ]
+  );
   personality.push(
     neutralPersonalityTraits[
       Math.floor(Math.random() * neutralPersonalityTraits.length)
-    ]);
+    ]
+  );
   personality.push(
     negativePersonalityTraits[
       Math.floor(Math.random() * negativePersonalityTraits.length)
-    ]);
+    ]
+  );
   return personality;
 }
 

@@ -22,7 +22,6 @@ import { MatListModule } from '@angular/material/list';
 
 // App imports
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 import { homeScreenComponent } from './components/homeScreen/homeScreen.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -35,7 +34,6 @@ import { NewCharDialogComponent } from './components/New Dialogs/newCharacterDia
 
 @NgModule({
   declarations: [
-    AppComponent,
     homeScreenComponent,
     ClassEditDialogComponent,
     CharEditDialogComponent,
