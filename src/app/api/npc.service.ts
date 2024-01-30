@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { nameScheme, npcClass, npcRace, raceNameScheme } from '../models';
+import { nameScheme, npc, npcClass, npcRace, raceNameScheme } from '../models';
 import { HttpClient } from '@angular/common/http';
 import {
+  characterApi,
   classApi,
   nameSchemeApi,
   raceApi,
@@ -10,7 +11,7 @@ import {
   subraceApi,
 } from './api.models';
 import { availableAbilities, availableHitDie, HitDie } from '../constants';
-import { convertASIFromBackend } from '../supporting methods/backendConversion';
+import { convertASIFromBackend, convertStatsFromBackend } from '../supporting methods/backendConversion';
 import { npcSubrace } from '../models/subraceModel';
 
 export interface ApiResponse<T> {
@@ -25,6 +26,31 @@ export interface ApiResponse<T> {
 })
 export class npcService {
   constructor(private http: HttpClient) {}
+
+  getAllCharacters(availableRaces: npcRace[], availableClasses: npcClass[], availableSubraces: npcSubrace[]): Observable<npc[]> {
+    const url = `api/Characters`;
+    return this.http
+      .get<ApiResponse<characterApi>>('http://localhost:8080/Characters')
+      .pipe(
+        map((npcCharacterData: ApiResponse<characterApi>): npc[] => 
+          npcCharacterData.data.map((data) => ({
+            charId: data.id,
+            charName: data.name,
+            charRace: availableRaces.find((race) => race.raceId == data.race_id),
+            charClass: availableClasses.find((charClass) => charClass.id == data.class_id),
+            charSubrace: availableSubraces.find((subrace) => subrace.id == data.subrace_id),
+            level: data.level,
+            stats: convertStatsFromBackend(data.stats),
+            hitPoints: data.hit_points,
+            alignment: data.alignment,
+            personalityTraits: data.personality,
+            age: data.age,
+            height: data.height,
+            weight: data.weight,
+          }))
+        )
+      );
+  }
 
   // map converts from backend
   getAllClasses(): Observable<npcClass[]> {
@@ -64,10 +90,7 @@ export class npcService {
             ageRange: [data.ageRange[0], data.ageRange[1]],
             asiRaw: data.asi,
             asivRaw: data.asiv,
-            abilityScoreIncrease: convertASIFromBackend(
-              data.asi,
-              data.asiv
-            ),
+            abilityScoreIncrease: convertASIFromBackend(data.asi, data.asiv),
             subraces: data.subraces,
             nameType: data.nameType,
           }))
@@ -89,10 +112,7 @@ export class npcService {
             asivRaw: data.asiv,
             abilityScoreIncrease:
               data.asi != null && data.asiv != null
-                ? convertASIFromBackend(
-                    data.asi,
-                    data.asiv
-                  )
+                ? convertASIFromBackend(data.asi, data.asiv)
                 : null,
           }))
         )

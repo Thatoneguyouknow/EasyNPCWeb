@@ -93,7 +93,7 @@ export class homeScreenComponent implements AfterViewInit {
   classTableColumns: string[] = ['name', 'hitDie', 'userCreated'];
   raceTableColumns: string[] = ['name', 'asi', 'userCreated'];
   characterDataSource = new MatTableDataSource<npc>();
-  characterData$: Observable<npc[]>;
+  characterData$: Observable<npc[]> = of([]);
   characterData: npc[] = [];
   classDataSource = new MatTableDataSource<npcClass>();
   classData$: Observable<npcClass[]>;
@@ -109,8 +109,6 @@ export class homeScreenComponent implements AfterViewInit {
   constructor(private api: npcService, private dialog: MatDialog) {
     this.classData$ = this.api.getAllClasses();
     this.raceData$ = this.api.getAllRaces();
-    // TODO
-    this.characterData$ = of(CHAR_MOC_DATA);
     this.subraceData$ = this.api.getAllSubraces();
     this.nameData$ = this.api.getAllNameSchemes();
   }
@@ -124,15 +122,22 @@ export class homeScreenComponent implements AfterViewInit {
       this.raceDataSource.data = npcRace;
       this.raceData = [...npcRace];
     });
-    this.characterSubscriptions = this.characterData$.subscribe((npc) => {
-      this.characterDataSource.data = npc;
-      this.characterData = [...npc];
-    });
     this.subraceSubscriptions = this.subraceData$.subscribe((npcSubrace) => {
       this.subraceData = [...npcSubrace];
     });
     this.nameData$.subscribe((npcNameScheme) => {
       this.nameData = [...npcNameScheme];
+    });
+
+    // Characters must come after races and classes
+    this.characterData$ = this.api.getAllCharacters(
+      this.raceData,
+      this.classData,
+      this.subraceData
+    );
+    this.characterSubscriptions = this.characterData$.subscribe((npc) => {
+      this.characterDataSource.data = npc;
+      this.characterData = [...npc];
     });
   }
 
@@ -300,22 +305,22 @@ export class homeScreenComponent implements AfterViewInit {
     const raceDataCopy: npcRace[] = [];
     this.raceData.forEach((val) => raceDataCopy.push(Object.assign({}, val)));
 
-    // REMOVE THIS after mock data is not necessary
-    if (
-      this.classData.find(
-        (npcClass) => npcClass.name == charToEdit.charClass.name
-      ) == undefined
-    ) {
-      charToEdit.charClass = this.classData[0];
-    }
-    // REMOVE THIS AS WELL
-    if (
-      this.raceData.find(
-        (npcRace) => npcRace.raceName == charToEdit.charRace.raceName
-      ) == undefined
-    ) {
-      charToEdit.charRace = this.raceData[0];
-    }
+    // // REMOVE THIS after mock data is not necessary
+    // if (
+    //   this.classData.find(
+    //     (npcClass) => npcClass.name == charToEdit.charClass.name
+    //   ) == undefined
+    // ) {
+    //   charToEdit.charClass = this.classData[0];
+    // }
+    // // REMOVE THIS AS WELL
+    // if (
+    //   this.raceData.find(
+    //     (npcRace) => npcRace.raceName == charToEdit.charRace.raceName
+    //   ) == undefined
+    // ) {
+    //   charToEdit.charRace = this.raceData[0];
+    // }
 
     let dialogRef = this.dialog.open(CharEditDialogComponent, {
       height: '800px',
