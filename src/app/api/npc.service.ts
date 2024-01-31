@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable, lastValueFrom, map } from 'rxjs';
 import { nameScheme, npc, npcClass, npcRace, raceNameScheme } from '../models';
 import { HttpClient } from '@angular/common/http';
 import {
@@ -10,8 +10,11 @@ import {
   raceNameSchemeApi,
   subraceApi,
 } from './api.models';
-import { availableAbilities, availableHitDie, HitDie } from '../constants';
-import { convertASIFromBackend, convertStatsFromBackend } from '../supporting methods/backendConversion';
+import { availableAbilities, availableHitDie } from '../constants';
+import {
+  convertASIFromBackend,
+  convertStatsFromBackend,
+} from '../supporting methods/backendConversion';
 import { npcSubrace } from '../models/subraceModel';
 
 export interface ApiResponse<T> {
@@ -27,18 +30,30 @@ export interface ApiResponse<T> {
 export class npcService {
   constructor(private http: HttpClient) {}
 
-  getAllCharacters(availableRaces: npcRace[], availableClasses: npcClass[], availableSubraces: npcSubrace[]): Observable<npc[]> {
+  getAllCharacters(
+    availableRaces: npcRace[],
+    availableClasses: npcClass[],
+    availableSubraces: npcSubrace[]
+  ): Observable<npc[]> {
     const url = `api/Characters`;
-    return this.http
+    console.log(availableRaces);
+    const data$ = this.http
       .get<ApiResponse<characterApi>>('http://localhost:8080/Characters')
       .pipe(
-        map((npcCharacterData: ApiResponse<characterApi>): npc[] => 
+        map((npcCharacterData: ApiResponse<characterApi>): npc[] =>
           npcCharacterData.data.map((data) => ({
             charId: data.id,
             charName: data.name,
-            charRace: availableRaces.find((race) => race.raceId == data.race_id),
-            charClass: availableClasses.find((charClass) => charClass.id == data.class_id),
-            charSubrace: availableSubraces.find((subrace) => subrace.id == data.subrace_id),
+            charRace: availableRaces.find(
+              (race) => race.raceId == data.race_id
+            ),
+            charClass:
+              availableClasses.find(
+                (charClass) => charClass.id == data.class_id
+              ) || availableClasses[0],
+            charSubrace: availableSubraces.find(
+              (subrace) => subrace.id == data.subrace_id
+            ),
             level: data.level,
             stats: convertStatsFromBackend(data.stats),
             hitPoints: data.hit_points,
@@ -50,12 +65,13 @@ export class npcService {
           }))
         )
       );
+    return data$;
   }
 
   // map converts from backend
-  getAllClasses(): Observable<npcClass[]> {
+  async getAllClasses(): Promise<Observable<npcClass[]>> {
     const url = `api/Classes`;
-    return this.http
+    const data$ = this.http
       .get<ApiResponse<classApi>>('http://localhost:8080/Classes')
       .pipe(
         map((npcClassData: ApiResponse<classApi>): npcClass[] =>
@@ -73,11 +89,12 @@ export class npcService {
           }))
         )
       );
+    return data$;
   }
 
-  getAllRaces(): Observable<npcRace[]> {
+  async getAllRaces(): Promise<Observable<npcRace[]>> {
     const url = `api/Races`;
-    return this.http
+    const data$ = this.http
       .get<ApiResponse<raceApi>>('http://localhost:8080/Races')
       .pipe(
         map((npcRaceData: ApiResponse<raceApi>): npcRace[] =>
@@ -96,11 +113,12 @@ export class npcService {
           }))
         )
       );
+    return data$;
   }
 
-  getAllSubraces(): Observable<npcSubrace[]> {
+  async getAllSubraces(): Promise<Observable<npcSubrace[]>> {
     const url = `api/Subraces`;
-    return this.http
+    const data$ = this.http
       .get<ApiResponse<subraceApi>>('http://localhost:8080/Subraces')
       .pipe(
         map((npcSubraceData: ApiResponse<subraceApi>): npcSubrace[] =>
@@ -117,6 +135,7 @@ export class npcService {
           }))
         )
       );
+    return data$;
   }
 
   getAllNameSchemes(): Observable<raceNameScheme[]> {

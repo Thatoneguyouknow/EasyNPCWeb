@@ -96,24 +96,34 @@ export class homeScreenComponent implements AfterViewInit {
   characterData$: Observable<npc[]> = of([]);
   characterData: npc[] = [];
   classDataSource = new MatTableDataSource<npcClass>();
-  classData$: Observable<npcClass[]>;
+  classData$: Observable<npcClass[]> = of([]);
   classData: npcClass[] = [];
   raceDataSource = new MatTableDataSource<npcRace>();
-  raceData$: Observable<npcRace[]>;
+  raceData$: Observable<npcRace[]> = of([]);
   raceData: npcRace[] = [];
-  subraceData$: Observable<npcSubrace[]>;
+  subraceData$: Observable<npcSubrace[]> = of([]);
   subraceData: npcSubrace[] = [];
-  nameData$: Observable<raceNameScheme[]>;
+  nameData$: Observable<raceNameScheme[]> = of([]);
   nameData: raceNameScheme[] = [];
 
-  constructor(private api: npcService, private dialog: MatDialog) {
-    this.classData$ = this.api.getAllClasses();
-    this.raceData$ = this.api.getAllRaces();
-    this.subraceData$ = this.api.getAllSubraces();
-    this.nameData$ = this.api.getAllNameSchemes();
+  constructor(private api: npcService, private dialog: MatDialog) {}
+
+  ngOnInit(): void {
+    this.getAllData();
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewInit(): void {}
+
+  async getAllData() {
+    // Do not need to wait for name data
+    this.nameData$ = this.api.getAllNameSchemes();
+
+    [this.classData$, this.raceData$, this.subraceData$] = await Promise.all([
+      this.api.getAllClasses(),
+      this.api.getAllRaces(),
+      this.api.getAllSubraces(),
+    ]);
+
     this.classSubscriptions = this.classData$.subscribe((npcClass) => {
       this.classDataSource.data = npcClass;
       this.classData = [...npcClass];
@@ -130,20 +140,16 @@ export class homeScreenComponent implements AfterViewInit {
     });
 
     // Characters must come after races and classes
-    this.characterData$ = this.api.getAllCharacters(
+    this.characterData$ = await this.api.getAllCharacters(
       this.raceData,
       this.classData,
       this.subraceData
     );
-    this.characterSubscriptions = this.characterData$.subscribe((npc) => {
-      this.characterDataSource.data = npc;
-      this.characterData = [...npc];
-    });
-  }
 
-  public classButtonTest() {
-    this.api.getAllClasses().subscribe((response) => {
-      console.log(response);
+    this.characterSubscriptions = this.characterData$.subscribe((npc) => {
+      // this.characterDataSource.data = npc;
+      this.characterData = [...npc];
+      console.log(npc);
     });
   }
 
