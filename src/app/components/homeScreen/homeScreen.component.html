@@ -34,14 +34,18 @@
           <mat-icon>playlist_add</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="generateNewCharacter()">generate character</button>
-          <button mat-menu-item (click)="newCharacter()"> blank character</button>
+          <button mat-menu-item (click)="generateNewCharacter()">
+            generate character
+          </button>
+          <button mat-menu-item (click)="newCharacter()">
+            blank character
+          </button>
         </mat-menu>
       </mat-card-header>
       <mat-card-content>
         <table
           mat-table
-          [dataSource]="characterDataSource"
+          [dataSource]="characterData"
           [ngClass]="'characters-table, display-table'"
         >
           <ng-component matColumnDef="name">
@@ -53,13 +57,13 @@
           <ng-component matColumnDef="race">
             <th mat-header-cell *matHeaderCellDef>Race</th>
             <td mat-cell *matCellDef="let character">
-              {{ character.charRace.raceName }}
+              {{ getRaceFromId(character.charRace).raceName }}
             </td>
           </ng-component>
           <ng-component matColumnDef="class">
             <th mat-header-cell *matHeaderCellDef>Class</th>
             <td mat-cell *matCellDef="let character">
-              {{ character.charClass.name }}
+              {{ getClassFromId(character.charClass).name }}
             </td>
           </ng-component>
 
@@ -129,7 +133,8 @@
           <ng-component matColumnDef="asi">
             <th mat-header-cell *matHeaderCellDef>Primary ASI</th>
             <td mat-cell *matCellDef="let race">
-              {{ race.abilityScoreIncrease[0][0].name }}, {{race.abilityScoreIncrease[0][1]}}
+              {{ race.abilityScoreIncrease[0][0].name }},
+              {{ race.abilityScoreIncrease[0][1] }}
             </td>
           </ng-component>
           <ng-component matColumnDef="userCreated">
@@ -137,7 +142,11 @@
             <td mat-cell *matCellDef>false</td>
           </ng-component>
           <tr mat-header-row *matHeaderRowDef="raceTableColumns"></tr>
-          <tr mat-row (click)="viewRace(row)" *matRowDef="let row; columns: raceTableColumns"></tr>
+          <tr
+            mat-row
+            (click)="viewRace(row)"
+            *matRowDef="let row; columns: raceTableColumns"
+          ></tr>
         </table>
       </mat-card-content>
     </mat-card>

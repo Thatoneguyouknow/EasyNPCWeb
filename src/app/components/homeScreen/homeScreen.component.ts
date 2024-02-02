@@ -13,7 +13,7 @@ import { npcService } from 'src/app/api/npc.service';
 import { CharEditDialogComponent } from '../Edit Dialogs/charEditDialog/charEditDialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ClassEditDialogComponent } from '../Edit Dialogs/classEditDialog/classEditDialog.component';
-import { Observable, of, Subscription } from 'rxjs';
+import { forkJoin, lastValueFrom, Observable, of, Subscription } from 'rxjs';
 import { NewClassDialogComponent } from '../New Dialogs/newClassDialog/newClassDialog.component';
 import { findLargestNumber } from 'src/app/supporting methods/mathOperations';
 import { RaceEditDialogComponent } from '../Edit Dialogs/raceEditDialog/raceEditDialog.component';
@@ -21,61 +21,61 @@ import { NewRaceDialogComponent } from '../New Dialogs/newRaceDialog/newRaceDial
 import { NewCharDialogComponent } from '../New Dialogs/newCharacterDialog/newCharacterDialog.component';
 import { generateCharacter } from 'src/app/supporting methods/generateCharacter';
 
-const CLASS_MOC_DATA: npcClass[] = [
-  {
-    id: 1,
-    userId: 100,
-    name: 'Ligma',
-    userCreated: false,
-    hitDie: Stat.availableHitDie.filter((hitdie) => hitdie.value == 4)[0],
-    statPriority: Stat.availableAbilities,
-  },
-];
+// const CLASS_MOC_DATA: npcClass[] = [
+//   {
+//     id: 1,
+//     userId: 100,
+//     name: 'Ligma',
+//     userCreated: false,
+//     hitDie: Stat.availableHitDie.filter((hitdie) => hitdie.value == 4)[0],
+//     statPriority: Stat.availableAbilities,
+//   },
+// ];
 
-const RACE_MOC_DATA: npcRace[] = [
-  {
-    raceId: 1,
-    raceName: 'Sugma',
-    alignmentSkew: 0,
-    heightRange: [4, 5],
-    weightRange: [100, 350],
-    ageRange: [10, 100],
-    // ASI: [Stat.availableAbilities[0]],
-    asiRaw: [0, 1, 2],
-    asivRaw: [1, 1, 1],
-    abilityScoreIncrease: [
-      [Stat.availableAbilities[0], 1],
-      [Stat.availableAbilities[0], 1],
-      [Stat.availableAbilities[0], 1],
-    ],
-    subraces: [1],
-    nameType: 1,
-  },
-];
+// const RACE_MOC_DATA: npcRace[] = [
+//   {
+//     raceId: 1,
+//     raceName: 'Sugma',
+//     alignmentSkew: 0,
+//     heightRange: [4, 5],
+//     weightRange: [100, 350],
+//     ageRange: [10, 100],
+//     // ASI: [Stat.availableAbilities[0]],
+//     asiRaw: [0, 1, 2],
+//     asivRaw: [1, 1, 1],
+//     abilityScoreIncrease: [
+//       [Stat.availableAbilities[0], 1],
+//       [Stat.availableAbilities[0], 1],
+//       [Stat.availableAbilities[0], 1],
+//     ],
+//     subraces: [1],
+//     nameType: 1,
+//   },
+// ];
 
-const CHAR_MOC_DATA: npc[] = [
-  {
-    charId: 1,
-    charName: 'Jeffery',
-    charRace: RACE_MOC_DATA[0],
-    charClass: CLASS_MOC_DATA[0],
-    alignment: 8,
-    personalityTraits: ['stupid'],
-    level: 1,
-    stats: [
-      { stat: Stat.availableAbilities[0], statValue: 15, statModifier: 3 },
-      { stat: Stat.availableAbilities[1], statValue: 14, statModifier: 3 },
-      { stat: Stat.availableAbilities[2], statValue: 13, statModifier: 3 },
-      { stat: Stat.availableAbilities[3], statValue: 12, statModifier: 3 },
-      { stat: Stat.availableAbilities[4], statValue: 11, statModifier: 3 },
-      { stat: Stat.availableAbilities[5], statValue: 10, statModifier: 3 },
-    ],
-    hitPoints: 12,
-    age: 50,
-    height: [5, 11],
-    weight: 120,
-  },
-];
+// const CHAR_MOC_DATA: npc[] = [
+//   {
+//     charId: 1,
+//     charName: 'Jeffery',
+//     charRace: RACE_MOC_DATA[0],
+//     charClass: CLASS_MOC_DATA[0],
+//     alignment: 8,
+//     personalityTraits: ['stupid'],
+//     level: 1,
+//     stats: [
+//       { stat: Stat.availableAbilities[0], statValue: 15, statModifier: 3 },
+//       { stat: Stat.availableAbilities[1], statValue: 14, statModifier: 3 },
+//       { stat: Stat.availableAbilities[2], statValue: 13, statModifier: 3 },
+//       { stat: Stat.availableAbilities[3], statValue: 12, statModifier: 3 },
+//       { stat: Stat.availableAbilities[4], statValue: 11, statModifier: 3 },
+//       { stat: Stat.availableAbilities[5], statValue: 10, statModifier: 3 },
+//     ],
+//     hitPoints: 12,
+//     age: 50,
+//     height: [5, 11],
+//     weight: 120,
+//   },
+// ];
 
 @Component({
   selector: 'app-root',
@@ -118,38 +118,53 @@ export class homeScreenComponent implements AfterViewInit {
     // Do not need to wait for name data
     this.nameData$ = this.api.getAllNameSchemes();
 
-    [this.classData$, this.raceData$, this.subraceData$] = await Promise.all([
-      this.api.getAllClasses(),
-      this.api.getAllRaces(),
-      this.api.getAllSubraces(),
-    ]);
+    [this.classData$, this.raceData$, this.subraceData$, this.characterData$] =
+      await Promise.all([
+        this.api.getAllClasses(),
+        this.api.getAllRaces(),
+        this.api.getAllSubraces(),
+        this.api.getAllCharacters(),
+      ]);
 
-    this.classSubscriptions = this.classData$.subscribe((npcClass) => {
-      this.classDataSource.data = npcClass;
-      this.classData = [...npcClass];
-    });
-    this.raceSubscriptions = this.raceData$.subscribe((npcRace) => {
-      this.raceDataSource.data = npcRace;
-      this.raceData = [...npcRace];
-    });
-    this.subraceSubscriptions = this.subraceData$.subscribe((npcSubrace) => {
-      this.subraceData = [...npcSubrace];
-    });
-    this.nameData$.subscribe((npcNameScheme) => {
-      this.nameData = [...npcNameScheme];
+
+      // I should change all of these data calls to promises, so that I can pass them synchronously directly into the character API call.
+
+    this.classSubscriptions = this.classData$.subscribe({
+      next: (data) => {
+        this.classDataSource.data = data;
+        this.classData = data;
+      },
+      error: (e) => console.error(e),
     });
 
-    // Characters must come after races and classes
-    this.characterData$ = await this.api.getAllCharacters(
-      this.raceData,
-      this.classData,
-      this.subraceData
-    );
+    this.raceSubscriptions = this.raceData$.subscribe({
+      next: (data) => {
+        this.raceDataSource.data = data;
+        this.raceData = data;
+      },
+      error: (e) => console.error(e),
+    });
 
-    this.characterSubscriptions = this.characterData$.subscribe((npc) => {
-      // this.characterDataSource.data = npc;
-      this.characterData = [...npc];
-      console.log(npc);
+    this.subraceSubscriptions = this.subraceData$.subscribe({
+      next: (data) => {
+        this.subraceData = data;
+      },
+      error: (e) => console.error(e),
+    });
+
+    this.characterSubscriptions = this.characterData$.subscribe({
+      next: (data) => {
+        this.characterDataSource.data = data;
+        this.characterData = data;
+      },
+      error: (e) => console.error(e),
+    });
+
+    this.nameData$.subscribe({
+      next: (data) => {
+        this.nameData = data;
+      },
+      error: (e) => console.error(e),
     });
   }
 
@@ -230,7 +245,6 @@ export class homeScreenComponent implements AfterViewInit {
       this.characterSubscriptions.unsubscribe();
 
       this.characterSubscriptions = this.characterData$.subscribe((npcChar) => {
-        this.characterDataSource.data = npcChar;
         this.characterData = [...npcChar];
       });
     });
@@ -304,30 +318,6 @@ export class homeScreenComponent implements AfterViewInit {
   }
 
   public viewCharacter(charToEdit: npc) {
-    // Need to create deep copies here, so that the character references its own version of the race, not the global race object
-    // Actually copies create a problem with saving and re-editing
-    const classDataCopy: npcClass[] = [];
-    this.classData.forEach((val) => classDataCopy.push(Object.assign({}, val)));
-    const raceDataCopy: npcRace[] = [];
-    this.raceData.forEach((val) => raceDataCopy.push(Object.assign({}, val)));
-
-    // // REMOVE THIS after mock data is not necessary
-    // if (
-    //   this.classData.find(
-    //     (npcClass) => npcClass.name == charToEdit.charClass.name
-    //   ) == undefined
-    // ) {
-    //   charToEdit.charClass = this.classData[0];
-    // }
-    // // REMOVE THIS AS WELL
-    // if (
-    //   this.raceData.find(
-    //     (npcRace) => npcRace.raceName == charToEdit.charRace.raceName
-    //   ) == undefined
-    // ) {
-    //   charToEdit.charRace = this.raceData[0];
-    // }
-
     let dialogRef = this.dialog.open(CharEditDialogComponent, {
       height: '800px',
       width: '600px',
@@ -346,9 +336,22 @@ export class homeScreenComponent implements AfterViewInit {
       this.characterSubscriptions.unsubscribe();
 
       this.characterSubscriptions = this.characterData$.subscribe((npcChar) => {
-        this.characterDataSource.data = npcChar;
         this.characterData = [...npcChar];
       });
     });
+  }
+
+  public getClassFromId(id: number): npcClass {
+    return this.classData.find((data) => (data.id = id)) || this.classData[0];
+  }
+
+  public getRaceFromId(id: number): npcRace {
+    return this.raceData.find((data) => (data.raceId = id)) || this.raceData[0];
+  }
+
+  public getSubraceFromId(id: number) {
+    return (
+      this.subraceData.find((data) => (data.id = id)) || this.subraceData[0]
+    );
   }
 }

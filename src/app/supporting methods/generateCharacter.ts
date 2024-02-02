@@ -46,9 +46,9 @@ export function generateCharacter(
   const character: npc = {
     charId: nextID,
     charName: name,
-    charRace: selectedRace,
-    charSubrace: selectedSubrace,
-    charClass: selectedClass,
+    charRace: selectedRace.raceId,
+    charSubrace: selectedSubrace?.id,
+    charClass: selectedClass.id,
     level: selectedLevel,
     stats: rolledStats,
     hitPoints: hitPoints,

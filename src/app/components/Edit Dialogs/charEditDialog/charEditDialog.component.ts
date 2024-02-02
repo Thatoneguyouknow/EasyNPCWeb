@@ -13,6 +13,8 @@ export class CharEditDialogComponent {
   classData: npcClass[] = [];
   raceData: npcRace[] = [];
   newTrait: string = '';
+  selectedClass: npcClass;
+  selectedRace: npcRace;
 
   constructor(
     public dialogRef: MatDialogRef<CharEditDialogComponent>,
@@ -21,6 +23,8 @@ export class CharEditDialogComponent {
   ) {
     this.classData = this.data.classData;
     this.raceData = this.data.raceData;
+    this.selectedClass = this.classData.find((val) => val.id = this.model.charClass) || this.classData[0];
+    this.selectedRace = this.raceData.find((val) => val.raceId = this.model.charRace) || this.raceData[0];
   }
 
   addTrait(trait: string) {
@@ -35,6 +39,14 @@ export class CharEditDialogComponent {
         this.model.personalityTraits.splice(index, 1);
       }
     });
+  }
+
+  classChanged(changedTo: npcClass) {
+    this.model.charClass = changedTo.id;
+  }
+
+  raceChanged(changedTo: npcRace) {
+    this.model.charRace = changedTo.raceId;
   }
 
   closeDialog() {

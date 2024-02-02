@@ -30,13 +30,8 @@ export interface ApiResponse<T> {
 export class npcService {
   constructor(private http: HttpClient) {}
 
-  getAllCharacters(
-    availableRaces: npcRace[],
-    availableClasses: npcClass[],
-    availableSubraces: npcSubrace[]
-  ): Observable<npc[]> {
+  async getAllCharacters(): Promise<Observable<npc[]>> {
     const url = `api/Characters`;
-    console.log(availableRaces);
     const data$ = this.http
       .get<ApiResponse<characterApi>>('http://localhost:8080/Characters')
       .pipe(
@@ -44,16 +39,9 @@ export class npcService {
           npcCharacterData.data.map((data) => ({
             charId: data.id,
             charName: data.name,
-            charRace: availableRaces.find(
-              (race) => race.raceId == data.race_id
-            ),
-            charClass:
-              availableClasses.find(
-                (charClass) => charClass.id == data.class_id
-              ) || availableClasses[0],
-            charSubrace: availableSubraces.find(
-              (subrace) => subrace.id == data.subrace_id
-            ),
+            charRace: data.race_id,
+            charClass: data.class_id,
+            charSubrace: data.subrace_id,
             level: data.level,
             stats: convertStatsFromBackend(data.stats),
             hitPoints: data.hit_points,
