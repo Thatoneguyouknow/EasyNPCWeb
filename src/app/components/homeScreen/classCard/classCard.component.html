@@ -1,0 +1,36 @@
+<mat-card [ngClass]="'classes-card, card'">
+    <mat-card-header [ngClass]="'card-header'">
+      <mat-card-title>Classes</mat-card-title>
+      <mat-card-subtitle>Classes you've created</mat-card-subtitle>
+      <button mat-icon-button [color]="'primary'" (click)="newClass()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </mat-card-header>
+    <mat-card-content>
+      <table
+        mat-table
+        [dataSource]="classes"
+        [ngClass]="'class-table, display-table'"
+      >
+        <ng-component matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let class">{{ class.name }}</td>
+        </ng-component>
+        <ng-component matColumnDef="hitDie">
+          <th mat-header-cell *matHeaderCellDef>Hit Die</th>
+          <td mat-cell *matCellDef="let class">{{ class.hitDie.display }}</td>
+        </ng-component>
+        <ng-component matColumnDef="userCreated">
+          <th mat-header-cell *matHeaderCellDef>User Created</th>
+          <td mat-cell *matCellDef="let class">{{ class.userCreated }}</td>
+        </ng-component>
+
+        <tr mat-header-row *matHeaderRowDef="classTableColumns"></tr>
+        <tr
+          mat-row
+          (click)="viewClass(row)"
+          *matRowDef="let row; columns: classTableColumns"
+        ></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>

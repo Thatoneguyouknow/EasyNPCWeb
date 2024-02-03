@@ -1,4 +1,11 @@
-import { AfterViewInit, Component, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewEncapsulation,
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import * as Stat from 'src/app/constants';
 import {
@@ -20,6 +27,15 @@ import { RaceEditDialogComponent } from '../Edit Dialogs/raceEditDialog/raceEdit
 import { NewRaceDialogComponent } from '../New Dialogs/newRaceDialog/newRaceDialog.component';
 import { NewCharDialogComponent } from '../New Dialogs/newCharacterDialog/newCharacterDialog.component';
 import { generateCharacter } from 'src/app/supporting methods/generateCharacter';
+import { Store } from '@ngrx/store';
+import { selectClassList, selectClasses } from 'src/app/state/class.selectors';
+import { ClassApiActions } from 'src/app/state/class.actions';
+import { selectRaces } from 'src/app/state/race.selectors';
+import { RaceApiActions } from 'src/app/state/race.actions';
+import { convertCharacterApiToCharacter } from 'src/app/supporting methods/backendConversion';
+import { character } from 'src/app/models/characterModel';
+import { CharacterApiActions } from 'src/app/state/character.actions';
+import { selectCharacters } from 'src/app/state/character.selectors';
 
 // const CLASS_MOC_DATA: npcClass[] = [
 //   {
@@ -89,12 +105,12 @@ export class homeScreenComponent implements AfterViewInit {
   raceSubscriptions: Subscription = Subscription.EMPTY;
   subraceSubscriptions: Subscription = Subscription.EMPTY;
   characterSubscriptions: Subscription = Subscription.EMPTY;
-  characterTableColumns: string[] = ['name', 'race', 'class'];
-  classTableColumns: string[] = ['name', 'hitDie', 'userCreated'];
-  raceTableColumns: string[] = ['name', 'asi', 'userCreated'];
   characterDataSource = new MatTableDataSource<npc>();
   characterData$: Observable<npc[]> = of([]);
   characterData: npc[] = [];
+  classes$: Observable<readonly npcClass[]> = this.store.select(selectClasses);
+  races$: Observable<readonly npcRace[]> = this.store.select(selectRaces);
+  characters$: Observable<readonly npc[]> = this.store.select(selectCharacters);
   classDataSource = new MatTableDataSource<npcClass>();
   classData$: Observable<npcClass[]> = of([]);
   classData: npcClass[] = [];
@@ -106,7 +122,11 @@ export class homeScreenComponent implements AfterViewInit {
   nameData$: Observable<raceNameScheme[]> = of([]);
   nameData: raceNameScheme[] = [];
 
-  constructor(private api: npcService, private dialog: MatDialog) {}
+  constructor(
+    private api: npcService,
+    private dialog: MatDialog,
+    private store: Store
+  ) {}
 
   ngOnInit(): void {
     this.getAllData();
@@ -118,32 +138,21 @@ export class homeScreenComponent implements AfterViewInit {
     // Do not need to wait for name data
     this.nameData$ = this.api.getAllNameSchemes();
 
-    [this.classData$, this.raceData$, this.subraceData$, this.characterData$] =
-      await Promise.all([
-        this.api.getAllClasses(),
-        this.api.getAllRaces(),
-        this.api.getAllSubraces(),
-        this.api.getAllCharacters(),
-      ]);
-
-
-      // I should change all of these data calls to promises, so that I can pass them synchronously directly into the character API call.
-
-    this.classSubscriptions = this.classData$.subscribe({
-      next: (data) => {
-        this.classDataSource.data = data;
-        this.classData = data;
+    (await this.api.getAllClasses()).subscribe({
+      next: (classes) => {
+        this.store.dispatch(ClassApiActions.retrievedClassList({ classes }));
       },
       error: (e) => console.error(e),
     });
 
-    this.raceSubscriptions = this.raceData$.subscribe({
-      next: (data) => {
-        this.raceDataSource.data = data;
-        this.raceData = data;
+    (await this.api.getAllRaces()).subscribe({
+      next: (races) => {
+        this.store.dispatch(RaceApiActions.retrievedRaceList({ races }));
       },
       error: (e) => console.error(e),
     });
+
+    this.subraceData$ = await this.api.getAllSubraces();
 
     this.subraceSubscriptions = this.subraceData$.subscribe({
       next: (data) => {
@@ -152,10 +161,12 @@ export class homeScreenComponent implements AfterViewInit {
       error: (e) => console.error(e),
     });
 
-    this.characterSubscriptions = this.characterData$.subscribe({
-      next: (data) => {
-        this.characterDataSource.data = data;
-        this.characterData = data;
+    (await this.api.getAllCharacters()).subscribe({
+      next: (characters) => {
+        this.store.dispatch(
+          CharacterApiActions.retrievedCharacterList({ characters })
+        );
+        console.log(characters);
       },
       error: (e) => console.error(e),
     });
@@ -339,19 +350,5 @@ export class homeScreenComponent implements AfterViewInit {
         this.characterData = [...npcChar];
       });
     });
-  }
-
-  public getClassFromId(id: number): npcClass {
-    return this.classData.find((data) => (data.id = id)) || this.classData[0];
-  }
-
-  public getRaceFromId(id: number): npcRace {
-    return this.raceData.find((data) => (data.raceId = id)) || this.raceData[0];
-  }
-
-  public getSubraceFromId(id: number) {
-    return (
-      this.subraceData.find((data) => (data.id = id)) || this.subraceData[0]
-    );
   }
 }

@@ -18,6 +18,22 @@ export interface npc {
     weight: number;
 }
 
+export interface character {
+    charId: number;
+    charName: string;
+    charRace: npcRace;
+    charSubrace?: npcSubrace;
+    charClass: npcClass;
+    level: number;
+    stats: characterStat[];
+    hitPoints: number; // Determined by rolling hit die, adding con modifier
+    alignment: number;
+    personalityTraits: string[];
+    age: number;
+    height: number[];
+    weight: number;
+}
+
 // Part 1: race
 //Race, Subrace, ASI
 
