@@ -2,7 +2,7 @@
     <mat-card-header [ngClass]="'card-header'">
       <mat-card-title>Classes</mat-card-title>
       <mat-card-subtitle>Classes you've created</mat-card-subtitle>
-      <button mat-icon-button [color]="'primary'" (click)="newClass()">
+      <button mat-icon-button [color]="'primary'" (click)="newClass.emit()">
         <mat-icon>add</mat-icon>
       </button>
     </mat-card-header>
@@ -28,7 +28,7 @@
         <tr mat-header-row *matHeaderRowDef="classTableColumns"></tr>
         <tr
           mat-row
-          (click)="viewClass(row)"
+          (click)="viewClass.emit(row)"
           *matRowDef="let row; columns: classTableColumns"
         ></tr>
       </table>

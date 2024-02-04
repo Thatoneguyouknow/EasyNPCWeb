@@ -6,6 +6,7 @@ export const ClassActions = createActionGroup({
   events: {
     'Add Class': props<{ classId: number }>(),
     'Remove Class': props<{ classId: number }>(),
+    'Edit Class': props<{ toEdit: npcClass }>(),
   },
 });
 

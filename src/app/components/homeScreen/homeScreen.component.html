@@ -26,8 +26,23 @@
     </div>
   </mat-drawer>
   <div [ngClass]="'display-cards'">
-    <character-card class="character-list" [characters]="(characters$ | async)!" [races]="(races$ | async)!" [classes]="(classes$ |async)!"></character-card>
-    <class-card class="class-list" [classes]="(classes$ | async)!"></class-card>
-    <race-card class="race-list" [races]="(races$ | async)!"></race-card>
+    <character-card
+      class="character-list"
+      [characters]="(characters$ | async)!"
+      [races]="(races$ | async)!"
+      [classes]="(classes$ | async)!"
+    ></character-card>
+    <class-card
+      class="class-list"
+      [classes]="(classes$ | async)!"
+      (viewClass)="viewClass($event)"
+      (newClass)="newClass()"
+    ></class-card>
+    <race-card
+      class="race-list"
+      [races]="(races$ | async)!"
+      (viewRace)="viewRace($event)"
+      (newRace)="newRace()"
+    ></race-card>
   </div>
 </mat-drawer-container>

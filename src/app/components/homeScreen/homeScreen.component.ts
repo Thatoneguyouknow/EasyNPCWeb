@@ -1,39 +1,27 @@
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  ViewEncapsulation,
-} from '@angular/core';
+import { AfterViewInit, Component, ViewEncapsulation } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import * as Stat from 'src/app/constants';
 import {
   npcClass,
   npcRace,
   npcSubrace,
   npc,
-  nameScheme,
   raceNameScheme,
 } from 'src/app/models';
 import { npcService } from 'src/app/api/npc.service';
 import { CharEditDialogComponent } from '../Edit Dialogs/charEditDialog/charEditDialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ClassEditDialogComponent } from '../Edit Dialogs/classEditDialog/classEditDialog.component';
-import { forkJoin, lastValueFrom, Observable, of, Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { NewClassDialogComponent } from '../New Dialogs/newClassDialog/newClassDialog.component';
-import { findLargestNumber } from 'src/app/supporting methods/mathOperations';
 import { RaceEditDialogComponent } from '../Edit Dialogs/raceEditDialog/raceEditDialog.component';
 import { NewRaceDialogComponent } from '../New Dialogs/newRaceDialog/newRaceDialog.component';
 import { NewCharDialogComponent } from '../New Dialogs/newCharacterDialog/newCharacterDialog.component';
 import { generateCharacter } from 'src/app/supporting methods/generateCharacter';
 import { Store } from '@ngrx/store';
-import { selectClassList, selectClasses } from 'src/app/state/class.selectors';
-import { ClassApiActions } from 'src/app/state/class.actions';
+import { selectClasses } from 'src/app/state/class.selectors';
+import { ClassActions, ClassApiActions } from 'src/app/state/class.actions';
 import { selectRaces } from 'src/app/state/race.selectors';
-import { RaceApiActions } from 'src/app/state/race.actions';
-import { convertCharacterApiToCharacter } from 'src/app/supporting methods/backendConversion';
-import { character } from 'src/app/models/characterModel';
+import { RaceActions, RaceApiActions } from 'src/app/state/race.actions';
 import { CharacterApiActions } from 'src/app/state/character.actions';
 import { selectCharacters } from 'src/app/state/character.selectors';
 
@@ -286,6 +274,7 @@ export class homeScreenComponent implements AfterViewInit {
           (npcClass) => npcClass.id === result.id
         );
         this.classData[index] = result;
+        this.store.dispatch(ClassActions.editClass({ toEdit: result }));
       }
       this.classData$ = of(this.classData);
 
@@ -314,6 +303,7 @@ export class homeScreenComponent implements AfterViewInit {
           (npcRace) => npcRace.raceId === result.raceId
         );
         this.raceData[index] = result;
+        this.store.dispatch(RaceActions.editRace({ toEdit: result }));
       }
       this.raceData$ = of(this.raceData);
 

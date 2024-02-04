@@ -44,6 +44,7 @@ import { CharacterCardComponent } from './components/homeScreen/characterCard/ch
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { charactersReducer } from './state/character.reducer';
 import { characterListReducer } from './state/characterList.reducer';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [
@@ -90,6 +91,7 @@ import { characterListReducer } from './state/characterList.reducer';
       characterList: characterListReducer,
     }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    EffectsModule.forRoot([]),
   ],
   providers: [],
   bootstrap: [homeScreenComponent],

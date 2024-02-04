@@ -2,7 +2,7 @@
     <mat-card-header>
       <mat-card-title>Races</mat-card-title>
       <mat-card-subtitle>Races you've created</mat-card-subtitle>
-      <button mat-icon-button [color]="'primary'" (click)="newRace()">
+      <button mat-icon-button [color]="'primary'" (click)="newRace.emit()">
         <mat-icon>library_add</mat-icon>
       </button>
     </mat-card-header>
@@ -30,7 +30,7 @@
         <tr mat-header-row *matHeaderRowDef="raceTableColumns"></tr>
         <tr
           mat-row
-          (click)="viewRace(row)"
+          (click)="viewRace.emit(row)"
           *matRowDef="let row; columns: raceTableColumns"
         ></tr>
       </table>

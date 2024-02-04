@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { npcRace } from 'src/app/models';
 
 @Component({
@@ -8,9 +8,7 @@ import { npcRace } from 'src/app/models';
 })
 export class RaceCardComponent {
   @Input() races: ReadonlyArray<npcRace> = [];
+  @Output() viewRace = new EventEmitter<npcRace>();
+  @Output() newRace = new EventEmitter();
   raceTableColumns: string[] = ['name', 'asi', 'userCreated'];
-
-  newRace() {}
-
-  viewRace(toView: npcRace) {}
 }

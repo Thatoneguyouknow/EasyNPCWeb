@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { npcClass } from 'src/app/models';
 
 @Component({
@@ -8,9 +8,7 @@ import { npcClass } from 'src/app/models';
 })
 export class ClassCardComponent {
   @Input() classes: ReadonlyArray<npcClass> = [];
+  @Output() viewClass = new EventEmitter<npcClass>();
+  @Output() newClass = new EventEmitter();
   classTableColumns: string[] = ['name', 'hitDie', 'userCreated'];
-
-  newClass() {}
-
-  viewClass(toView: npcClass) {}
 }
