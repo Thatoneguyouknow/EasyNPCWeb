@@ -120,7 +120,19 @@ export class homeScreenComponent implements AfterViewInit {
     this.getAllData();
   }
 
-  ngAfterViewInit(): void {}
+  ngAfterViewInit(): void {
+    this.classes$.subscribe({
+      next: (classes) => {
+        this.classData = [...classes];
+      },
+    });
+
+    this.races$.subscribe({
+      next: (races) => {
+        this.raceData = [...races];
+      },
+    });
+  }
 
   async getAllData() {
     // Do not need to wait for name data
