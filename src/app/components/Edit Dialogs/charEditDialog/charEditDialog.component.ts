@@ -23,12 +23,12 @@ export class CharEditDialogComponent {
   ) {
     this.classData = this.data.classData;
     this.raceData = this.data.raceData;
-    this.selectedClass = this.classData.find((val) => val.id = this.model.charClass) || this.classData[0];
-    this.selectedRace = this.raceData.find((val) => val.raceId = this.model.charRace) || this.raceData[0];
+    this.selectedClass = this.classData.find((val) => val.id === this.model.charClass) || this.classData[0];
+    this.selectedRace = this.raceData.find((val) => val.raceId === this.model.charRace) || this.raceData[0];
   }
 
   addTrait(trait: string) {
-    this.model.personalityTraits.push(trait);
+    this.model.personalityTraits = [...this.model.personalityTraits, trait];
     this.newTrait = '';
   }
 

@@ -4,8 +4,9 @@ import { npc } from '../models';
 export const CharacterActions = createActionGroup({
   source: 'Characters',
   events: {
-    'Add Character': props<{ characterId: number }>(),
-    'Remove Character': props<{ characterId: number }>(),
+    'Add Character': props<{ toAdd: npc }>(),
+    'Remove Character': props<{ toRemove: npc }>(),
+    'Edit Character': props<{ toEdit: npc }>(),
   },
 });
 

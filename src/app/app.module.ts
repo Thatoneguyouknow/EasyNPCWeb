@@ -35,15 +35,12 @@ import { NewCharDialogComponent } from './components/New Dialogs/newCharacterDia
 // Ngrx imports
 import { StoreModule } from '@ngrx/store';
 import { classesReducer } from './state/class.reducer';
-import { classListReducer } from './state/classList.reducer';
 import { ClassCardComponent } from './components/homeScreen/classCard/classCard.component';
 import { racesReducer } from './state/race.reducer';
-import { raceListReducer } from './state/raceList.reducer';
 import { RaceCardComponent } from './components/homeScreen/raceCard/raceCard.component';
 import { CharacterCardComponent } from './components/homeScreen/characterCard/characterCard.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { charactersReducer } from './state/character.reducer';
-import { characterListReducer } from './state/characterList.reducer';
 import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
@@ -84,11 +81,8 @@ import { EffectsModule } from '@ngrx/effects';
     HttpClientModule,
     StoreModule.forRoot({
       classes: classesReducer,
-      classList: classListReducer,
       races: racesReducer,
-      raceList: raceListReducer,
       characters: charactersReducer,
-      characterList: characterListReducer,
     }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     EffectsModule.forRoot([]),

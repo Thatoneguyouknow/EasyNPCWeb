@@ -4,8 +4,8 @@ import { npcClass } from '../models';
 export const ClassActions = createActionGroup({
   source: 'Classes',
   events: {
-    'Add Class': props<{ classId: number }>(),
-    'Remove Class': props<{ classId: number }>(),
+    'Add Class': props<{ toAdd: npcClass }>(),
+    'Remove Class': props<{ toRemove: npcClass }>(),
     'Edit Class': props<{ toEdit: npcClass }>(),
   },
 });

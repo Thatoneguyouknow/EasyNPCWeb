@@ -9,5 +9,12 @@ export const racesReducer = createReducer(
   on(RaceApiActions.retrievedRaceList, (_state, { races }) => races),
   on(RaceActions.editRace, (state, { toEdit }) => {
     return [toEdit, ...state.filter((id) => id.raceId !== toEdit.raceId)];
-  })
+  }),
+  on(RaceActions.addRace, (state, { toAdd }) => {
+    if (state.indexOf(toAdd) > -1) return state;
+    return [...state, toAdd];
+  }),
+  on(RaceActions.removeRace, (state, { toRemove }) =>
+    state.filter((race) => race.raceId !== toRemove.raceId)
+  )
 );

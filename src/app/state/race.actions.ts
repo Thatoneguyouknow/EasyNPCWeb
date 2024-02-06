@@ -4,8 +4,8 @@ import { npcRace } from '../models';
 export const RaceActions = createActionGroup({
   source: 'Races',
   events: {
-    'Add Race': props<{ raceId: number }>(),
-    'Remove Race': props<{ raceId: number }>(),
+    'Add Race': props<{ toAdd: npcRace }>(),
+    'Remove Race': props<{ toRemove: npcRace }>(),
     'Edit Race': props<{ toEdit: npcRace }>(),
   },
 });

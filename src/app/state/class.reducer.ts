@@ -11,4 +11,11 @@ export const classesReducer = createReducer(
   on(ClassActions.editClass, (state, { toEdit }) => {
     return [toEdit, ...state.filter((id) => id.id !== toEdit.id)];
   }),
+  on(ClassActions.addClass, (state, { toAdd }) => {
+    if (state.indexOf(toAdd) > -1) return state;
+    return [...state, toAdd];
+  }),
+  on(ClassActions.removeClass, (state, { toRemove }) => 
+    state.filter((charClass) => charClass.id !== toRemove.id)
+  ),
 );

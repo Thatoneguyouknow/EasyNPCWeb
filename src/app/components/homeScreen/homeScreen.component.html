@@ -31,6 +31,9 @@
       [characters]="(characters$ | async)!"
       [races]="(races$ | async)!"
       [classes]="(classes$ | async)!"
+      (viewCharacter)="viewCharacter($event)"
+      (newCharacter)="newCharacter()"
+      (generateCharacter)="generateNewCharacter()"
     ></character-card>
     <class-card
       class="class-list"
