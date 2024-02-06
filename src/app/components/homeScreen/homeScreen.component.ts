@@ -19,14 +19,27 @@ import { NewCharDialogComponent } from '../New Dialogs/newCharacterDialog/newCha
 import { generateCharacter } from 'src/app/supporting methods/generateCharacter';
 import { Store } from '@ngrx/store';
 import { selectClasses } from 'src/app/state/class_state/class.selectors';
-import { ClassActions, ClassApiActions } from 'src/app/state/class_state/class.actions';
+import {
+  ClassActions,
+  ClassApiActions,
+} from 'src/app/state/class_state/class.actions';
 import { selectRaces } from 'src/app/state/race_state/race.selectors';
-import { RaceActions, RaceApiActions } from 'src/app/state/race_state/race.actions';
+import {
+  RaceActions,
+  RaceApiActions,
+} from 'src/app/state/race_state/race.actions';
 import {
   CharacterActions,
   CharacterApiActions,
 } from 'src/app/state/character_state/character.actions';
 import { selectCharacters } from 'src/app/state/character_state/character.selectors';
+import { selectSubraces } from 'src/app/state/subrace_state/subrace.selectors';
+import {
+  SubraceActions,
+  SubraceApiActions,
+} from 'src/app/state/subrace_state/subrace.actions';
+import { selectNames } from 'src/app/state/name_state/name.selectors';
+import { NameApiActions } from 'src/app/state/name_state/name.actions';
 
 // const CLASS_MOC_DATA: npcClass[] = [
 //   {
@@ -99,9 +112,11 @@ export class homeScreenComponent implements AfterViewInit {
   characters$: Observable<readonly npc[]> = this.store.select(selectCharacters);
   classData: npcClass[] = [];
   raceData: npcRace[] = [];
-  subraceData$: Observable<npcSubrace[]> = of([]);
+  subraces$: Observable<readonly npcSubrace[]> =
+    this.store.select(selectSubraces);
   subraceData: npcSubrace[] = [];
-  nameData$: Observable<raceNameScheme[]> = of([]);
+  names$: Observable<readonly raceNameScheme[]> =
+    this.store.select(selectNames);
   nameData: raceNameScheme[] = [];
 
   private destroy$: Subject<void> = new Subject<void>();
@@ -134,10 +149,26 @@ export class homeScreenComponent implements AfterViewInit {
         this.characterData = [...characters];
       },
     });
+
+    this.subraces$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (subraces) => {
+        this.subraceData = [...subraces];
+      },
+    });
+
+    this.names$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (names) => {
+        this.nameData = [...names];
+      },
+    });
   }
 
   async getAllData() {
-    this.nameData$ = this.api.getAllNameSchemes();
+    this.api.getAllNameSchemes().subscribe({
+      next: (names) => {
+        this.store.dispatch(NameApiActions.retrievedNameList({ names }));
+      },
+    });
 
     (await this.api.getAllClasses()).subscribe({
       next: (classes) => {
@@ -153,13 +184,12 @@ export class homeScreenComponent implements AfterViewInit {
       error: (e) => console.error(e),
     });
 
-    this.subraceData$ = await this.api.getAllSubraces();
-
-    this.subraceSubscriptions = this.subraceData$.subscribe({
-      next: (data) => {
-        this.subraceData = data;
+    (await this.api.getAllSubraces()).subscribe({
+      next: (subraces) => {
+        this.store.dispatch(
+          SubraceApiActions.retrievedSubraceList({ subraces })
+        );
       },
-      error: (e) => console.error(e),
     });
 
     (await this.api.getAllCharacters()).subscribe({
@@ -168,13 +198,6 @@ export class homeScreenComponent implements AfterViewInit {
           CharacterApiActions.retrievedCharacterList({ characters })
         );
         console.log(characters);
-      },
-      error: (e) => console.error(e),
-    });
-
-    this.nameData$.subscribe({
-      next: (data) => {
-        this.nameData = data;
       },
       error: (e) => console.error(e),
     });
@@ -250,7 +273,6 @@ export class homeScreenComponent implements AfterViewInit {
       this.nameData,
       nextID
     );
-    console.log(character);
     this.store.dispatch(CharacterActions.addCharacter({ toAdd: character }));
   }
 

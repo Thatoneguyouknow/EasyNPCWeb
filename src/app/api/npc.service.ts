@@ -5,7 +5,6 @@ import { HttpClient } from '@angular/common/http';
 import {
   characterApi,
   classApi,
-  nameSchemeApi,
   raceApi,
   raceNameSchemeApi,
   subraceApi,
@@ -56,13 +55,6 @@ export class npcService {
     return data$;
   }
 
-  async getCharacters(): Promise<Observable<ApiResponse<characterApi>>> {
-    const url = `api/Characters`;
-    const data$ = this.http.get<ApiResponse<characterApi>>('http://localhost:8080/Characters');
-    return data$;
-  }
-
-  // map converts from backend
   async getAllClasses(): Promise<Observable<npcClass[]>> {
     const url = `api/Classes`;
     const data$ = this.http
@@ -86,54 +78,7 @@ export class npcService {
     return data$;
   }
 
-  getClasses(): Observable<npcClass[]> {
-    const url = `api/Classes`;
-    const data$ = this.http
-      .get<ApiResponse<classApi>>('http://localhost:8080/Classes')
-      .pipe(
-        map((npcClassData: ApiResponse<classApi>): npcClass[] =>
-          npcClassData.data.map((data) => ({
-            id: data.id,
-            userId: data.userID,
-            name: data.name,
-            userCreated: data.userID == 100 ? false : true,
-            hitDie: availableHitDie.filter(
-              (hitDie) => hitDie.value == data.hitDie
-            )[0],
-            statPriority: data.statPriority.map(
-              (stat) => availableAbilities.filter((val) => val.value == stat)[0]
-            ),
-          }))
-        )
-      );
-    return data$;
-  }
-
   async getAllRaces(): Promise<Observable<npcRace[]>> {
-    const url = `api/Races`;
-    const data$ = this.http
-      .get<ApiResponse<raceApi>>('http://localhost:8080/Races')
-      .pipe(
-        map((npcRaceData: ApiResponse<raceApi>): npcRace[] =>
-          npcRaceData.data.map((data) => ({
-            raceId: data.id,
-            raceName: data.name,
-            alignmentSkew: data.alignment,
-            heightRange: [data.heightRange[0], data.heightRange[1]],
-            weightRange: [data.weightRange[0], data.weightRange[1]],
-            ageRange: [data.ageRange[0], data.ageRange[1]],
-            asiRaw: data.asi,
-            asivRaw: data.asiv,
-            abilityScoreIncrease: convertASIFromBackend(data.asi, data.asiv),
-            subraces: data.subraces,
-            nameType: data.nameType,
-          }))
-        )
-      );
-    return data$;
-  }
-
-  getRaces(): Observable<npcRace[]> {
     const url = `api/Races`;
     const data$ = this.http
       .get<ApiResponse<raceApi>>('http://localhost:8080/Races')
