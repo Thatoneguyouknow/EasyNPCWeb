@@ -197,7 +197,6 @@ export class homeScreenComponent implements AfterViewInit {
         this.store.dispatch(
           CharacterApiActions.retrievedCharacterList({ characters })
         );
-        console.log(characters);
       },
       error: (e) => console.error(e),
     });

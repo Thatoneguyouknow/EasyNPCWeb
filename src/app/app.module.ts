@@ -42,6 +42,8 @@ import { CharacterCardComponent } from './components/homeScreen/characterCard/ch
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { charactersReducer } from './state/character_state/character.reducer';
 import { EffectsModule } from '@ngrx/effects';
+import { subracesReducer } from './state/subrace_state/subrace.reducer';
+import { namesReducer } from './state/name_state/name.reducer';
 
 @NgModule({
   declarations: [
@@ -83,6 +85,8 @@ import { EffectsModule } from '@ngrx/effects';
       classes: classesReducer,
       races: racesReducer,
       characters: charactersReducer,
+      subraces: subracesReducer,
+      names: namesReducer,
     }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     EffectsModule.forRoot([]),
