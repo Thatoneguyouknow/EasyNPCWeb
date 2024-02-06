@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { npcRace } from '../models';
+import { npcRace } from '../../models';
 import { RaceActions, RaceApiActions } from './race.actions';
 
 export const initialState: ReadonlyArray<npcRace> = [];

@@ -34,13 +34,13 @@ import { NewCharDialogComponent } from './components/New Dialogs/newCharacterDia
 
 // Ngrx imports
 import { StoreModule } from '@ngrx/store';
-import { classesReducer } from './state/class.reducer';
+import { classesReducer } from './state/class_state/class.reducer';
 import { ClassCardComponent } from './components/homeScreen/classCard/classCard.component';
-import { racesReducer } from './state/race.reducer';
+import { racesReducer } from './state/race_state/race.reducer';
 import { RaceCardComponent } from './components/homeScreen/raceCard/raceCard.component';
 import { CharacterCardComponent } from './components/homeScreen/characterCard/characterCard.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { charactersReducer } from './state/character.reducer';
+import { charactersReducer } from './state/character_state/character.reducer';
 import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({

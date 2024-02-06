@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { npcClass } from '../models';
+import { npcClass } from '../../models';
 import { ClassActions, ClassApiActions } from './class.actions';
 import { immerOn } from 'ngrx-immer/store';
 

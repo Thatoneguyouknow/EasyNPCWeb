@@ -18,15 +18,15 @@ import { NewRaceDialogComponent } from '../New Dialogs/newRaceDialog/newRaceDial
 import { NewCharDialogComponent } from '../New Dialogs/newCharacterDialog/newCharacterDialog.component';
 import { generateCharacter } from 'src/app/supporting methods/generateCharacter';
 import { Store } from '@ngrx/store';
-import { selectClasses } from 'src/app/state/class.selectors';
-import { ClassActions, ClassApiActions } from 'src/app/state/class.actions';
-import { selectRaces } from 'src/app/state/race.selectors';
-import { RaceActions, RaceApiActions } from 'src/app/state/race.actions';
+import { selectClasses } from 'src/app/state/class_state/class.selectors';
+import { ClassActions, ClassApiActions } from 'src/app/state/class_state/class.actions';
+import { selectRaces } from 'src/app/state/race_state/race.selectors';
+import { RaceActions, RaceApiActions } from 'src/app/state/race_state/race.actions';
 import {
   CharacterActions,
   CharacterApiActions,
-} from 'src/app/state/character.actions';
-import { selectCharacters } from 'src/app/state/character.selectors';
+} from 'src/app/state/character_state/character.actions';
+import { selectCharacters } from 'src/app/state/character_state/character.selectors';
 
 // const CLASS_MOC_DATA: npcClass[] = [
 //   {
