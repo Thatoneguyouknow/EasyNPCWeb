@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
-import { nameScheme, npcClass, npcRace, raceNameScheme } from '../models';
+import { Observable, lastValueFrom, map } from 'rxjs';
+import { nameScheme, npc, npcClass, npcRace, raceNameScheme } from '../models';
 import { HttpClient } from '@angular/common/http';
 import {
+  characterApi,
   classApi,
-  nameSchemeApi,
   raceApi,
   raceNameSchemeApi,
   subraceApi,
 } from './api.models';
-import { availableAbilities, availableHitDie, HitDie } from '../constants';
-import { convertASIFromBackend } from '../supporting methods/backendConversion';
+import { availableAbilities, availableHitDie } from '../constants';
+import {
+  convertASIFromBackend,
+  convertStatsFromBackend,
+} from '../supporting methods/backendConversion';
 import { npcSubrace } from '../models/subraceModel';
 
 export interface ApiResponse<T> {
@@ -26,10 +29,35 @@ export interface ApiResponse<T> {
 export class npcService {
   constructor(private http: HttpClient) {}
 
-  // map converts from backend
-  getAllClasses(): Observable<npcClass[]> {
+  async getAllCharacters(): Promise<Observable<npc[]>> {
+    const url = `api/Characters`;
+    const data$ = this.http
+      .get<ApiResponse<characterApi>>('http://localhost:8080/Characters')
+      .pipe(
+        map((npcCharacterData: ApiResponse<characterApi>): npc[] =>
+          npcCharacterData.data.map((data) => ({
+            charId: data.id,
+            charName: data.name,
+            charRace: data.race_id,
+            charClass: data.class_id,
+            charSubrace: data.subrace_id,
+            level: data.level,
+            stats: convertStatsFromBackend(data.stats),
+            hitPoints: data.hit_points,
+            alignment: data.alignment,
+            personalityTraits: data.personality,
+            age: data.age,
+            height: data.height,
+            weight: data.weight,
+          }))
+        )
+      );
+    return data$;
+  }
+
+  async getAllClasses(): Promise<Observable<npcClass[]>> {
     const url = `api/Classes`;
-    return this.http
+    const data$ = this.http
       .get<ApiResponse<classApi>>('http://localhost:8080/Classes')
       .pipe(
         map((npcClassData: ApiResponse<classApi>): npcClass[] =>
@@ -47,11 +75,12 @@ export class npcService {
           }))
         )
       );
+    return data$;
   }
 
-  getAllRaces(): Observable<npcRace[]> {
+  async getAllRaces(): Promise<Observable<npcRace[]>> {
     const url = `api/Races`;
-    return this.http
+    const data$ = this.http
       .get<ApiResponse<raceApi>>('http://localhost:8080/Races')
       .pipe(
         map((npcRaceData: ApiResponse<raceApi>): npcRace[] =>
@@ -64,20 +93,18 @@ export class npcService {
             ageRange: [data.ageRange[0], data.ageRange[1]],
             asiRaw: data.asi,
             asivRaw: data.asiv,
-            abilityScoreIncrease: convertASIFromBackend(
-              data.asi,
-              data.asiv
-            ),
+            abilityScoreIncrease: convertASIFromBackend(data.asi, data.asiv),
             subraces: data.subraces,
             nameType: data.nameType,
           }))
         )
       );
+    return data$;
   }
 
-  getAllSubraces(): Observable<npcSubrace[]> {
+  async getAllSubraces(): Promise<Observable<npcSubrace[]>> {
     const url = `api/Subraces`;
-    return this.http
+    const data$ = this.http
       .get<ApiResponse<subraceApi>>('http://localhost:8080/Subraces')
       .pipe(
         map((npcSubraceData: ApiResponse<subraceApi>): npcSubrace[] =>
@@ -89,14 +116,12 @@ export class npcService {
             asivRaw: data.asiv,
             abilityScoreIncrease:
               data.asi != null && data.asiv != null
-                ? convertASIFromBackend(
-                    data.asi,
-                    data.asiv
-                  )
+                ? convertASIFromBackend(data.asi, data.asiv)
                 : null,
           }))
         )
       );
+    return data$;
   }
 
   getAllNameSchemes(): Observable<raceNameScheme[]> {

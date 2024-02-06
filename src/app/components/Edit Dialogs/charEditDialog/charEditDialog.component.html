@@ -13,7 +13,7 @@
     </mat-form-field>
     <mat-form-field>
       <label for="class">Class</label>
-      <mat-select [(ngModel)]="model.charClass" name="class" #class="ngModel">
+      <mat-select [(value)]="selectedClass" name="class" (selectionChange)="classChanged(selectedClass)">
         <mat-option *ngFor="let cClass of classData" [value]="cClass">
           {{ cClass.name }}
         </mat-option>
@@ -21,7 +21,7 @@
     </mat-form-field>
     <mat-form-field>
       <label for="race">Race</label>
-      <mat-select [(ngModel)]="model.charRace" name="race" #race="ngModel">
+      <mat-select [(value)]="selectedRace" name="race" (selectionChange)="raceChanged(selectedRace)">
         <mat-option *ngFor="let cRace of raceData" [value]="cRace">
           {{ cRace.raceName }}
         </mat-option>

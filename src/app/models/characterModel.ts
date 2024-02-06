@@ -5,6 +5,22 @@ import { npcClass, npcRace, npcSubrace } from '../models';
 export interface npc {
     charId: number;
     charName: string;
+    charRace: number;
+    charSubrace?: number;
+    charClass: number;
+    level: number;
+    stats: characterStat[];
+    hitPoints: number; // Determined by rolling hit die, adding con modifier
+    alignment: number;
+    personalityTraits: string[];
+    age: number;
+    height: number[];
+    weight: number;
+}
+
+export interface character {
+    charId: number;
+    charName: string;
     charRace: npcRace;
     charSubrace?: npcSubrace;
     charClass: npcClass;

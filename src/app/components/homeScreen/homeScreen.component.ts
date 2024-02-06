@@ -1,81 +1,101 @@
 import { AfterViewInit, Component, ViewEncapsulation } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import * as Stat from 'src/app/constants';
 import {
   npcClass,
   npcRace,
   npcSubrace,
   npc,
-  nameScheme,
   raceNameScheme,
 } from 'src/app/models';
 import { npcService } from 'src/app/api/npc.service';
 import { CharEditDialogComponent } from '../Edit Dialogs/charEditDialog/charEditDialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ClassEditDialogComponent } from '../Edit Dialogs/classEditDialog/classEditDialog.component';
-import { Observable, of, Subscription } from 'rxjs';
+import { Observable, of, Subject, Subscription, takeUntil } from 'rxjs';
 import { NewClassDialogComponent } from '../New Dialogs/newClassDialog/newClassDialog.component';
-import { findLargestNumber } from 'src/app/supporting methods/mathOperations';
 import { RaceEditDialogComponent } from '../Edit Dialogs/raceEditDialog/raceEditDialog.component';
 import { NewRaceDialogComponent } from '../New Dialogs/newRaceDialog/newRaceDialog.component';
 import { NewCharDialogComponent } from '../New Dialogs/newCharacterDialog/newCharacterDialog.component';
 import { generateCharacter } from 'src/app/supporting methods/generateCharacter';
+import { Store } from '@ngrx/store';
+import { selectClasses } from 'src/app/state/class_state/class.selectors';
+import {
+  ClassActions,
+  ClassApiActions,
+} from 'src/app/state/class_state/class.actions';
+import { selectRaces } from 'src/app/state/race_state/race.selectors';
+import {
+  RaceActions,
+  RaceApiActions,
+} from 'src/app/state/race_state/race.actions';
+import {
+  CharacterActions,
+  CharacterApiActions,
+} from 'src/app/state/character_state/character.actions';
+import { selectCharacters } from 'src/app/state/character_state/character.selectors';
+import { selectSubraces } from 'src/app/state/subrace_state/subrace.selectors';
+import {
+  SubraceActions,
+  SubraceApiActions,
+} from 'src/app/state/subrace_state/subrace.actions';
+import { selectNames } from 'src/app/state/name_state/name.selectors';
+import { NameApiActions } from 'src/app/state/name_state/name.actions';
 
-const CLASS_MOC_DATA: npcClass[] = [
-  {
-    id: 1,
-    userId: 100,
-    name: 'Ligma',
-    userCreated: false,
-    hitDie: Stat.availableHitDie.filter((hitdie) => hitdie.value == 4)[0],
-    statPriority: Stat.availableAbilities,
-  },
-];
+// const CLASS_MOC_DATA: npcClass[] = [
+//   {
+//     id: 1,
+//     userId: 100,
+//     name: 'Ligma',
+//     userCreated: false,
+//     hitDie: Stat.availableHitDie.filter((hitdie) => hitdie.value == 4)[0],
+//     statPriority: Stat.availableAbilities,
+//   },
+// ];
 
-const RACE_MOC_DATA: npcRace[] = [
-  {
-    raceId: 1,
-    raceName: 'Sugma',
-    alignmentSkew: 0,
-    heightRange: [4, 5],
-    weightRange: [100, 350],
-    ageRange: [10, 100],
-    // ASI: [Stat.availableAbilities[0]],
-    asiRaw: [0, 1, 2],
-    asivRaw: [1, 1, 1],
-    abilityScoreIncrease: [
-      [Stat.availableAbilities[0], 1],
-      [Stat.availableAbilities[0], 1],
-      [Stat.availableAbilities[0], 1],
-    ],
-    subraces: [1],
-    nameType: 1,
-  },
-];
+// const RACE_MOC_DATA: npcRace[] = [
+//   {
+//     raceId: 1,
+//     raceName: 'Sugma',
+//     alignmentSkew: 0,
+//     heightRange: [4, 5],
+//     weightRange: [100, 350],
+//     ageRange: [10, 100],
+//     // ASI: [Stat.availableAbilities[0]],
+//     asiRaw: [0, 1, 2],
+//     asivRaw: [1, 1, 1],
+//     abilityScoreIncrease: [
+//       [Stat.availableAbilities[0], 1],
+//       [Stat.availableAbilities[0], 1],
+//       [Stat.availableAbilities[0], 1],
+//     ],
+//     subraces: [1],
+//     nameType: 1,
+//   },
+// ];
 
-const CHAR_MOC_DATA: npc[] = [
-  {
-    charId: 1,
-    charName: 'Jeffery',
-    charRace: RACE_MOC_DATA[0],
-    charClass: CLASS_MOC_DATA[0],
-    alignment: 8,
-    personalityTraits: ['stupid'],
-    level: 1,
-    stats: [
-      { stat: Stat.availableAbilities[0], statValue: 15, statModifier: 3 },
-      { stat: Stat.availableAbilities[1], statValue: 14, statModifier: 3 },
-      { stat: Stat.availableAbilities[2], statValue: 13, statModifier: 3 },
-      { stat: Stat.availableAbilities[3], statValue: 12, statModifier: 3 },
-      { stat: Stat.availableAbilities[4], statValue: 11, statModifier: 3 },
-      { stat: Stat.availableAbilities[5], statValue: 10, statModifier: 3 },
-    ],
-    hitPoints: 12,
-    age: 50,
-    height: [5, 11],
-    weight: 120,
-  },
-];
+// const CHAR_MOC_DATA: npc[] = [
+//   {
+//     charId: 1,
+//     charName: 'Jeffery',
+//     charRace: RACE_MOC_DATA[0],
+//     charClass: CLASS_MOC_DATA[0],
+//     alignment: 8,
+//     personalityTraits: ['stupid'],
+//     level: 1,
+//     stats: [
+//       { stat: Stat.availableAbilities[0], statValue: 15, statModifier: 3 },
+//       { stat: Stat.availableAbilities[1], statValue: 14, statModifier: 3 },
+//       { stat: Stat.availableAbilities[2], statValue: 13, statModifier: 3 },
+//       { stat: Stat.availableAbilities[3], statValue: 12, statModifier: 3 },
+//       { stat: Stat.availableAbilities[4], statValue: 11, statModifier: 3 },
+//       { stat: Stat.availableAbilities[5], statValue: 10, statModifier: 3 },
+//     ],
+//     hitPoints: 12,
+//     age: 50,
+//     height: [5, 11],
+//     weight: 120,
+//   },
+// ];
 
 @Component({
   selector: 'app-root',
@@ -85,60 +105,100 @@ const CHAR_MOC_DATA: npc[] = [
 })
 export class homeScreenComponent implements AfterViewInit {
   title = 'EasyNPCHome';
-  classSubscriptions: Subscription = Subscription.EMPTY;
-  raceSubscriptions: Subscription = Subscription.EMPTY;
   subraceSubscriptions: Subscription = Subscription.EMPTY;
-  characterSubscriptions: Subscription = Subscription.EMPTY;
-  characterTableColumns: string[] = ['name', 'race', 'class'];
-  classTableColumns: string[] = ['name', 'hitDie', 'userCreated'];
-  raceTableColumns: string[] = ['name', 'asi', 'userCreated'];
-  characterDataSource = new MatTableDataSource<npc>();
-  characterData$: Observable<npc[]>;
   characterData: npc[] = [];
-  classDataSource = new MatTableDataSource<npcClass>();
-  classData$: Observable<npcClass[]>;
+  classes$: Observable<readonly npcClass[]> = this.store.select(selectClasses);
+  races$: Observable<readonly npcRace[]> = this.store.select(selectRaces);
+  characters$: Observable<readonly npc[]> = this.store.select(selectCharacters);
   classData: npcClass[] = [];
-  raceDataSource = new MatTableDataSource<npcRace>();
-  raceData$: Observable<npcRace[]>;
   raceData: npcRace[] = [];
-  subraceData$: Observable<npcSubrace[]>;
+  subraces$: Observable<readonly npcSubrace[]> =
+    this.store.select(selectSubraces);
   subraceData: npcSubrace[] = [];
-  nameData$: Observable<raceNameScheme[]>;
+  names$: Observable<readonly raceNameScheme[]> =
+    this.store.select(selectNames);
   nameData: raceNameScheme[] = [];
 
-  constructor(private api: npcService, private dialog: MatDialog) {
-    this.classData$ = this.api.getAllClasses();
-    this.raceData$ = this.api.getAllRaces();
-    // TODO
-    this.characterData$ = of(CHAR_MOC_DATA);
-    this.subraceData$ = this.api.getAllSubraces();
-    this.nameData$ = this.api.getAllNameSchemes();
+  private destroy$: Subject<void> = new Subject<void>();
+
+  constructor(
+    private api: npcService,
+    private dialog: MatDialog,
+    private store: Store
+  ) {}
+
+  ngOnInit(): void {
+    this.getAllData();
   }
 
   ngAfterViewInit(): void {
-    this.classSubscriptions = this.classData$.subscribe((npcClass) => {
-      this.classDataSource.data = npcClass;
-      this.classData = [...npcClass];
+    this.classes$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (classes) => {
+        this.classData = [...classes];
+      },
     });
-    this.raceSubscriptions = this.raceData$.subscribe((npcRace) => {
-      this.raceDataSource.data = npcRace;
-      this.raceData = [...npcRace];
+
+    this.races$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (races) => {
+        this.raceData = [...races];
+      },
     });
-    this.characterSubscriptions = this.characterData$.subscribe((npc) => {
-      this.characterDataSource.data = npc;
-      this.characterData = [...npc];
+
+    this.characters$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (characters) => {
+        this.characterData = [...characters];
+      },
     });
-    this.subraceSubscriptions = this.subraceData$.subscribe((npcSubrace) => {
-      this.subraceData = [...npcSubrace];
+
+    this.subraces$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (subraces) => {
+        this.subraceData = [...subraces];
+      },
     });
-    this.nameData$.subscribe((npcNameScheme) => {
-      this.nameData = [...npcNameScheme];
+
+    this.names$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (names) => {
+        this.nameData = [...names];
+      },
     });
   }
 
-  public classButtonTest() {
-    this.api.getAllClasses().subscribe((response) => {
-      console.log(response);
+  async getAllData() {
+    this.api.getAllNameSchemes().subscribe({
+      next: (names) => {
+        this.store.dispatch(NameApiActions.retrievedNameList({ names }));
+      },
+    });
+
+    (await this.api.getAllClasses()).subscribe({
+      next: (classes) => {
+        this.store.dispatch(ClassApiActions.retrievedClassList({ classes }));
+      },
+      error: (e) => console.error(e),
+    });
+
+    (await this.api.getAllRaces()).subscribe({
+      next: (races) => {
+        this.store.dispatch(RaceApiActions.retrievedRaceList({ races }));
+      },
+      error: (e) => console.error(e),
+    });
+
+    (await this.api.getAllSubraces()).subscribe({
+      next: (subraces) => {
+        this.store.dispatch(
+          SubraceApiActions.retrievedSubraceList({ subraces })
+        );
+      },
+    });
+
+    (await this.api.getAllCharacters()).subscribe({
+      next: (characters) => {
+        this.store.dispatch(
+          CharacterApiActions.retrievedCharacterList({ characters })
+        );
+      },
+      error: (e) => console.error(e),
     });
   }
 
@@ -156,15 +216,8 @@ export class homeScreenComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result: npcClass) => {
       if (result != undefined) {
-        this.classData.push(result);
+        this.store.dispatch(ClassActions.addClass({ toAdd: result }));
       }
-      this.classData$ = of(this.classData);
-      this.classSubscriptions.unsubscribe();
-
-      this.classSubscriptions = this.classData$.subscribe((npcClass) => {
-        this.classDataSource.data = npcClass;
-        this.classData = [...npcClass];
-      });
     });
   }
 
@@ -182,15 +235,8 @@ export class homeScreenComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result: npcRace) => {
       if (result != undefined) {
-        this.raceData.push(result);
+        this.store.dispatch(RaceActions.addRace({ toAdd: result }));
       }
-      this.raceData$ = of(this.raceData);
-      this.raceSubscriptions.unsubscribe();
-
-      this.raceSubscriptions = this.raceData$.subscribe((npcRace) => {
-        this.raceDataSource.data = npcRace;
-        this.raceData = [...npcRace];
-      });
     });
   }
 
@@ -199,11 +245,6 @@ export class homeScreenComponent implements AfterViewInit {
       this.characterData
         .map((npc) => npc.charId)
         .reduce((a, b) => Math.max(a, b)) + 1;
-    // Need to create deep copies here, so that the character references its own version of the race, not the global race object
-    const classDataCopy: npcClass[] = [];
-    this.classData.forEach((val) => classDataCopy.push(Object.assign({}, val)));
-    const raceDataCopy: npcRace[] = [];
-    this.raceData.forEach((val) => raceDataCopy.push(Object.assign({}, val)));
 
     let dialogRef = this.dialog.open(NewCharDialogComponent, {
       height: '800px',
@@ -213,20 +254,17 @@ export class homeScreenComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result: npc) => {
       if (result != undefined) {
-        this.characterData.push(result);
+        this.store.dispatch(CharacterActions.addCharacter({ toAdd: result }));
       }
-      this.characterData$ = of(this.characterData);
-      this.characterSubscriptions.unsubscribe();
-
-      this.characterSubscriptions = this.characterData$.subscribe((npcChar) => {
-        this.characterDataSource.data = npcChar;
-        this.characterData = [...npcChar];
-      });
     });
   }
 
   public generateNewCharacter() {
-    let nextID = 1;
+    let nextID: number =
+      this.characterData
+        .map((npc) => npc.charId)
+        .reduce((a, b) => Math.max(a, b)) + 1;
+
     let character: npc = generateCharacter(
       this.raceData,
       this.classData,
@@ -234,7 +272,7 @@ export class homeScreenComponent implements AfterViewInit {
       this.nameData,
       nextID
     );
-    console.log(character);
+    this.store.dispatch(CharacterActions.addCharacter({ toAdd: character }));
   }
 
   public viewClass(classToEdit: npcClass) {
@@ -246,21 +284,8 @@ export class homeScreenComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result: npcClass) => {
       if (result != undefined) {
-        let index = this.classData.findIndex(
-          (npcClass) => npcClass.id === result.id
-        );
-        this.classData[index] = result;
+        this.store.dispatch(ClassActions.editClass({ toEdit: result }));
       }
-      this.classData$ = of(this.classData);
-
-      // TODO: Backend save call
-
-      this.classSubscriptions.unsubscribe();
-
-      this.classSubscriptions = this.classData$.subscribe((npcClass) => {
-        this.classDataSource.data = npcClass;
-        this.classData = [...npcClass];
-      });
     });
   }
 
@@ -273,50 +298,12 @@ export class homeScreenComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result: npcRace) => {
       if (result != undefined) {
-        console.log(result);
-        let index = this.raceData.findIndex(
-          (npcRace) => npcRace.raceId === result.raceId
-        );
-        this.raceData[index] = result;
+        this.store.dispatch(RaceActions.editRace({ toEdit: result }));
       }
-      this.raceData$ = of(this.raceData);
-
-      // TODO: Backend save call
-
-      this.raceSubscriptions.unsubscribe();
-
-      this.raceSubscriptions = this.raceData$.subscribe((npcRace) => {
-        this.raceDataSource.data = npcRace;
-        this.raceData = [...npcRace];
-      });
     });
   }
 
   public viewCharacter(charToEdit: npc) {
-    // Need to create deep copies here, so that the character references its own version of the race, not the global race object
-    // Actually copies create a problem with saving and re-editing
-    const classDataCopy: npcClass[] = [];
-    this.classData.forEach((val) => classDataCopy.push(Object.assign({}, val)));
-    const raceDataCopy: npcRace[] = [];
-    this.raceData.forEach((val) => raceDataCopy.push(Object.assign({}, val)));
-
-    // REMOVE THIS after mock data is not necessary
-    if (
-      this.classData.find(
-        (npcClass) => npcClass.name == charToEdit.charClass.name
-      ) == undefined
-    ) {
-      charToEdit.charClass = this.classData[0];
-    }
-    // REMOVE THIS AS WELL
-    if (
-      this.raceData.find(
-        (npcRace) => npcRace.raceName == charToEdit.charRace.raceName
-      ) == undefined
-    ) {
-      charToEdit.charRace = this.raceData[0];
-    }
-
     let dialogRef = this.dialog.open(CharEditDialogComponent, {
       height: '800px',
       width: '600px',
@@ -325,19 +312,13 @@ export class homeScreenComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result: npc) => {
       if (result != undefined) {
-        let index = this.characterData.findIndex(
-          (npcChar) => npcChar.charId === result.charId
-        );
-        this.characterData[index] = result;
+        this.store.dispatch(CharacterActions.editCharacter({ toEdit: result }));
       }
-      this.characterData$ = of(this.characterData);
-
-      this.characterSubscriptions.unsubscribe();
-
-      this.characterSubscriptions = this.characterData$.subscribe((npcChar) => {
-        this.characterDataSource.data = npcChar;
-        this.characterData = [...npcChar];
-      });
     });
+  }
+
+  ngOnDestory() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

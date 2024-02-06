@@ -1,5 +1,5 @@
 // Angular imports
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -32,6 +32,19 @@ import { RaceEditDialogComponent } from './components/Edit Dialogs/raceEditDialo
 import { NewRaceDialogComponent } from './components/New Dialogs/newRaceDialog/newRaceDialog.component';
 import { NewCharDialogComponent } from './components/New Dialogs/newCharacterDialog/newCharacterDialog.component';
 
+// Ngrx imports
+import { StoreModule } from '@ngrx/store';
+import { classesReducer } from './state/class_state/class.reducer';
+import { ClassCardComponent } from './components/homeScreen/classCard/classCard.component';
+import { racesReducer } from './state/race_state/race.reducer';
+import { RaceCardComponent } from './components/homeScreen/raceCard/raceCard.component';
+import { CharacterCardComponent } from './components/homeScreen/characterCard/characterCard.component';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { charactersReducer } from './state/character_state/character.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { subracesReducer } from './state/subrace_state/subrace.reducer';
+import { namesReducer } from './state/name_state/name.reducer';
+
 @NgModule({
   declarations: [
     homeScreenComponent,
@@ -41,6 +54,9 @@ import { NewCharDialogComponent } from './components/New Dialogs/newCharacterDia
     NewCharDialogComponent,
     NewClassDialogComponent,
     NewRaceDialogComponent,
+    ClassCardComponent,
+    RaceCardComponent,
+    CharacterCardComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -65,6 +81,15 @@ import { NewCharDialogComponent } from './components/New Dialogs/newCharacterDia
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    StoreModule.forRoot({
+      classes: classesReducer,
+      races: racesReducer,
+      characters: charactersReducer,
+      subraces: subracesReducer,
+      names: namesReducer,
+    }),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    EffectsModule.forRoot([]),
   ],
   providers: [],
   bootstrap: [homeScreenComponent],

@@ -1,0 +1,47 @@
+<mat-card [ngClass]="'characters-card, card'">
+  <mat-card-header>
+    <mat-card-title>Characters</mat-card-title>
+    <mat-card-subtitle>Characters you've created</mat-card-subtitle>
+    <button mat-icon-button [color]="'primary'" [matMenuTriggerFor]="menu">
+      <mat-icon>playlist_add</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="generateCharacter.emit()">
+        generate character
+      </button>
+      <button mat-menu-item (click)="newCharacter.emit()">blank character</button>
+    </mat-menu>
+  </mat-card-header>
+  <mat-card-content>
+    <table
+      mat-table
+      [dataSource]="characters"
+      [ngClass]="'characters-table, display-table'"
+    >
+      <ng-component matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let character">
+          {{ character.charName }}
+        </td>
+      </ng-component>
+      <ng-component matColumnDef="race">
+        <th mat-header-cell *matHeaderCellDef>Race</th>
+        <td mat-cell *matCellDef="let character">
+          {{ getRaceName(character.charRace) }}
+        </td>
+      </ng-component>
+      <ng-component matColumnDef="class">
+        <th mat-header-cell *matHeaderCellDef>Class</th>
+        <td mat-cell *matCellDef="let character">
+          {{ getClassName(character.charClass) }}
+        </td>
+      </ng-component>
+      <tr mat-header-row *matHeaderRowDef="characterTableColumns"></tr>
+      <tr
+        mat-row
+        (click)="viewCharacter.emit(row)"
+        *matRowDef="let row; columns: characterTableColumns"
+      ></tr>
+    </table>
+  </mat-card-content>
+</mat-card>
