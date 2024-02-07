@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { npcRace } from 'src/app/models';
 import { availableAbilities } from 'src/app/constants';
@@ -9,6 +9,7 @@ import { availableAbilities } from 'src/app/constants';
   styleUrls: ['./raceEditDialog.component.scss'],
 })
 export class RaceEditDialogComponent {
+  @Output() deleteRace = new EventEmitter<npcRace>();
   model = Object.assign({}, this.data);
   abilities = availableAbilities;
 
@@ -18,6 +19,11 @@ export class RaceEditDialogComponent {
     public dialogRef: MatDialogRef<RaceEditDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: npcRace
   ) {}
+
+  remove() {
+    this.deleteRace.emit(this.model);
+    this.closeDialog();
+  }
 
   closeDialog() {
     this.dialogRef.close();

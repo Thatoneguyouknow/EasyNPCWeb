@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { npcClass } from 'src/app/models';
 import { availableHitDie } from 'src/app/constants';
@@ -10,6 +10,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
   styleUrls: ['./classEditDialog.component.scss'],
 })
 export class ClassEditDialogComponent {
+  @Output() deleteClass = new EventEmitter<npcClass>();
   model = Object.assign({}, this.data);
   availableHitDie = availableHitDie;
 
@@ -26,6 +27,11 @@ export class ClassEditDialogComponent {
       event.previousIndex,
       event.currentIndex
     );
+  }
+
+  remove() {
+    this.deleteClass.emit(this.model);
+    this.closeDialog();
   }
 
   closeDialog() {

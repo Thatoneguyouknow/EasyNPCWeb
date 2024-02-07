@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatListOption } from '@angular/material/list';
 import { npc, npcRace, npcClass } from 'src/app/models';
@@ -9,6 +9,7 @@ import { npc, npcRace, npcClass } from 'src/app/models';
   styleUrls: ['./charEditDialog.component.scss'],
 })
 export class CharEditDialogComponent {
+  @Output() deleteCharacter = new EventEmitter<npc>();
   model = Object.assign({}, this.data.charToEdit);
   classData: npcClass[] = [];
   raceData: npcRace[] = [];
@@ -47,6 +48,11 @@ export class CharEditDialogComponent {
 
   raceChanged(changedTo: npcRace) {
     this.model.charRace = changedTo.raceId;
+  }
+
+  remove() {
+    this.deleteCharacter.emit(this.model);
+    this.closeDialog();
   }
 
   closeDialog() {
