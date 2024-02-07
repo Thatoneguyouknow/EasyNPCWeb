@@ -203,10 +203,13 @@ export class homeScreenComponent implements AfterViewInit {
   }
 
   public newClass() {
-    let next_ID: number =
-      this.classData
-        .map((npcClass) => npcClass.id)
-        .reduce((a, b) => Math.max(a, b)) + 1;
+    let next_ID: number = 0;
+    try {
+      next_ID =
+        this.classData
+          .map((npcClass) => npcClass.id)
+          .reduce((a, b) => Math.max(a, b)) + 1;
+    } catch (error) {}
 
     let dialogRef = this.dialog.open(NewClassDialogComponent, {
       height: '400px',
@@ -222,10 +225,13 @@ export class homeScreenComponent implements AfterViewInit {
   }
 
   public newRace() {
-    let next_ID: number =
-      this.raceData
-        .map((npcRace) => npcRace.raceId)
-        .reduce((a, b) => Math.max(a, b)) + 1;
+    let next_ID: number = 0;
+    try {
+      next_ID =
+        this.raceData
+          .map((npcRace) => npcRace.raceId)
+          .reduce((a, b) => Math.max(a, b)) + 1;
+    } catch (error) {}
 
     let dialogRef = this.dialog.open(NewRaceDialogComponent, {
       height: '400px',
@@ -241,15 +247,18 @@ export class homeScreenComponent implements AfterViewInit {
   }
 
   public newCharacter() {
-    let next_ID: number =
-      this.characterData
-        .map((npc) => npc.charId)
-        .reduce((a, b) => Math.max(a, b)) + 1;
+    let nextID: number = 0;
+    try {
+      nextID =
+        this.characterData
+          .map((npc) => npc.charId)
+          .reduce((a, b) => Math.max(a, b)) + 1;
+    } catch (error) {}
 
     let dialogRef = this.dialog.open(NewCharDialogComponent, {
       height: '800px',
       width: '600px',
-      data: { next_ID, classData: this.classData, raceData: this.raceData },
+      data: { nextID, classData: this.classData, raceData: this.raceData },
     });
 
     dialogRef.afterClosed().subscribe((result: npc) => {
@@ -260,10 +269,13 @@ export class homeScreenComponent implements AfterViewInit {
   }
 
   public generateNewCharacter() {
-    let nextID: number =
-      this.characterData
-        .map((npc) => npc.charId)
-        .reduce((a, b) => Math.max(a, b)) + 1;
+    let nextID: number = 0;
+    try {
+      nextID =
+        this.characterData
+          .map((npc) => npc.charId)
+          .reduce((a, b) => Math.max(a, b)) + 1;
+    } catch (error) {}
 
     let character: npc = generateCharacter(
       this.raceData,
@@ -282,6 +294,10 @@ export class homeScreenComponent implements AfterViewInit {
       data: classToEdit,
     });
 
+    dialogRef.componentInstance.deleteClass.subscribe((result) => {
+      this.store.dispatch(ClassActions.removeClass({ toRemove: result }));
+    });
+
     dialogRef.afterClosed().subscribe((result: npcClass) => {
       if (result != undefined) {
         this.store.dispatch(ClassActions.editClass({ toEdit: result }));
@@ -296,6 +312,10 @@ export class homeScreenComponent implements AfterViewInit {
       data: raceToEdit,
     });
 
+    dialogRef.componentInstance.deleteRace.subscribe((result) => {
+      this.store.dispatch(RaceActions.removeRace({ toRemove: result }));
+    });
+
     dialogRef.afterClosed().subscribe((result: npcRace) => {
       if (result != undefined) {
         this.store.dispatch(RaceActions.editRace({ toEdit: result }));
@@ -308,6 +328,12 @@ export class homeScreenComponent implements AfterViewInit {
       height: '800px',
       width: '600px',
       data: { charToEdit, classData: this.classData, raceData: this.raceData },
+    });
+
+    dialogRef.componentInstance.deleteCharacter.subscribe((result) => {
+      this.store.dispatch(
+        CharacterActions.removeCharacter({ toRemove: result })
+      );
     });
 
     dialogRef.afterClosed().subscribe((result: npc) => {
