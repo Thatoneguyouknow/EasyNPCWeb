@@ -44,6 +44,7 @@ import { charactersReducer } from './state/character_state/character.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { subracesReducer } from './state/subrace_state/subrace.reducer';
 import { namesReducer } from './state/name_state/name.reducer';
+import { DualNumberInput } from './custom-feilds/dual-number-input/dualNumberInput';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { namesReducer } from './state/name_state/name.reducer';
     ClassCardComponent,
     RaceCardComponent,
     CharacterCardComponent,
+    DualNumberInput,
   ],
   imports: [
     BrowserAnimationsModule,

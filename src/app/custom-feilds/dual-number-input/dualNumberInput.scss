@@ -1,0 +1,22 @@
+.dual-number-input-container {
+  display: block;
+}
+
+.dual-number-input-element {
+  border: none;
+  background: none;
+  padding: 0;
+  outline: none;
+  font: inherit;
+  text-align: left;
+  color: currentColor;
+}
+
+span {
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+:host.floating span {
+  opacity: 1;
+}

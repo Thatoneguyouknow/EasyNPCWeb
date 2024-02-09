@@ -20,6 +20,7 @@
         name="age"
         #age="ngModel"
       />
+      <div></div>
       <input
         matInput
         type="number"
@@ -90,6 +91,10 @@
         </mat-select>
         <input matInput type="number" [(ngModel)]="asi[1]" />
       </div>
+    </mat-form-field>
+    <mat-form-field>
+      <label for="number-input">Dual Input</label>
+      <dual-number-input></dual-number-input>
     </mat-form-field>
     <div>
       <button mat-button [mat-dialog-close]="model">Save</button>

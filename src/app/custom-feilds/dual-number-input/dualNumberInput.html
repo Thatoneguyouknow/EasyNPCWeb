@@ -1,0 +1,21 @@
+<div
+  role="group"
+  class="dual-number-input-container"
+  [formGroup]="parts"
+  [attr.aria-labelledby]="_formField.getLabelId()"
+  (focusin)="onFocusIn($event)"
+  (focusout)="onFocusOut($event)"
+>
+  <input
+    class="dual-number-input-element"
+    formControlName="beginning"
+    aria-label="Beginning of Range"
+    #beginning
+  />
+  <input
+    class="dual-number-input-element"
+    formControlName="end"
+    aria-label="End of Range"
+    #end
+  />
+</div>
