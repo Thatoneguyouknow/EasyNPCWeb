@@ -29,6 +29,11 @@
         #age="ngModel"
       />
     </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <label for="number-input">Age Range 2</label>
+      <dual-number-input [(ngModel)]="model.ageRange"></dual-number-input>
+    </mat-form-field>
     <mat-form-field appearance="fill">
       <label for="height">Height Range </label>
       <input
@@ -91,10 +96,6 @@
         </mat-select>
         <input matInput type="number" [(ngModel)]="asi[1]" />
       </div>
-    </mat-form-field>
-    <mat-form-field>
-      <label for="number-input">Dual Input</label>
-      <dual-number-input></dual-number-input>
     </mat-form-field>
     <div>
       <button mat-button [mat-dialog-close]="model">Save</button>
