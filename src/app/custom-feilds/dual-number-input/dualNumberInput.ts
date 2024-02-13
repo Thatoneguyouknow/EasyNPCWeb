@@ -10,7 +10,9 @@ import {
   Self,
 } from '@angular/core';
 import {
+  AbstractControl,
   AbstractControlDirective,
+  ControlValueAccessor,
   FormBuilder,
   FormGroup,
   NgControl,
@@ -22,17 +24,15 @@ import {
 } from '@angular/material/form-field';
 import { Subject } from 'rxjs';
 
-class DualNum {
-  constructor(public beginning: number, public end: number) {}
-}
-
 @Component({
   selector: 'dual-number-input',
   templateUrl: './dualNumberInput.html',
   styleUrls: ['./dualNumberInput.scss'],
   providers: [{ provide: MatFormFieldControl, useExisting: DualNumberInput }],
 })
-export class DualNumberInput implements MatFormFieldControl<DualNum> {
+export class DualNumberInput
+  implements MatFormFieldControl<Array<number>>, ControlValueAccessor
+{
   parts: FormGroup;
   stateChanges = new Subject<void>();
   static nextId = 0;
@@ -40,6 +40,7 @@ export class DualNumberInput implements MatFormFieldControl<DualNum> {
   focused: boolean = false;
   touched: boolean = false;
   controlType: string = 'dual-number-input';
+  onChange = (_: any) => {};
   onTouched = () => {};
   @Input('aria-describedby') userAriaDescribedBy?: string | undefined;
 
@@ -50,6 +51,9 @@ export class DualNumberInput implements MatFormFieldControl<DualNum> {
     @Optional() @Inject(MAT_FORM_FIELD) public _formField: MatFormField,
     @Optional() @Self() public ngControl: NgControl
   ) {
+    if (this.ngControl != null) {
+      this.ngControl.valueAccessor = this;
+    }
     this.parts = formBuilder.group({
       beginning: '',
       end: '',
@@ -57,16 +61,16 @@ export class DualNumberInput implements MatFormFieldControl<DualNum> {
   }
 
   @Input()
-  get value(): DualNum | null {
+  get value(): Array<number> | null {
     let val = this.parts.value;
     if (val.beginning >= 0 && val.end >= 0 && val.beginning <= val.end) {
-      return new DualNum(val.beginning, val.end);
+      return [val.beginning, val.end];
     }
     return null;
   }
-  set value(num: DualNum | null) {
-    num = num || new DualNum(0, 0);
-    this.parts.setValue({ beginning: num.beginning, end: num.end });
+  set value(num: Array<number> | null) {
+    num = num || [0, 0];
+    this.parts.setValue({ beginning: num[0], end: num[1] });
     this.stateChanges.next();
   }
 
@@ -78,7 +82,7 @@ export class DualNumberInput implements MatFormFieldControl<DualNum> {
     this._placeholder = holder;
     this.stateChanges.next();
   }
-  private _placeholder: string  = '';
+  private _placeholder: string = '';
 
   onFocusIn(event: FocusEvent) {
     if (!this.focused) {
@@ -152,6 +156,22 @@ export class DualNumberInput implements MatFormFieldControl<DualNum> {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
       this._elementRef.nativeElement.querySelector('input')?.focus();
     }
+  }
+
+  writeValue(dualVal: Array<number> | null) {
+    this.value = dualVal;
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  _handleInput(): void {
+    this.onChange(this.value);
   }
 
   ngOnDestroy() {

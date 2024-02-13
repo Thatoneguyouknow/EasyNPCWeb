@@ -11,7 +11,7 @@
         #name="ngModel"
       />
     </mat-form-field>
-    <mat-form-field appearance="fill">
+    <!-- <mat-form-field appearance="fill">
       <label for="age">Age Range </label>
       <input
         matInput
@@ -28,13 +28,17 @@
         name="age"
         #age="ngModel"
       />
-    </mat-form-field>
+    </mat-form-field> -->
 
     <mat-form-field appearance="fill">
-      <label for="number-input">Age Range 2</label>
+      <label for="number-input">Age Range</label>
       <dual-number-input [(ngModel)]="model.ageRange"></dual-number-input>
     </mat-form-field>
     <mat-form-field appearance="fill">
+      <label for="number-input">Height Range</label>
+      <dual-number-input [(ngModel)]="model.heightRange"></dual-number-input>
+    </mat-form-field>
+    <!-- <mat-form-field appearance="fill">
       <label for="height">Height Range </label>
       <input
         matInput
@@ -49,9 +53,13 @@
         [(ngModel)]="model.heightRange[1]"
         name="height"
         #height="ngModel"
-      />
-    </mat-form-field>
+      /> -->
+    <!-- </mat-form-field> -->
     <mat-form-field appearance="fill">
+      <label for="number-input">Weight Range</label>
+      <dual-number-input [(ngModel)]="model.weightRange"></dual-number-input>
+    </mat-form-field>
+    <!-- <mat-form-field appearance="fill">
       <label for="weight">Weight Range </label>
       <input
         matInput
@@ -67,7 +75,7 @@
         name="weight"
         #weight="ngModel"
       />
-    </mat-form-field>
+    </mat-form-field> -->
     <mat-form-field>
       <label for="alignment">Alignment Skew</label>
       <mat-select

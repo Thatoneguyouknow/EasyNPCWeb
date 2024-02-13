@@ -10,6 +10,7 @@
     class="dual-number-input-element"
     formControlName="beginning"
     aria-label="Beginning of Range"
+    (input)="_handleInput()"
     type="number"
     #beginning
   />
@@ -17,6 +18,7 @@
     class="dual-number-input-element"
     formControlName="end"
     aria-label="End of Range"
+    (input)="_handleInput()"
     type="number"
     #end
   />
