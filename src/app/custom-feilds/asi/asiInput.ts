@@ -162,8 +162,13 @@ export class AsiInput
 
   onContainerClick(event: MouseEvent): void {
     if (
-      (event.target as Element).tagName.toLowerCase() != 'select' &&
-      (event.target as Element).tagName.toLowerCase() != 'input'
+      // All of these classes are part of the mat-select element, however event.target does not register the mat-select element, but rather elements within it (namely various divs)
+      (event.target as Element).tagName.toLowerCase() != 'input' &&
+      !(event.target as Element).classList.contains('mat-mdc-select-value') &&
+      !(event.target as Element).classList.contains(
+        'mat-mdc-select-min-line'
+      ) &&
+      !(event.target as Element).classList.contains('ng-tns-c35-9')
     ) {
       this._elementRef.nativeElement.querySelector('input')?.focus();
     }

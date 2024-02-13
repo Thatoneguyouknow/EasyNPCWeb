@@ -5,15 +5,15 @@
   (focusin)="onFocusIn($event)"
   (focusout)="onFocusOut($event)"
 >
-  <select
+  <mat-select
     class="asi-input-value-stat"
     formControlName="stat"
     aria-label="Ability Score Increase Stat"
     (input)="_handleInput()"
     #stat
   >
-    <option class="asi-input-value-option" *ngFor="let stat of abilities" [value]="stat">{{stat.name}}</option>
-  </select>
+    <mat-option class="asi-input-value-option" *ngFor="let stat of abilities" [value]="stat">{{stat.name}}</mat-option>
+  </mat-select>
   <input
     class="asi-input-value-element"
     formControlName="val"

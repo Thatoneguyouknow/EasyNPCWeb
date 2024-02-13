@@ -12,7 +12,7 @@ export class RaceEditDialogComponent {
   @Output() deleteRace = new EventEmitter<npcRace>();
   model = Object.assign({}, this.data);
   abilities = availableAbilities;
-  test = "";
+  test = '';
 
   //TODO Add Validators
 
@@ -20,6 +20,10 @@ export class RaceEditDialogComponent {
     public dialogRef: MatDialogRef<RaceEditDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: npcRace
   ) {}
+
+  changeAsi($event: Event) {
+    console.log($event);
+  }
 
   remove() {
     this.deleteRace.emit(this.model);

@@ -43,7 +43,7 @@
     </mat-form-field>
     <mat-form-field>
       <label>Ability Score Increases</label>
-      <asi-input></asi-input>
+      <asi-input [ngModel]="model.abilityScoreIncrease[0]" (ngModelChange)="changeAsi($event)"></asi-input>
     </mat-form-field>
     <!-- <mat-form-field>
       <mat-selection-list>
