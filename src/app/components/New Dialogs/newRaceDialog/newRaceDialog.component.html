@@ -1,89 +1,49 @@
 <div>
-    <h1 mat-dialog-title>Create New Race</h1>
-    <div mat-dialog-content>
-      <mat-form-field appearance="fill">
-        <label for="name">Race Name </label>
-        <input
-          matInput
-          type="text"
-          [(ngModel)]="model.raceName"
-          name="name"
-          #name="ngModel"
-        />
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <label for="age">Age Range </label>
-        <input
-          matInput
-          type="number"
-          [(ngModel)]="model.ageRange[0]"
-          name="age"
-          #age="ngModel"
-        />
-        <input
-          matInput
-          type="number"
-          [(ngModel)]="model.ageRange[1]"
-          name="age"
-          #age="ngModel"
-        />
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <label for="height">Height Range </label>
-        <input
-          matInput
-          type="number"
-          [(ngModel)]="model.heightRange[0]"
-          name="height"
-          #height="ngModel"
-        />
-        <input
-          matInput
-          type="number"
-          [(ngModel)]="model.heightRange[1]"
-          name="height"
-          #height="ngModel"
-        />
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <label for="weight">Weight Range </label>
-        <input
-          matInput
-          type="number"
-          [(ngModel)]="model.weightRange[0]"
-          name="weight"
-          #weight="ngModel"
-        />
-        <input
-          matInput
-          type="number"
-          [(ngModel)]="model.weightRange[1]"
-          name="weight"
-          #weight="ngModel"
-        />
-      </mat-form-field>
-      <mat-form-field>
-        <label for="alignment">Alignment Skew</label>
-        <mat-select
-          [(ngModel)]="model.alignmentSkew"
-          name="alignment"
-          #alignment="ngModel"
-        >
-          <mat-option [value]="0">Lawful Good</mat-option>
-          <mat-option [value]="1">Neutral Good</mat-option>
-          <mat-option [value]="2">Chaotic Good</mat-option>
-          <mat-option [value]="3">Lawful Neutral</mat-option>
-          <mat-option [value]="4">True Neutral</mat-option>
-          <mat-option [value]="5">Chaotic Neutral</mat-option>
-          <mat-option [value]="6">Lawful Evil</mat-option>
-          <mat-option [value]="7">Neutral Evil</mat-option>
-          <mat-option [value]="8">Chaotic Evil</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <div>
-        <button mat-button [mat-dialog-close]="model">Save</button>
-        <button mat-button (click)="closeDialog()">Cancel</button>
-      </div>
+  <h1 mat-dialog-title>Create New Race</h1>
+  <div mat-dialog-content>
+    <mat-form-field appearance="fill">
+      <label for="name">Race Name </label>
+      <input
+        matInput
+        type="text"
+        [(ngModel)]="model.raceName"
+        name="name"
+        #name="ngModel"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <label for="age">Age Range </label>
+      <dual-number-input [(ngModel)]="model.ageRange"></dual-number-input>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <label for="height">Height Range </label>
+      <dual-number-input [(ngModel)]="model.heightRange"></dual-number-input>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <label for="weight">Weight Range </label>
+      <dual-number-input [(ngModel)]="model.weightRange"></dual-number-input>
+    </mat-form-field>
+    <mat-form-field>
+      <label for="alignment">Alignment Skew</label>
+      <mat-select
+        [(ngModel)]="model.alignmentSkew"
+        name="alignment"
+        #alignment="ngModel"
+      >
+        <mat-option [value]="0">Lawful Good</mat-option>
+        <mat-option [value]="1">Neutral Good</mat-option>
+        <mat-option [value]="2">Chaotic Good</mat-option>
+        <mat-option [value]="3">Lawful Neutral</mat-option>
+        <mat-option [value]="4">True Neutral</mat-option>
+        <mat-option [value]="5">Chaotic Neutral</mat-option>
+        <mat-option [value]="6">Lawful Evil</mat-option>
+        <mat-option [value]="7">Neutral Evil</mat-option>
+        <mat-option [value]="8">Chaotic Evil</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div>
+      <button mat-button [mat-dialog-close]="model">Save</button>
+      <button mat-button (click)="closeDialog()">Cancel</button>
     </div>
   </div>
-  
+</div>

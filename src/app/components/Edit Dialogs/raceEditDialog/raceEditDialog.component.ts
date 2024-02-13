@@ -12,6 +12,7 @@ export class RaceEditDialogComponent {
   @Output() deleteRace = new EventEmitter<npcRace>();
   model = Object.assign({}, this.data);
   abilities = availableAbilities;
+  test = "";
 
   //TODO Add Validators
 

@@ -10,12 +10,12 @@ import {
   Self,
 } from '@angular/core';
 import {
-  AbstractControl,
-  AbstractControlDirective,
   ControlValueAccessor,
   FormBuilder,
+  FormControl,
   FormGroup,
   NgControl,
+  Validators,
 } from '@angular/forms';
 import {
   MAT_FORM_FIELD,
@@ -33,7 +33,10 @@ import { Subject } from 'rxjs';
 export class DualNumberInput
   implements MatFormFieldControl<Array<number>>, ControlValueAccessor
 {
-  parts: FormGroup;
+  parts: FormGroup<{
+    beginning: FormControl<number | null>;
+    end: FormControl<number | null>;
+  }>;
   stateChanges = new Subject<void>();
   static nextId = 0;
   @HostBinding() id = `dual-number-input-${DualNumberInput.nextId++}`;
@@ -55,15 +58,15 @@ export class DualNumberInput
       this.ngControl.valueAccessor = this;
     }
     this.parts = formBuilder.group({
-      beginning: '',
-      end: '',
+      beginning: [0, [Validators.required]],
+      end: [0, [Validators.required]],
     });
   }
 
   @Input()
   get value(): Array<number> | null {
     let val = this.parts.value;
-    if (val.beginning >= 0 && val.end >= 0 && val.beginning <= val.end) {
+    if (val.beginning && val.end && val.beginning >= 0 && val.end >= 0 && val.beginning <= val.end) {
       return [val.beginning, val.end];
     }
     return null;

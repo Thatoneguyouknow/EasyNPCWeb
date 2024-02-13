@@ -72,7 +72,7 @@
           {{trait}}
         </mat-list-option>
       </mat-selection-list>
-      <input matInput type="text" [(ngModel)]="newTrait"/>
+      <input matInput type="text" [(ngModel)]="newTrait" placeholder="Add New Trait"/>
       <button mat-button (click)="addTrait(newTrait)">add</button>
       <button mat-button (click)="deleteTraits(personality.selectedOptions.selected)">delete</button>
     </mat-form-field>
