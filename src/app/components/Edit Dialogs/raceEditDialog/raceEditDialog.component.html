@@ -42,25 +42,17 @@
       </mat-select>
     </mat-form-field>
     <!-- <mat-form-field>
+      <label>Ability Score Increases</label>
+      <asi-input></asi-input>
+    </mat-form-field> -->
+    <!-- <mat-form-field> -->
       <mat-selection-list>
-        <label>Test123</label>
-        <mat-list-option *ngFor="let val of [1, 2, 3]">
-          <input type="text" />
+        <label>Test</label>
+        <mat-list-option *ngFor="let asi of model.abilityScoreIncrease">
+          <asi-input [value]="asi"></asi-input>
         </mat-list-option>
       </mat-selection-list>
-      <input matInput type="text" [(ngModel)]="test" />
-    </mat-form-field> -->
-    <mat-form-field>
-      <label for="asiField">Ability Score Increases</label>
-      <div *ngFor="let asi of model.abilityScoreIncrease">
-        <mat-select [(ngModel)]="asi[0]" name="asiStat" #asiStat="ngModel">
-          <mat-option *ngFor="let stat of abilities">
-            {{ stat.name }}
-          </mat-option>
-        </mat-select>
-        <input matInput type="number" [(ngModel)]="asi[1]" />
-      </div>
-    </mat-form-field>
+    <!-- </mat-form-field> -->
     <div>
       <button mat-button [mat-dialog-close]="model">Save</button>
       <button mat-button (click)="closeDialog()">Cancel</button>
