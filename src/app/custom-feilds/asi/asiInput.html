@@ -9,7 +9,7 @@
     class="asi-input-value-stat"
     formControlName="stat"
     aria-label="Ability Score Increase Stat"
-    (input)="_handleInput()"
+    (change)="_handleInput($event)"
     #stat
   >
     <mat-option class="asi-input-value-option" *ngFor="let stat of abilities" [value]="stat">{{stat.name}}</mat-option>
@@ -18,7 +18,7 @@
     class="asi-input-value-element"
     formControlName="val"
     aria-label="Ability Score Increase Value"
-    (input)="_handleInput()"
+    (input)="_handleInput($event)"
     type="number"
     #val
   />

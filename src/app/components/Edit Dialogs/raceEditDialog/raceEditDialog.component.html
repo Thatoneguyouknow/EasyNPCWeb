@@ -43,16 +43,54 @@
     </mat-form-field>
     <mat-form-field>
       <label>Ability Score Increases</label>
-      <asi-input [ngModel]="model.abilityScoreIncrease[0]" (ngModelChange)="changeAsi($event)"></asi-input>
+      <asi-input
+        [ngModel]="model.abilityScoreIncrease[0]"
+        (ngModelChange)="changeAsi($event)"
+      ></asi-input>
     </mat-form-field>
-    <!-- <mat-form-field>
-      <mat-selection-list>
-        <label>Test</label>
-        <mat-list-option *ngFor="let asi of model.abilityScoreIncrease">
-          <asi-input [value]="asi"></asi-input>
+    <!-- <div>
+      <mat-list>
+        <mat-list-item *ngFor="let asi of model.abilityScoreIncrease">
+          <div class="test">
+            <asi-input
+            [ngModel]="asi"
+            (ngModelChange)="changeAsi($event)"
+          ></asi-input>
+          <input type="checkbox" />
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </div> -->
+    <div>
+      <label>Ability Score Increases</label>
+      <mat-selection-list #asi>
+        <mat-list-option
+          *ngFor="let asi of model.abilityScoreIncrease"
+          (click)="noCheck($event)"
+          [disableRipple]="true"
+          [value]="asi"
+        >
+          <asi-input
+            [ngModel]="asi"
+            (ngModelChange)="changeAsi($event)"
+            (click)="noCheck($event)"
+          ></asi-input>
         </mat-list-option>
       </mat-selection-list>
-    </mat-form-field> -->
+      <div>
+        <button mat-button (click)="addASI()">Add ASI</button>
+        <button mat-button (click)="deleteASIs(asi.selectedOptions.selected)">Delete Selected ASIs</button>
+      </div>
+    </div>
+
+    <!-- <div>
+      <mat-selection-list>
+        <mat-list-option *ngFor="let asi of model.abilityScoreIncrease">
+          
+        </mat-list-option>
+      </mat-selection-list>
+    </div> -->
+
     <div>
       <button mat-button [mat-dialog-close]="model">Save</button>
       <button mat-button (click)="closeDialog()">Cancel</button>

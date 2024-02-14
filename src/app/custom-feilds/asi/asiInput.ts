@@ -22,6 +22,7 @@ import {
   MatFormField,
   MatFormFieldControl,
 } from '@angular/material/form-field';
+import { MatSelectChange } from '@angular/material/select';
 import { Subject } from 'rxjs';
 import { StatTypes, availableAbilities } from 'src/app/constants';
 
@@ -186,7 +187,12 @@ export class AsiInput
     this.onTouched = fn;
   }
 
-  _handleInput(): void {
+  _handleInput($event: Event): void {
+    console.log("Event");
+    this.onChange(this.value);
+  }
+
+  _handleSelectionChange($event: MatSelectChange): void {
     this.onChange(this.value);
   }
 
