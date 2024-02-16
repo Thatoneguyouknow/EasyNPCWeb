@@ -1,8 +1,18 @@
-import { Component, EventEmitter, Inject, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  Output,
+  QueryList,
+} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { npcRace } from 'src/app/models';
-import { availableAbilities } from 'src/app/constants';
-import { MatListOption } from '@angular/material/list';
+import { StatTypes, availableAbilities } from 'src/app/constants';
+import {
+  MatList,
+  MatListOption,
+  MatSelectionList,
+} from '@angular/material/list';
 
 @Component({
   selector: 'race-edit-dialog',
@@ -22,8 +32,17 @@ export class RaceEditDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: npcRace
   ) {}
 
-  changeAsi($event: Event) {
-    console.log($event);
+  changeAsi($event: [StatTypes, number], oldParam: [StatTypes, number]) {
+    let index = this.model.abilityScoreIncrease.indexOf(oldParam);
+    console.log(index);
+    if (index >= 0) {
+      this.model.abilityScoreIncrease = [
+        ...this.model.abilityScoreIncrease.slice(0, index),
+        $event,
+        ...this.model.abilityScoreIncrease.slice(index + 1),
+      ];
+    }
+    console.log(this.model.abilityScoreIncrease);
   }
 
   noCheck($event: Event) {

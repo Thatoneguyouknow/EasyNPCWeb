@@ -188,11 +188,10 @@ export class AsiInput
   }
 
   _handleInput($event: Event): void {
-    console.log("Event");
     this.onChange(this.value);
   }
 
-  _handleSelectionChange($event: MatSelectChange): void {
+  _handleSelectionChange($event: Event): void {
     this.onChange(this.value);
   }
 
