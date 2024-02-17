@@ -13,7 +13,11 @@
     </mat-form-field>
     <mat-form-field>
       <label for="class">Class</label>
-      <mat-select [(value)]="selectedClass" name="class" (selectionChange)="classChanged(selectedClass)">
+      <mat-select
+        [(value)]="selectedClass"
+        name="class"
+        (selectionChange)="classChanged(selectedClass)"
+      >
         <mat-option *ngFor="let cClass of classData" [value]="cClass">
           {{ cClass.name }}
         </mat-option>
@@ -21,7 +25,11 @@
     </mat-form-field>
     <mat-form-field>
       <label for="race">Race</label>
-      <mat-select [(value)]="selectedRace" name="race" (selectionChange)="raceChanged(selectedRace)">
+      <mat-select
+        [(value)]="selectedRace"
+        name="race"
+        (selectionChange)="raceChanged(selectedRace)"
+      >
         <mat-option *ngFor="let cRace of raceData" [value]="cRace">
           {{ cRace.raceName }}
         </mat-option>
@@ -68,27 +76,29 @@
     <mat-form-field>
       <mat-selection-list #personality>
         <label for="personality">Personality Traits</label>
-        <mat-list-option *ngFor="let trait of model.personalityTraits" [value]="trait">
-          {{trait}}
+        <mat-list-option
+          *ngFor="let trait of model.personalityTraits"
+          [value]="trait"
+        >
+          {{ trait }}
         </mat-list-option>
       </mat-selection-list>
-      <input matInput type="text" [(ngModel)]="newTrait" placeholder="Add New Trait"/>
+      <input
+        matInput
+        type="text"
+        [(ngModel)]="newTrait"
+        placeholder="Add New Trait"
+      />
       <button mat-button (click)="addTrait(newTrait)">add</button>
-      <button mat-button (click)="deleteTraits(personality.selectedOptions.selected)">delete</button>
+      <button
+        mat-button
+        (click)="deleteTraits(personality.selectedOptions.selected)"
+      >
+        delete
+      </button>
     </mat-form-field>
     <mat-form-field>
-      <label for="strength">Strength modifier: {{model.stats[0].statModifier}}</label>
-      <input matInput type="number" [(ngModel)]="model.stats[0].statValue">
-      <label for="dexterity">Dexterity</label>
-      <input matInput type="number" [(ngModel)]="model.stats[1].statValue">
-      <label for="constitution">Constitution</label>
-      <input matInput type="number" [(ngModel)]="model.stats[2].statValue">
-      <label for="intelligence">Intelligence</label>
-      <input matInput type="number" [(ngModel)]="model.stats[3].statValue">
-      <label for="wisdom">Wisdom</label>
-      <input matInput type="number" [(ngModel)]="model.stats[4].statValue">
-      <label for="charisma">Charisma</label>
-      <input matInput type="number" [(ngModel)]="model.stats[5].statValue">
+      <stat-list-input [ngModel]="model.stats" (ngModelChange)="changeStat($event)"></stat-list-input>
     </mat-form-field>
     <div>
       <button mat-button [mat-dialog-close]="model">Save</button>
