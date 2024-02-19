@@ -127,32 +127,43 @@ export class StatListInput
   @Input()
   get value(): Array<characterStat> | null {
     let val = this.parts.value;
-    console.log(val);
     if (
       val.str &&
       val.str.stat &&
-      val.str.stat_val &&
-      val.str.stat_mod &&
+      val.str.stat_val != null &&
+      val.str.stat_val >= 0 &&
+      val.str.stat_mod != null &&
+      val.str.stat_mod >= 0 &&
       val.dex &&
       val.dex.stat &&
-      val.dex.stat_val &&
-      val.dex.stat_mod &&
+      val.dex.stat_val != null &&
+      val.dex.stat_mod != null &&
+      val.dex.stat_val >= 0 &&
+      val.dex.stat_mod >= 0 &&
       val.con &&
       val.con.stat &&
-      val.con.stat_val &&
-      val.con.stat_mod &&
+      val.con.stat_val != null &&
+      val.con.stat_mod != null &&
+      val.con.stat_val >= 0 &&
+      val.con.stat_mod >= 0 &&
       val.int &&
       val.int.stat &&
-      val.int.stat_val &&
-      val.int.stat_mod &&
+      val.int.stat_val != null &&
+      val.int.stat_mod != null &&
+      val.int.stat_val >= 0 &&
+      val.int.stat_mod >= 0 &&
       val.wis &&
       val.wis.stat &&
-      val.wis.stat_val &&
-      val.wis.stat_mod &&
+      val.wis.stat_val != null &&
+      val.wis.stat_mod != null &&
+      val.wis.stat_val >= 0 &&
+      val.wis.stat_mod >= 0 &&
       val.cha &&
       val.cha.stat &&
-      val.cha.stat_val &&
-      val.cha.stat_mod
+      val.cha.stat_val != null &&
+      val.cha.stat_mod != null &&
+      val.cha.stat_val >= 0 &&
+      val.cha.stat_mod >= 0
     ) {
       return [
         {
@@ -198,7 +209,6 @@ export class StatListInput
       { stat: availableAbilities[4], statValue: 0, statModifier: 0 },
       { stat: availableAbilities[5], statValue: 0, statModifier: 0 },
     ];
-    console.log(val);
     this.parts.setValue({
       str: {
         stat: val[0].stat,
@@ -331,8 +341,6 @@ export class StatListInput
   }
 
   _handleInput($event: Event): void {
-    console.log($event);
-    console.log(this.value);
     this.onChange(this.value);
   }
 

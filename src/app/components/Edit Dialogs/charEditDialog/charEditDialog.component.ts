@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatListOption } from '@angular/material/list';
+import { characterStat } from 'src/app/constants';
 import { npc, npcRace, npcClass } from 'src/app/models';
 
 @Component({
@@ -46,8 +47,8 @@ export class CharEditDialogComponent {
     });
   }
 
-  changeStat($event: Event) {
-    console.log($event);
+  changeStat($event: Array<characterStat>) {
+    this.model.stats = [...$event];
   }
 
   classChanged(changedTo: npcClass) {
