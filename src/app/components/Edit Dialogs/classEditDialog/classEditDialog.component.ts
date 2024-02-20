@@ -30,6 +30,7 @@ export class ClassEditDialogComponent {
   }
 
   remove() {
+    // First need to validate that the class isn't being used by any characters
     this.deleteClass.emit(this.model);
     this.closeDialog();
   }

@@ -1,0 +1,25 @@
+<div
+  role="group"
+  class="asi-input-container"
+  [formGroup]="parts"
+  (focusin)="onFocusIn($event)"
+  (focusout)="onFocusOut($event)"
+>
+  <mat-select
+    class="asi-input-value-stat"
+    formControlName="stat"
+    aria-label="Ability Score Increase Stat"
+    (selectionChange)="_handleSelectionChange($event.value)"
+    #stat
+  >
+    <mat-option class="asi-input-value-option" *ngFor="let stat of abilities" [value]="stat">{{stat.name}}</mat-option>
+  </mat-select>
+  <input
+    class="asi-input-value-element"
+    formControlName="val"
+    aria-label="Ability Score Increase Value"
+    (input)="_handleInput($event)"
+    type="number"
+    #val
+  />
+</div>

@@ -6,14 +6,15 @@
       <input
         matInput
         type="text"
+        required
         [(ngModel)]="model.name"
         name="name"
         #name="ngModel"
       />
+      <mat-error *ngIf="name.invalid">Name cannot be blank</mat-error>
     </mat-form-field>
     <mat-form-field appearance="fill">
       <label for="hitDie">Hit Die </label>
-      <!-- <input matInput type="text" [(ngModel)]="model.hitDie" name="hitDie" #hitDie="ngModel"> -->
       <mat-select [(ngModel)]="model.hitDie" name="hitDie" #hitDie="ngModel">
         <mat-option *ngFor="let die of availableHitDie" [value]="die">
           {{die.display}}
@@ -23,8 +24,10 @@
     <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
       <div class="example-box" *ngFor="let stat of model.statPriority" cdkDrag>{{stat.name}}</div>
     </div>
-    <div>
-      <button mat-button [mat-dialog-close]="model">Save</button>
+    <div mat-dialog-actions>
+      <div *ngIf="name.valid">
+        <button mat-button [mat-dialog-close]="model">Save</button>
+      </div>
       <button mat-button (click)="closeDialog()">Cancel</button>
       <button mat-button (click)="remove()">Delete</button>
     </div>

@@ -12,55 +12,16 @@
       />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <label for="age">Age Range </label>
-      <input
-        matInput
-        type="number"
-        [(ngModel)]="model.ageRange[0]"
-        name="age"
-        #age="ngModel"
-      />
-      <input
-        matInput
-        type="number"
-        [(ngModel)]="model.ageRange[1]"
-        name="age"
-        #age="ngModel"
-      />
+      <label for="number-input">Age Range</label>
+      <dual-number-input [(ngModel)]="model.ageRange"></dual-number-input>
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <label for="height">Height Range </label>
-      <input
-        matInput
-        type="number"
-        [(ngModel)]="model.heightRange[0]"
-        name="height"
-        #height="ngModel"
-      />
-      <input
-        matInput
-        type="number"
-        [(ngModel)]="model.heightRange[1]"
-        name="height"
-        #height="ngModel"
-      />
+      <label for="number-input">Height Range</label>
+      <dual-number-input [(ngModel)]="model.heightRange"></dual-number-input>
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <label for="weight">Weight Range </label>
-      <input
-        matInput
-        type="number"
-        [(ngModel)]="model.weightRange[0]"
-        name="weight"
-        #weight="ngModel"
-      />
-      <input
-        matInput
-        type="number"
-        [(ngModel)]="model.weightRange[1]"
-        name="weight"
-        #weight="ngModel"
-      />
+      <label for="number-input">Weight Range</label>
+      <dual-number-input [(ngModel)]="model.weightRange"></dual-number-input>
     </mat-form-field>
     <mat-form-field>
       <label for="alignment">Alignment Skew</label>
@@ -80,17 +41,32 @@
         <mat-option [value]="8">Chaotic Evil</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field>
-      <label for="asiField">Ability Score Increases</label>
-      <div *ngFor="let asi of model.abilityScoreIncrease">
-        <mat-select [(ngModel)]="asi[0]" name="asiStat" #asiStat="ngModel">
-          <mat-option *ngFor="let stat of abilities">
-            {{ stat.name }}
-          </mat-option>
-        </mat-select>
-        <input matInput type="number" [(ngModel)]="asi[1]" />
+    <div>
+      <label>Ability Score Increases</label>
+      <mat-selection-list #AbilityScoreIncreases>
+        <mat-list-option
+          *ngFor="let asi of model.abilityScoreIncrease"
+          (click)="noCheck($event)"
+          [disableRipple]="true"
+          [value]="asi"
+        >
+          <asi-input
+            [ngModel]="asi"
+            (ngModelChange)="changeAsi($event, asi)"
+            (click)="noCheck($event)"
+          ></asi-input>
+        </mat-list-option>
+      </mat-selection-list>
+      <div>
+        <button mat-button (click)="addASI()">Add ASI</button>
+        <button
+          mat-button
+          (click)="deleteASIs(AbilityScoreIncreases.selectedOptions.selected)"
+        >
+          Delete Selected ASIs
+        </button>
       </div>
-    </mat-form-field>
+    </div>
     <div>
       <button mat-button [mat-dialog-close]="model">Save</button>
       <button mat-button (click)="closeDialog()">Cancel</button>

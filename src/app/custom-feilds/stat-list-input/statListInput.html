@@ -1,0 +1,75 @@
+<div
+  role="group"
+  class="stat-list-input-container"
+  [formGroup]="parts"
+  [attr.aria-labelledby]="_formField.getLabelId()"
+  (focusin)="onFocusIn($event)"
+  (focusout)="onFocusOut($event)"
+>
+  <div formGroupName="str">
+    <label for="strength">Strength</label>
+    <input
+      class="stat-list-input-element"
+      formControlName="stat_val"
+      aria-label="Strength Stat"
+      (input)="_handleInput($event)"
+      type="number"
+      #str
+    />
+  </div>
+  <div formGroupName="dex">
+    <label for="dexterity">Dexterity</label>
+    <input
+      class="stat-list-input-element"
+      formControlName="stat_val"
+      aria-label="Dexterity Stat"
+      (input)="_handleInput($event)"
+      type="number"
+      #dex
+    />
+  </div>
+  <div formGroupName="con">
+    <label for="constitution">Constitution</label>
+    <input
+      class="stat-list-input-element"
+      formControlName="stat_val"
+      aria-label="Constitution Stat"
+      (input)="_handleInput($event)"
+      type="number"
+      #dex
+    />
+  </div>
+  <div formGroupName="int">
+    <label for="intelligence">Intelligence</label>
+    <input
+      class="stat-list-input-element"
+      formControlName="stat_val"
+      aria-label="Intelligence Stat"
+      (input)="_handleInput($event)"
+      type="number"
+      #dex
+    />
+  </div>
+  <div formGroupName="wis">
+    <label for="wisdom">Wisdom</label>
+    <input
+      class="stat-list-input-element"
+      formControlName="stat_val"
+      aria-label="Wisdom Stat"
+      (input)="_handleInput($event)"
+      type="number"
+      #dex
+    />
+  </div>
+  <div formGroupName="cha">
+    <label for="charisma">Charisma</label>
+    <input
+      class="stat-list-input-element"
+      formControlName="stat_val"
+      aria-label="Charisma Stat"
+      (input)="_handleInput($event)"
+      type="number"
+      #dex
+    />
+  </div>
+</div>
