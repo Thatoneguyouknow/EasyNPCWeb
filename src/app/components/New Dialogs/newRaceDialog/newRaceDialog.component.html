@@ -42,6 +42,32 @@
       </mat-select>
     </mat-form-field>
     <div>
+      <label>Ability Score Increases</label>
+      <mat-selection-list #AbilityScoreIncreases>
+        <mat-list-option
+          *ngFor="let asi of model.abilityScoreIncrease"
+          (click)="noCheck($event)"
+          [disableRipple]="true"
+          [value]="asi"
+        >
+          <asi-input
+            [ngModel]="asi"
+            (ngModelChange)="changeAsi($event, asi)"
+            (click)="noCheck($event)"
+          ></asi-input>
+        </mat-list-option>
+      </mat-selection-list>
+      <div>
+        <button mat-button (click)="addASI()">Add ASI</button>
+        <button
+          mat-button
+          (click)="deleteASIs(AbilityScoreIncreases.selectedOptions.selected)"
+        >
+          Delete Selected ASIs
+        </button>
+      </div>
+    </div>
+    <div>
       <button mat-button [mat-dialog-close]="model">Save</button>
       <button mat-button (click)="closeDialog()">Cancel</button>
     </div>

@@ -34,7 +34,6 @@ export class RaceEditDialogComponent {
 
   changeAsi($event: [StatTypes, number], oldParam: [StatTypes, number]) {
     let index = this.model.abilityScoreIncrease.indexOf(oldParam);
-    console.log(index);
     if (index >= 0) {
       this.model.abilityScoreIncrease = [
         ...this.model.abilityScoreIncrease.slice(0, index),
