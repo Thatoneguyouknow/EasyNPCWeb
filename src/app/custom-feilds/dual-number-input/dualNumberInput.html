@@ -12,6 +12,8 @@
     aria-label="Beginning of Range"
     (input)="_handleInput()"
     type="number"
+    min="0"
+    oninput="validity.valid||(value='')"
     #beginning
   />
   <input
@@ -20,6 +22,8 @@
     aria-label="End of Range"
     (input)="_handleInput()"
     type="number"
+    min="0"
+    oninput="validity.valid||(value='')"
     #end
   />
 </div>

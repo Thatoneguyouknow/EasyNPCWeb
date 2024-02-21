@@ -47,6 +47,7 @@ import { namesReducer } from './state/name_state/name.reducer';
 import { DualNumberInput } from './custom-feilds/dual-number-input/dualNumberInput';
 import { AsiInput } from './custom-feilds/asi/asiInput';
 import { StatListInput } from './custom-feilds/stat-list-input/statListInput';
+import { InvalidRangeDirective } from './supporting methods/validatingFunctions';
 
 @NgModule({
   declarations: [
@@ -97,7 +98,7 @@ import { StatListInput } from './custom-feilds/stat-list-input/statListInput';
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     EffectsModule.forRoot([]),
   ],
-  providers: [],
+  providers: [InvalidRangeDirective],
   bootstrap: [homeScreenComponent],
 })
 export class AppModule {}

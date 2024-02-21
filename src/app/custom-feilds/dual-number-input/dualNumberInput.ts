@@ -58,7 +58,7 @@ export class DualNumberInput
       this.ngControl.valueAccessor = this;
     }
     this.parts = formBuilder.group({
-      beginning: [0, [Validators.required]],
+      beginning: [0, [Validators.required, Validators.min(0)]],
       end: [0, [Validators.required]],
     });
   }
