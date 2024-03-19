@@ -47,7 +47,10 @@ import { namesReducer } from './state/name_state/name.reducer';
 import { DualNumberInput } from './custom-feilds/dual-number-input/dualNumberInput';
 import { AsiInput } from './custom-feilds/asi/asiInput';
 import { StatListInput } from './custom-feilds/stat-list-input/statListInput';
-import { InvalidRangeDirective } from './supporting methods/validatingFunctions';
+import {
+  ForbiddenValidatorDirective,
+  InvalidRangeDirective,
+} from './supporting methods/validatingFunctions';
 
 @NgModule({
   declarations: [
@@ -64,6 +67,8 @@ import { InvalidRangeDirective } from './supporting methods/validatingFunctions'
     DualNumberInput,
     AsiInput,
     StatListInput,
+    InvalidRangeDirective,
+    ForbiddenValidatorDirective,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -98,7 +103,7 @@ import { InvalidRangeDirective } from './supporting methods/validatingFunctions'
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     EffectsModule.forRoot([]),
   ],
-  providers: [InvalidRangeDirective],
+  providers: [],
   bootstrap: [homeScreenComponent],
 })
 export class AppModule {}

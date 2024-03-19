@@ -66,7 +66,7 @@ export class DualNumberInput
   @Input()
   get value(): Array<number> | null {
     let val = this.parts.value;
-    if (val.beginning && val.end && val.beginning >= 0 && val.end >= 0 && val.beginning <= val.end) {
+    if (val.beginning && val.end && val.beginning >= 0 && val.end >= 0) {
       return [val.beginning, val.end];
     }
     return null;

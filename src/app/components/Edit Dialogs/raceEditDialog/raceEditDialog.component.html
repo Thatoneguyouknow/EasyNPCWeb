@@ -7,16 +7,32 @@
         matInput
         type="text"
         required
+        appForbiddenName="bob"
         [(ngModel)]="model.raceName"
         name="name"
         #name="ngModel"
       />
-      <mat-error *ngIf="name.invalid">Name cannot be blank</mat-error>
+      <mat-error *ngIf="name.invalid && name.errors?.['forbiddenName']"
+        >Name cannot be bob</mat-error
+      >
+      <mat-error *ngIf="name.invalid && name.errors?.['required']"
+        >Name cannot be blank</mat-error
+      >
     </mat-form-field>
     <mat-form-field appearance="fill">
       <label for="number-input">Age Range</label>
-      <dual-number-input required appInvalidRange [(ngModel)]="model.ageRange" #ageRange="ngModel"></dual-number-input>
-      <mat-error *ngIf="ageRange.invalid && ageRange.errors?.['required']">Values cannot be blank</mat-error>
+      <dual-number-input
+        required
+        appInvalidRange
+        [(ngModel)]="model.ageRange"
+        #ageRange="ngModel"
+      ></dual-number-input>
+      <mat-error *ngIf="ageRange.invalid && ageRange.errors?.['required']"
+        >Values cannot be blank</mat-error
+      >
+      <mat-error *ngIf="ageRange.invalid && ageRange.errors?.['invalidRange']"
+        >Invalid Range</mat-error
+      >
     </mat-form-field>
     <mat-form-field appearance="fill">
       <label for="number-input">Height Range</label>
